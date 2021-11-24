@@ -9,7 +9,7 @@ if (!dbURL) {
   throw new Error('DB_URL is undefined');
 }
 
-const schema = buildSchema(`
+/* const schema = buildSchema(`
   type User {
     id: String
     mdp: String
@@ -25,7 +25,7 @@ const schema = buildSchema(`
     addUser(mdp: String, email: String, role: [String]): [User]
   }
 
-`);
+`); */
 
 mongoose
   .connect(dbURL, {
