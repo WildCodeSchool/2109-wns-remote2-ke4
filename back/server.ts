@@ -1,7 +1,7 @@
-import { ApolloServer } from "apollo-server-express";
-import express from "express";
-import cors from "cors";
-import schema from "./graphql";
+import { ApolloServer } from 'apollo-server-express';
+import express from 'express';
+import cors from 'cors';
+import schema from './src/graphql/graphql';
 
 const app = express();
 
@@ -12,7 +12,7 @@ async function startApolloServer() {
   const apolloServer = new ApolloServer({ schema: schema });
   await apolloServer.start();
 
-  apolloServer.applyMiddleware({ app, path: "/graphql" });
+  apolloServer.applyMiddleware({ app, path: '/graphql' });
 }
 
 startApolloServer();

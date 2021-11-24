@@ -4,9 +4,9 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLString,
-} from "graphql";
-import prisma from "../../../lib/prisma";
-import TypePost from "../../types/TypePost";
+} from 'graphql';
+import prisma from '../../../lib/prisma';
+import TypePost from '../../types/TypePost';
 
 const registerPost: GraphQLFieldConfig<any, any, any> = {
   args: {
