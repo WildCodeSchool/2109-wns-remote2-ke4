@@ -127,12 +127,12 @@ function Board() {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center">Ticket subject</StyledTableCell>
-              <StyledTableCell align="center">Related project</StyledTableCell>
-              <StyledTableCell align="center">Status</StyledTableCell>
-              <StyledTableCell align="center">Priority</StyledTableCell>
-              <StyledTableCell align="center">Assignee</StyledTableCell>
-              <StyledTableCell align="center">Due date</StyledTableCell>
+              <StyledTableCell>Ticket subject</StyledTableCell>
+              <StyledTableCell>Related project</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell>Priority</StyledTableCell>
+              <StyledTableCell>Assignee</StyledTableCell>
+              <StyledTableCell>Due date</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
