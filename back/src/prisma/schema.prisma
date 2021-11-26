@@ -11,7 +11,7 @@ generator client {
 }
 
 model User {
-  id Int @id @default(autoincrement()) 
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId  
   email String @unique
   mdp String @unique
   name String
@@ -19,17 +19,22 @@ model User {
   avatar String
   description String
   role String[]
-  project UserOnProject[]
+  project Project[] @relation(fields: [projectId], references: [id])
+  projectId String
+  ticket Ticket[] @relation(fields: [ticketId], references: [id])
+  ticketId String
+  comment Comment[]
 }
 
 model Ticket {
-  id Int @id @default(autoincrement())  @map("_id")
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId  
   name String
-  project Project @relation(fields: [projectId], references: [id])
+  project Project[] @relation(fields: [projectId], references: [id])
   projectId Int
   status String
   description String
-  developpeur String[] // A REVOIR
+  user User[] @relation(fields: [userId], references: [id])
+  userId String[] @db.Array(ObjectId)
   investedTime String // A REVOIR
   estimatedTime String  // A REVOIR
   startDate DateTime
@@ -39,31 +44,24 @@ model Ticket {
 }
 
 model Project {
-  id Int @id @default(autoincrement()) 
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId 
   name String
   author String
   ticket Ticket[]
   client String
   status String
   description String
-  user UserOnProject[]
+  user User[] @relation(fields: [userId], references: [id])
+  userId String[] @db.Array(ObjectId)
   investedTime String // A REVOIR
   estimatedTime String  // A REVOIR
 }
 
-model UserOnProject {
-  user User[] @relation(fields: [userId], references: [id])
-  userId Int
-  project Project[] @relation(fields: [projectId], references: [id])
-  projectId Int
-
-  @@id([userId, projectId])
-}
-
-model Comments {
-  id Int @id @default(autoincrement()) 
+model Comment {
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId 
   postDate DateTime
   content String
-  idUser String
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
 }
 
