@@ -4,7 +4,7 @@ RUN mkdir /app
 WORKDIR /app
 COPY package*.json ./
 COPY public public
-COPY tsconfig.json tsconfig.json
+COPY tsconfig.json ./
 RUN npm i
 COPY src src
 
