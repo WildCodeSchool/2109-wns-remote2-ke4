@@ -9,7 +9,9 @@ app.use(cors());
 app.use(express.json());
 
 async function startApolloServer() {
-  const apolloServer = new ApolloServer({ schema: schema });
+  const apolloServer = new ApolloServer({
+    schema: schema,
+  });
   await apolloServer.start();
 
   apolloServer.applyMiddleware({ app, path: "/graphql" });
