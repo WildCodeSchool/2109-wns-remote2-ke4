@@ -1,26 +1,35 @@
-import { AvatarGroup, AvatarProps, ChipProps } from '@mui/material';
+import { AvatarGroup } from '@mui/material';
 import { StyledTableRow, StyledTableCell } from '../elements/styledTable';
+import {
+  getChipPriority,
+  getChipStatus,
+  getCleanAvatar,
+} from '../functions/boardFunctions';
 
-function BoardRow(
-  subject: any,
-  project: any,
-  status: ChipProps,
-  priority: ChipProps,
-  assignee: AvatarProps[],
-  dueDate: any
-) {
+interface Row {
+  subject: string;
+  project: string;
+  status: string;
+  priority: string;
+  assignee: string[];
+  dueDate: string;
+}
+
+function BoardRow(row: Row) {
   return (
-    <StyledTableRow key={subject.subject}>
+    <StyledTableRow key={row.subject}>
       <StyledTableCell component="th" scope="row">
-        {subject.subject}
+        {row.subject}
       </StyledTableCell>
-      <StyledTableCell>{subject.project}</StyledTableCell>
-      <StyledTableCell>{subject.status}</StyledTableCell>
-      <StyledTableCell>{subject.priority}</StyledTableCell>
+      <StyledTableCell>{row.project}</StyledTableCell>
+      <StyledTableCell>{getChipStatus(row.status)}</StyledTableCell>
+      <StyledTableCell>{getChipPriority(row.priority)}</StyledTableCell>
       <StyledTableCell sx={{ display: 'flex' }} align="center">
-        <AvatarGroup>{subject.assignee.map((avatar: AvatarProps) => avatar)}</AvatarGroup>
+        <AvatarGroup max={4}>
+          {row.assignee.map((avatar: string) => getCleanAvatar(avatar))}
+        </AvatarGroup>
       </StyledTableCell>
-      <StyledTableCell>{subject.dueDate}</StyledTableCell>
+      <StyledTableCell>{row.dueDate}</StyledTableCell>
     </StyledTableRow>
   );
 }
