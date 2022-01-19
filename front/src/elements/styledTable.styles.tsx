@@ -1,6 +1,7 @@
 import { styled } from "@mui/system";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -22,3 +23,13 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+export const SortTableStyled = styled(TableSortLabel)`
+  &:hover {
+    color: #bdc3c7;
+  }
+
+  &:focus {
+    color: #bdc3c7;
+  }
+`;

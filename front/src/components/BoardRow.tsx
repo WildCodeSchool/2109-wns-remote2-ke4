@@ -1,5 +1,6 @@
-import { AvatarGroup } from '@mui/material';
-import { StyledTableRow, StyledTableCell } from '../elements/styledTable';
+import { AvatarGroup, Chip } from '@mui/material';
+import { StyledTableRow, StyledTableCell } from '../elements/styledTable.styles';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {
   getChipPriority,
   getChipStatus,
@@ -29,7 +30,9 @@ function BoardRow(row: Row) {
           {row.assignee.map((avatar: string) => getCleanAvatar(avatar))}
         </AvatarGroup>
       </StyledTableCell>
-      <StyledTableCell>{row.dueDate}</StyledTableCell>
+      <StyledTableCell>
+        <Chip label={row.dueDate} size="small" icon={<AccessTimeIcon />} />
+      </StyledTableCell>
     </StyledTableRow>
   );
 }

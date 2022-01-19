@@ -5,7 +5,17 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import BoardRows from '../components/BoardRows';
 import { Container } from '@mui/material';
-import { StyledTableCell } from '../elements/styledTable';
+import { StyledTableCell } from '../elements/styledTable.styles';
+import { SortTableStyled } from '../elements/styledTable.styles';
+
+const cellLabels = [
+  'Ticket subject',
+  'Related project',
+  'Status',
+  'Priority',
+  'Assignee',
+  'Due date',
+];
 
 function Board() {
   return (
@@ -14,12 +24,13 @@ function Board() {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Ticket subject</StyledTableCell>
-              <StyledTableCell>Related project</StyledTableCell>
-              <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell>Priority</StyledTableCell>
-              <StyledTableCell>Assignee</StyledTableCell>
-              <StyledTableCell>Due date</StyledTableCell>
+              {cellLabels.map((cell) => {
+                return (
+                  <StyledTableCell>
+                    <SortTableStyled>{cell}</SortTableStyled>
+                  </StyledTableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <BoardRows />
