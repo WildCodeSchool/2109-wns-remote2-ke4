@@ -16,24 +16,6 @@ import LuxonUtils from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
-// import { gql, useMutation, useQuery } from "@apollo/client";
-// import Alert from "@mui/material/Alert";
-
-// const MUTATION_PROJECT = gql`
-//     mutation CreateProject(
-//       $name:String!
-//       $dateDue:String!
-//       description:String!
-
-//     ){
-//       createProject(
-//         name:$name
-//         dateDue:$dateDue
-//         description:$description
-//       )
-//     }
-// `;
-
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
@@ -84,18 +66,6 @@ const CreateProject = () => {
   const deleteDevInCreateProject = (id: string) => {
     setArrayDev((el) => el.filter((element) => element.id !== id));
   };
-
-  // const [createProject, { loading, error }] = useMutation(MUTATION_PROJECT);
-
-  // const onSubmit = async () => {
-  //   await createProject({
-  //     variables: {
-  //       name: title,
-  //       description: description,
-  //       dateDue: dateDue,
-  //     },
-  //   });
-  // };
 
   return (
     <div
