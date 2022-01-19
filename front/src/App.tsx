@@ -3,6 +3,7 @@ import CreateProject from './pages/CreateProject';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import UpdateProfil from './pages/UpdateProfil';
 
 export default function App() {
   return (
@@ -19,6 +20,9 @@ export default function App() {
         </Route>
         <Route path="/createProject">
           <CreateProject />
+        </Route>
+        <Route path="/updateprofil">
+          <UpdateProfil />
         </Route>
       </Switch>
     </Router>

@@ -2,12 +2,21 @@ import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import InputPassword from './Ui/InputPassword';
+import { styled } from '@mui/material/styles';
 
-const RegisterForm = () => {
+const GridContainerUpdate = styled(Grid)(({ theme }) => ({
+  padding: '0px 150px',
+
+  [theme.breakpoints.down('md')]: {
+    padding: '0px 50px',
+  },
+}));
+
+const LoginUpdateProfil = () => {
   const [showPasswordOne, setShowPasswordOne] = useState(false);
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
   return (
-    <Grid container spacing={1} style={{ padding: '0px 40px' }}>
+    <GridContainerUpdate container spacing={1}>
       <Grid item md={6} sm={12} xs={12}>
         <TextField
           id="outlined-required"
@@ -67,7 +76,7 @@ const RegisterForm = () => {
           rows={2}
         />
       </Grid>
-    </Grid>
+    </GridContainerUpdate>
   );
 };
-export default RegisterForm;
+export default LoginUpdateProfil;

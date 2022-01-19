@@ -7,13 +7,14 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 const InputPassword: React.FC<{
+  label: string;
   state: boolean;
   onChange: (b: boolean) => void;
-}> = ({ state, onChange }) => {
+}> = ({ state, onChange, label }) => {
   return (
     <FormControl variant="outlined" fullWidth margin="normal">
       <InputLabel htmlFor="password" variant="outlined">
-        Mot de passe*
+        {label}
       </InputLabel>
       <OutlinedInput
         fullWidth

@@ -7,10 +7,8 @@ import { styled } from '@mui/material/styles';
 const GridContainer = styled(Grid)(({ theme }) => ({
   padding: '0px 100px',
   marginBottom: '25px',
-  margin: theme.spacing(0, 4),
-  gap: 8,
   [theme.breakpoints.down('sm')]: {
-    padding: '0px 20px',
+    padding: '0px 20px!important',
   },
 }));
 
@@ -28,7 +26,11 @@ const LoginForm = () => {
         />
       </Grid>
       <Grid item sm={12} md={12} xs={12}>
-        <InputPassword state={showPassword} onChange={setShowPassword} />
+        <InputPassword
+          label="Mot de passe"
+          state={showPassword}
+          onChange={setShowPassword}
+        />
       </Grid>
     </GridContainer>
   );
