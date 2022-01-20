@@ -1,5 +1,8 @@
 import { AvatarGroup, Chip } from '@mui/material';
-import { StyledTableRow, StyledTableCell } from '../elements/styledTable.styles';
+import {
+  StyledTableRow,
+  StyledTableCell,
+} from '../elements/styledTable.styles';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {
   getChipPriority,
