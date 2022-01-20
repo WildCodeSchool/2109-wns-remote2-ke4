@@ -8,7 +8,7 @@ import { url, pageWithNotHeader } from './libs/utils';
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div style={{ width: '100%', height: '100vh' }}>
+  
         <Router>
           {!pageWithNotHeader.includes(url) && <Header />}
 
@@ -19,7 +19,7 @@ export default function App() {
             <Route path="/login">{/* login component */}</Route>
           </Switch>
         </Router>
-      </div>
+     
     </ThemeProvider>
   );
 }
