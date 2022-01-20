@@ -1,6 +1,6 @@
 import BoardRow from './BoardRow';
 import { TableBody } from '@mui/material';
-import { boardRowsList } from '../mock/boardRows.mock';
+import { boardRowsList } from '../../mock/boardRows.mock';
 
 function BoardRows() {
   return (
