@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import UpdateProfil from './pages/UpdateProfil';
+import NewPassword from './pages/NewPassword';
 
 export default function App() {
   return (
@@ -23,6 +24,9 @@ export default function App() {
         </Route>
         <Route path="/updateprofil">
           <UpdateProfil />
+        </Route>
+        <Route path="/newpassword">
+          <NewPassword />
         </Route>
       </Switch>
     </Router>
