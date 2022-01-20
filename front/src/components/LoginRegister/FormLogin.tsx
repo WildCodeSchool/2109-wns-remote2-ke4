@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import InputPassword from './Ui/InputPassword';
+import InputPassword from './InputPassword';
 import { styled } from '@mui/material/styles';
 
 const GridContainer = styled(Grid)(({ theme }) => ({

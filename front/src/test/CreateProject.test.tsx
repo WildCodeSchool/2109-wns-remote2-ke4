@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CreateProject from '../pages/CreateProject';
-import ModalAssignCreate from '../Components/ModalAssignCreate';
+import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
 
 describe('CreateProject', () => {
   it('Buttons invite dev', () => {

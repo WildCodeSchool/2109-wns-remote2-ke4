@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import FormUpdateProfil from '../Components/FormUpdateProfil';
+import FormUpdateProfil from '../components/UpdateProfile/FormUpdateProfil';
 
 const AvatarUpdate = styled(Avatar)(() => ({
   width: '100%',

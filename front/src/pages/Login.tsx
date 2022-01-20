@@ -1,5 +1,5 @@
-import RegisterLogin from '../Components/Ui/RegisterLogin';
-import LoginForm from '../Components/FormLogin';
+import RegisterLogin from '../components/LoginRegister/RegisterLogin';
+import LoginForm from '../components/LoginRegister/FormLogin';
 
 const Register = () => {
   return (

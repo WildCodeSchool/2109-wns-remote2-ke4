@@ -5,16 +5,26 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { makeStyles, createStyles } from '@mui/styles';
-import CancelIcon from '@mui/icons-material/Cancel';
-import background from '../images/background.jpg';
 import avatar1 from '../images/avatar1.jpg';
 import avatar2 from '../images/avatar2.jpg';
 import avatar3 from '../images/avatar3.jpg';
 import imgCreateProject from '../images/imgCreateProject.jpeg';
-import ModalAssignCreate from '../Components/ModalAssignCreate';
+import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
 import LuxonUtils from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import {
+  AvatarDiv,
+  BoxAvatarDev,
+  BoxContainer,
+  ButtonCreate,
+  Cancel,
+  GridLeft,
+  GridMargin,
+  GridOne,
+  Input,
+  Title,
+} from '../elements/createProject.styled';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,6 +40,7 @@ const useStyles = makeStyles(() =>
       border: '2px solid #000',
       borderRadius: '25px',
       boxShadow: '24px',
+      overflow: 'hidden',
 
       zIndex: 1,
       minHeight: '500px',
@@ -68,48 +79,24 @@ const CreateProject = () => {
   };
 
   return (
-    <div
-      style={{
-        background: `url(${background})`,
-        width: '100%',
-        minHeight: '100vh',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
+    <BoxContainer>
       <Box className={classes.root} component="form">
-        <Grid
-          item
-          md={6}
-          sm={12}
-          xs={12}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px 0px',
-          }}
-        >
-          <Typography
-            id="modal-modal-title"
-            variant="h2"
-            style={{ margin: '25px 0px' }}
-          >
+        <GridLeft item md={6} sm={12} xs={12}>
+          <Title id="modal-modal-title" variant="h2">
             New Project
-          </Typography>
-          <Grid item sx={{ width: '70%', marginBottom: '30px' }}>
-            <TextField
+          </Title>
+          <GridMargin item>
+            <Input
               data-testid="title"
               required
               error={!title}
               label="Titre"
               helperText="Ce champs est requis"
-              style={{ width: '100%' }}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-          </Grid>
-          <Grid sx={{ width: '70%' }}>
+          </GridMargin>
+          <GridOne>
             <LocalizationProvider
               dateAdapter={LuxonUtils}
               style={{ marginBottom: '20px' }}
@@ -131,104 +118,54 @@ const CreateProject = () => {
                 )}
               />
             </LocalizationProvider>
-          </Grid>
-          <Grid item sx={{ width: '70%', marginBottom: '30px' }}>
-            <TextField
+          </GridOne>
+          <GridMargin item>
+            <Input
               data-testid="description"
               label="Description"
               multiline
               rows={3}
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              style={{ width: '100%' }}
             />
-          </Grid>
-          <Button
-            style={{
-              background: '#07DFCD',
-              color: '#fff',
-              margin: '25px 0px',
-              padding: '10px 10px',
-            }}
-            onClick={handleOpen}
-          >
-            + Inviter des utilisateurs
-          </Button>
-          <Grid
-            item
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginBottom: '40px',
-            }}
-            data-testid="AvatarDev"
-          >
+          </GridMargin>
+          <Button onClick={handleOpen}>+ Inviter des utilisateurs</Button>
+          <BoxAvatarDev data-testid="AvatarDev">
             {arrayDev.map((f) => (
-              <div
+              <AvatarDiv
                 style={{
-                  height: '50px',
-                  width: '50px',
-                  borderRadius: '50%',
-                  position: 'relative',
-                  marginLeft: '15px',
-                  cursor: 'pointer',
-                  zIndex: 2,
                   background: `url(${f.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
                 }}
                 key={f.id}
               >
-                <CancelIcon
-                  style={{
-                    position: 'absolute',
-                    top: -5,
-                    right: 0,
-                    height: '20px',
-                    width: '20px',
-                    color: '#000',
-                    zIndex: 3,
-                  }}
+                <Cancel
                   onClick={() => deleteDevInCreateProject(f.id)}
                   data-testid="delete"
-                ></CancelIcon>
-              </div>
+                ></Cancel>
+              </AvatarDiv>
             ))}
-          </Grid>
+          </BoxAvatarDev>
 
-          <Button
+          <ButtonCreate
             style={{
-              background: '#07DFCD',
-              color: '#fff',
-              padding: '10px 10px',
               opacity: title !== '' ? 1 : 0.2,
             }}
             type="submit"
             disabled={title === ''}
           >
             Create Project
-          </Button>
-        </Grid>
+          </ButtonCreate>
+        </GridLeft>
         <Grid
           item
           md={6}
-          sx={{
+          style={{
             background: `url(${imgCreateProject})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            borderTopRightRadius: '20px',
-            borderBottomRightRadius: '20px',
-            display: {
-              xs: 'none',
-              sm: 'none',
-              md: 'flex',
-              lg: 'flex',
-            },
           }}
         ></Grid>
       </Box>
       <ModalAssignCreate open={open} handleClose={handleClose} />
-    </div>
+    </BoxContainer>
   );
 };
 export default CreateProject;

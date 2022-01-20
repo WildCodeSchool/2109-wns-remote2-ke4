@@ -7,7 +7,7 @@ import {
   ButtonCancel,
   ButtonSend,
   TextFieldNewPassword,
-} from '../Components/NewPassword';
+} from '../elements/newPassword.styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
