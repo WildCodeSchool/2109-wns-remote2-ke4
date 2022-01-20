@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { makeStyles, createStyles } from '@mui/styles';
-import workspace from '../../images/workspace.jpg';
-import logo from '../../images/logoKe4.png';
+import workspace from '../../assets/images/workspace.jpg';
+import logo from '../../assets/images/logoKe4.png';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 

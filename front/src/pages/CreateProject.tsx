@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { makeStyles, createStyles } from '@mui/styles';
-import avatar1 from '../images/avatar1.jpg';
-import avatar2 from '../images/avatar2.jpg';
-import avatar3 from '../images/avatar3.jpg';
-import imgCreateProject from '../images/imgCreateProject.jpeg';
+import avatar1 from '../assets/images/avatar1.jpg';
+import avatar2 from '../assets/images/avatar2.jpg';
+import avatar3 from '../assets/images/avatar3.jpg';
+import imgCreateProject from '../assets/images/imgCreateProject.jpeg';
 import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
 import LuxonUtils from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';

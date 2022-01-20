@@ -1,6 +1,6 @@
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import avatar from '../images/avatar1.jpg';
+import avatar from '../assets/images/avatar1.jpg';
 import { makeStyles, createStyles } from '@mui/styles';
 import { styled } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';

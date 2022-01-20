@@ -1,9 +1,9 @@
-import avatar1 from '../images/avatar1.jpg';
-import avatar2 from '../images/avatar2.jpg';
-import avatar3 from '../images/avatar3.jpg';
-import avatar4 from '../images/avatar4.jpg';
-import avatar5 from '../images/avatar5.jpg';
-import avatar6 from '../images/avatar6.jpg';
+import avatar1 from '../assets/images/avatar1.jpg';
+import avatar2 from '../assets/images/avatar2.jpg';
+import avatar3 from '../assets/images/avatar3.jpg';
+import avatar4 from '../assets/images/avatar4.jpg';
+import avatar5 from '../assets/images/avatar5.jpg';
+import avatar6 from '../assets/images/avatar6.jpg';
 export const devArrayAssign = [
     {
       id: 1,
