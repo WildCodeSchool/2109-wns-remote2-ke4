@@ -8,14 +8,22 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export const StyledNavbar = styled('div')(({ theme }) => ({
+interface DivProps {
+  visible: number;
+}
+
+export const StyledNavbar = styled(Box)<DivProps>(({ theme, visible }) => ({
   width: '300px',
   height: '100vh',
   boxShadow: '5px 0px 15px -1px #000000',
-  background: '#FFF',
+  background: '#fff',
   display: 'flex',
   flexDirection: 'column',
   zIndex: 4,
+  position: 'fixed',
+  top: 0,
+  left: visible,
+  transition: 'left .5s',
 }));
 
 export const StyledNavbarTop = styled('div')(() => ({
@@ -32,6 +40,7 @@ export const Close = styled(CloseIcon)(() => ({
   zIndex: 5,
   right: 10,
   top: 10,
+  cursor: 'pointer',
 }));
 
 export const Logo = styled('img')(() => ({

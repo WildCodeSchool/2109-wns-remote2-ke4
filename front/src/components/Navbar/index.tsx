@@ -8,16 +8,20 @@ import {
   StyledNavbarTop,
 } from '../../elements/navbar.styled';
 import logo from '../../assets/images/logoKe4.png';
+import React from 'react';
 import { navbarOption } from '../../mock/navbar.mock';
 import { useHistory } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar: React.FC<{ onChange: (b: boolean) => void; navbar: boolean }> = ({
+  onChange,
+  navbar,
+}) => {
   const history = useHistory();
   return (
-    <StyledNavbar>
+    <StyledNavbar visible={navbar ? 0 : -310}>
       <StyledNavbarTop>
         <Logo src={logo} alt="logo" />
-        <Close />
+        <Close onClick={() => onChange(false)} />
       </StyledNavbarTop>
       <ContainerOption>
         {navbarOption.map(({ label, icon, link }, index) => (
