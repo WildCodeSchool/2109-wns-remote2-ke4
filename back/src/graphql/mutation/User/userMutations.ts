@@ -7,49 +7,53 @@ import {
 } from 'graphql';
 import prisma from '../../../lib/prisma';
 
-const registerProject: GraphQLFieldConfig<any, any, any> = {
+interface argstype {
+  // todo
+}
+
+const registerUser: GraphQLFieldConfig<any, any, any> = {
   args: {
+    email: {
+      type: GraphQLString,
+    },
+    mdp: {
+      type: GraphQLString,
+    },
     name: {
       type: GraphQLString,
     },
-    author: {
+    firstname: {
       type: GraphQLString,
     },
-    ticket: {
-      type: new GraphQLList(GraphQLString),
-    },
-    client: {
-      type: GraphQLString,
-    },
-    status: {
+    avatar: {
       type: GraphQLString,
     },
     description: {
       type: GraphQLString,
     },
-    user: {
+    role: {
       type: new GraphQLList(GraphQLString),
     },
-    investedTime: {
-      type: GraphQLString,
+    project: {
+      type: new GraphQLList(GraphQLString),
     },
-    estimatedTime: {
-      type: GraphQLString,
+    ticket: {
+      type: new GraphQLList(GraphQLString),
     },
   },
   type: new GraphQLNonNull(GraphQLID),
   resolve: async (_, args) => {
-    const post = await prisma.project.create({
+    const post = await prisma.user.create({
       data: {
+        email: args.email,
+        mdp: args.mdp,
         name: args.name,
-        author: args.author,
-        ticketId: args.ticket,
-        client: args.client,
-        status: args.status,
+        firstname: args.firstname,
+        avatar: args.avatar,
         description: args.description,
-        userId: args.user,
-        investedTime: args.investedTime,
-        estimatedTime: args.estimatedTime,
+        role: args.role,
+        projectId: args.project,
+        ticketId: args.ticket,
       },
     });
     console.dir(post);
@@ -57,4 +61,4 @@ const registerProject: GraphQLFieldConfig<any, any, any> = {
   },
 };
 
-export default registerProject;
+export default registerUser;

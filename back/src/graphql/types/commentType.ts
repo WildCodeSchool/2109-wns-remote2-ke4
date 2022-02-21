@@ -5,7 +5,7 @@ import {
   GraphQLString,
 } from 'graphql';
 
-const commentType = new GraphQLObjectType({
+const Comment = new GraphQLObjectType({
   name: 'comment',
   fields: () => ({
     id: {
@@ -17,9 +17,9 @@ const commentType = new GraphQLObjectType({
     content: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    author: {
+    authorId: {
       type: new GraphQLNonNull(GraphQLString),
     },
   }),
 });
-export default commentType;
+export default Comment;

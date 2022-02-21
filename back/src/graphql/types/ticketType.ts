@@ -5,10 +5,9 @@ import {
   GraphQLString,
   GraphQLList,
 } from 'graphql';
-import User from './userType';
 
-const Ticket = new GraphQLObjectType({
-  name: 'comment',
+const Ticket: any = new GraphQLObjectType({
+  name: 'ticket',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -16,8 +15,7 @@ const Ticket = new GraphQLObjectType({
     name: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    project: {
-      // A REVOIR
+    projectId: {
       type: new GraphQLNonNull(GraphQLString),
     },
     status: {
@@ -26,12 +24,23 @@ const Ticket = new GraphQLObjectType({
     description: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    user: {
-      type: new GraphQLNonNull(new GraphQLList(User)),
+    userId: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
     ressources: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
+    /* project: {
+      type: new GraphQLList(Project),
+      resolve: async (node) => {
+        const project = await prisma.project.findUnique({
+          where: {
+            id: node.projectId,
+          },
+        });
+        return project;
+      },
+    }, */
   }),
 });
 export default Ticket;

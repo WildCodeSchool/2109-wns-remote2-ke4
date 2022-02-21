@@ -7,7 +7,7 @@ import {
 } from 'graphql';
 
 const User = new GraphQLObjectType({
-  name: 'comment',
+  name: 'user',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -34,12 +34,10 @@ const User = new GraphQLObjectType({
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
     project: {
-      // A REVOIR
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
     ticket: {
-      // A REVOIR
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
   }),
 });
