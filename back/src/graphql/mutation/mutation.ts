@@ -1,8 +1,24 @@
 import { GraphQLObjectType } from 'graphql/type';
-import registerComment from './Comment/commentMutations';
-import registerUser from './User/userMutations';
-import registerTicket from './Ticket/ticketMutations';
-import registerProject from './Project/projectMutations';
+import {
+  registerComment,
+  updateCommentById,
+  deleteCommentById,
+} from './Comment/commentMutations';
+import {
+  registerUser,
+  updateUserById,
+  deleteUserById,
+} from './User/userMutations';
+import {
+  registerTicket,
+  updateTicketById,
+  deleteTicketById,
+} from './Ticket/ticketMutations';
+import {
+  registerProject,
+  updateProjectByID,
+  deleteProjectById,
+} from './Project/projectMutations';
 
 const mutations = new GraphQLObjectType({
   name: 'RootMutation',
@@ -10,9 +26,15 @@ const mutations = new GraphQLObjectType({
   // @ts-ignore
   fields: () => ({
     registerComment,
+    updateCommentById,
+    deleteCommentById,
     registerUser,
     registerTicket,
+    updateTicketById,
+    deleteUserById,
     registerProject,
+    updateProjectByID,
+    deleteProjectById,
   }),
 });
 export default mutations;
