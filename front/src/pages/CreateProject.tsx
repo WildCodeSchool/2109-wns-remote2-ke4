@@ -4,26 +4,22 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { makeStyles, createStyles } from '@mui/styles';
-import avatar1 from '../assets/images/avatar1.jpg';
-import avatar2 from '../assets/images/avatar2.jpg';
-import avatar3 from '../assets/images/avatar3.jpg';
 import imgCreateProject from '../assets/images/imgCreateProject.jpeg';
 import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
 import LuxonUtils from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import {
-  AvatarDiv,
-  BoxAvatarDev,
   BoxContainer,
   ButtonCreate,
-  Cancel,
   GridLeft,
   GridMargin,
   GridOne,
   Input,
   Title,
 } from '../elements/createProject.styled';
+import { devArrayNotAssign } from '../libs/const';
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,35 +43,29 @@ const useStyles = makeStyles(() =>
   })
 );
 
+const columnsFromBackend = {
+  [uuidv4()]: {
+    name: 'Assigned',
+    items: [],
+  },
+  [uuidv4()]: {
+    name: 'Not Assigned',
+    items: devArrayNotAssign,
+  },
+};
+
 const CreateProject = () => {
   const classes = useStyles();
 
   // State
+  const [columns, setColumns] = useState(columnsFromBackend);
   const [title, setTitle] = useState('');
-  const [arrayDev, setArrayDev] = useState([
-    {
-      id: 'zfozekfeoz',
-      image: avatar1,
-    },
-    {
-      id: 'zefnzelkf',
-      image: avatar2,
-    },
-    {
-      id: 'zekfzekfm',
-      image: avatar3,
-    },
-  ]);
   const [open, setOpen] = useState<boolean>(false);
   const [dateDue, setDateDue] = useState<Date | null>(new Date());
   const [description, setDescription] = useState<string>('');
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const deleteDevInCreateProject = (id: string) => {
-    setArrayDev((el) => el.filter((element) => element.id !== id));
-  };
 
   return (
     <BoxContainer>
@@ -129,21 +119,6 @@ const CreateProject = () => {
             />
           </GridMargin>
           <Button onClick={handleOpen}>+ Inviter des utilisateurs</Button>
-          <BoxAvatarDev data-testid="AvatarDev">
-            {arrayDev.map((f) => (
-              <AvatarDiv
-                style={{
-                  background: `url(${f.image})`,
-                }}
-                key={f.id}
-              >
-                <Cancel
-                  onClick={() => deleteDevInCreateProject(f.id)}
-                  data-testid="delete"
-                ></Cancel>
-              </AvatarDiv>
-            ))}
-          </BoxAvatarDev>
 
           <ButtonCreate
             style={{
@@ -163,7 +138,12 @@ const CreateProject = () => {
           }}
         ></Grid>
       </Box>
-      <ModalAssignCreate open={open} handleClose={handleClose} />
+      <ModalAssignCreate
+        open={open}
+        handleClose={handleClose}
+        columns={columns}
+        setColumns={setColumns}
+      />
     </BoxContainer>
   );
 };
