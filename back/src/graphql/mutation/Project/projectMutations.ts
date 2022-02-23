@@ -49,6 +49,7 @@ export const registerProject: GraphQLFieldConfig<any, any, any> = {
         status: args.status,
         description: args.description,
         userId: args.user,
+        date: args.date,
         investedTime: args.investedTime,
         estimatedTime: args.estimatedTime,
       },
@@ -84,6 +85,10 @@ export const updateProjectByID: GraphQLFieldConfig<any, any, any> = {
     user: {
       type: new GraphQLList(GraphQLID),
     },
+    date: {
+      type: GraphQLString,
+    },
+
     investedTime: {
       type: GraphQLString,
     },
@@ -104,7 +109,8 @@ export const updateProjectByID: GraphQLFieldConfig<any, any, any> = {
         client: args.client,
         status: args.status,
         description: args.description,
-        user: args.user,
+        userId: args.user,
+        date: args.date,
         investedTime: args.investedTime,
         estimatedTime: args.estimatedTime,
       },
