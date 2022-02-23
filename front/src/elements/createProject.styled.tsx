@@ -67,6 +67,8 @@ export const BoxContainer = styled(Box)(() => ({
   minHeight: '100vh',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
+  display: 'flex',
+  justifyContent: 'center',
 }));
 
 export const ButtonDev = styled(Button)(() => ({

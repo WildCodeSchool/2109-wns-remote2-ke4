@@ -20,15 +20,13 @@ import {
 } from '../elements/createProject.styled';
 import { devArrayNotAssign } from '../libs/const';
 import { v4 as uuidv4 } from 'uuid';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'flex',
-      position: 'absolute' as 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+      marginTop: '10px',
       maxWidth: 1200,
       width: '100%',
       background: '#fff',
@@ -60,6 +58,9 @@ const CreateProject = () => {
   // State
   const [columns, setColumns] = useState(columnsFromBackend);
   const [title, setTitle] = useState('');
+  const [societe, setSociete] = useState('');
+  const [time, setTime] = useState('');
+  const [optionTime, setOptionTime] = useState('');
   const [open, setOpen] = useState<boolean>(false);
   const [dateDue, setDateDue] = useState<Date | null>(new Date());
   const [description, setDescription] = useState<string>('');
@@ -70,73 +71,104 @@ const CreateProject = () => {
   return (
     <BoxContainer>
       <Box className={classes.root} component="form">
-        <GridLeft item md={6} sm={12} xs={12}>
-          <Title id="modal-modal-title" variant="h2">
-            New Project
-          </Title>
-          <GridMargin item>
-            <Input
-              data-testid="title"
-              required
-              error={!title}
-              label="Titre"
-              helperText="Ce champs est requis"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </GridMargin>
-          <GridOne>
-            <LocalizationProvider
-              dateAdapter={LuxonUtils}
-              style={{ marginBottom: '20px' }}
-              locale="fr"
-            >
-              <DatePicker
-                label="Date Due"
-                value={dateDue}
-                disablePast
-                onChange={(date: Date | null) => {
-                  setDateDue(date);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    sx={{ marginBottom: '20px', width: '100%' }}
-                    data-testid="dateDue"
-                  />
-                )}
+        <Grid container>
+          <GridLeft item md={6} sm={12} xs={12}>
+            <Title id="modal-modal-title" variant="h2">
+              New Project
+            </Title>
+            <GridMargin item>
+              <Input
+                data-testid="title"
+                required
+                error={!title}
+                label="Titre"
+                helperText="Ce champs est requis"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
-            </LocalizationProvider>
-          </GridOne>
-          <GridMargin item>
-            <Input
-              data-testid="description"
-              label="Description"
-              multiline
-              rows={3}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </GridMargin>
-          <Button onClick={handleOpen}>+ Inviter des utilisateurs</Button>
+            </GridMargin>
+            <GridOne>
+              <LocalizationProvider
+                dateAdapter={LuxonUtils}
+                style={{ marginBottom: '20px' }}
+                locale="fr"
+              >
+                <DatePicker
+                  label="Date Due"
+                  value={dateDue}
+                  disablePast
+                  onChange={(date: Date | null) => {
+                    setDateDue(date);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={{ marginBottom: '20px', width: '100%' }}
+                      data-testid="dateDue"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+            </GridOne>
+            <GridMargin item>
+              <Input
+                label="Nom de societe"
+                value={societe}
+                onChange={(e) => setSociete(e.target.value)}
+              />
+            </GridMargin>
+            <GridMargin item>
+              <Input
+                label="Temps durée estimé"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </GridMargin>
+            <GridMargin item>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Option durée
+                </InputLabel>
+                <Select
+                  value={optionTime}
+                  onChange={(e) => setOptionTime(e.target.value)}
+                >
+                  <MenuItem value={'jours'}>jours</MenuItem>
+                  <MenuItem value={'mois'}>mois</MenuItem>
+                  <MenuItem value={'années'}>années</MenuItem>
+                </Select>
+              </FormControl>
+            </GridMargin>
+            <GridMargin item>
+              <Input
+                data-testid="description"
+                label="Description"
+                multiline
+                rows={3}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+              />
+            </GridMargin>
+            <Button onClick={handleOpen}>+ Inviter des utilisateurs</Button>
 
-          <ButtonCreate
+            <ButtonCreate
+              style={{
+                opacity: title !== '' ? 1 : 0.2,
+              }}
+              onClick={() => {}}
+              disabled={title === ''}
+            >
+              Create Project
+            </ButtonCreate>
+          </GridLeft>
+          <Grid
+            item
+            md={6}
             style={{
-              opacity: title !== '' ? 1 : 0.2,
+              background: `url(${imgCreateProject})`,
             }}
-            onClick={() => {}}
-            disabled={title === ''}
-          >
-            Create Project
-          </ButtonCreate>
-        </GridLeft>
-        <Grid
-          item
-          md={6}
-          style={{
-            background: `url(${imgCreateProject})`,
-          }}
-        ></Grid>
+          ></Grid>
+        </Grid>
       </Box>
       <ModalAssignCreate
         open={open}
