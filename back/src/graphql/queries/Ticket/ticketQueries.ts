@@ -9,9 +9,10 @@ import prisma from '../../../lib/prisma';
 
 const queriesTicket: GraphQLFieldConfigMap<any, any> = {
   getAllTickets: {
-    type: new GraphQLNonNull(new GraphQLList(Ticket)),
+    type: new GraphQLList(Ticket),
     resolve: async () => {
-      return await prisma.ticket.findMany();
+      const tickets = prisma.ticket.findMany();
+      return tickets || [];
     },
   },
 

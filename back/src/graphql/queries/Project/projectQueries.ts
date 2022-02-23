@@ -9,9 +9,10 @@ import prisma from '../../../lib/prisma';
 
 const queriesProject: GraphQLFieldConfigMap<any, any> = {
   getAllProjects: {
-    type: new GraphQLNonNull(new GraphQLList(Project)),
+    type: new GraphQLList(Project),
     resolve: async () => {
-      return await prisma.project.findMany();
+      const projects = await prisma.project.findMany();
+      return projects || [];
     },
   },
 

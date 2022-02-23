@@ -3,16 +3,16 @@ import {
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLString,
 } from 'graphql';
 import User from '../../types/userType';
 import prisma from '../../../lib/prisma';
 
 const queriesUser: GraphQLFieldConfigMap<any, any> = {
   getAllUsers: {
-    type: new GraphQLNonNull(new GraphQLList(User)),
+    type: new GraphQLList(User),
     resolve: async () => {
-      return await prisma.user.findMany();
+      const users = prisma.user.findMany();
+      return users || [];
     },
   },
 

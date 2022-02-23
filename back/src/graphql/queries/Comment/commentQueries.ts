@@ -3,16 +3,16 @@ import {
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLString,
 } from 'graphql';
 import Comment from '../../types/commentType';
 import prisma from '../../../lib/prisma';
 
 const queriesComment: GraphQLFieldConfigMap<any, any> = {
   getAllComments: {
-    type: new GraphQLNonNull(new GraphQLList(Comment)),
+    type: new GraphQLList(Comment),
     resolve: async () => {
-      return await prisma.comment.findMany();
+      const comments = await prisma.comment.findMany();
+      return comments || [];
     },
   },
 
