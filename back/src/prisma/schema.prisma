@@ -35,6 +35,7 @@ model Ticket {
   description String
   user User[] @relation(fields: [userId], references: [id])
   userId String[] @db.Array(ObjectId)
+  comments Comment[]
   investedTime String
   estimatedTime String 
   startDate String
@@ -47,8 +48,8 @@ model Project {
   id String @id @default(dbgenerated()) @map("_id") @db.ObjectId 
   name String
   author String
-  ticket Ticket[] @relation(fields: [ticketId], references: [id])
-  ticketId String[]
+  tickets Ticket[] @relation(fields: [ticketsId], references: [id])
+  ticketsId String[]
   client String
   status String
   description String
@@ -64,5 +65,7 @@ model Comment {
   content String
   author User @relation(fields: [authorId], references: [id])
   authorId String
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  ticketId String
 }
 

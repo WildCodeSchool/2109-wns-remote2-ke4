@@ -28,10 +28,15 @@ const mutations = new GraphQLObjectType({
     registerComment,
     updateCommentById,
     deleteCommentById,
+
     registerUser,
+    updateUserById,
+    deleteUserById,
+
     registerTicket,
     updateTicketById,
-    deleteUserById,
+    deleteTicketById,
+
     registerProject,
     updateProjectByID,
     deleteProjectById,

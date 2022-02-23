@@ -16,7 +16,7 @@ export const registerProject: GraphQLFieldConfig<any, any, any> = {
     author: {
       type: GraphQLString,
     },
-    ticket: {
+    ticketsId: {
       type: new GraphQLList(GraphQLString),
     },
     client: {
@@ -44,7 +44,7 @@ export const registerProject: GraphQLFieldConfig<any, any, any> = {
       data: {
         name: args.name,
         author: args.author,
-        ticketId: args.ticket,
+        ticketsId: args.ticketsId,
         client: args.client,
         status: args.status,
         description: args.description,
@@ -69,7 +69,7 @@ export const updateProjectByID: GraphQLFieldConfig<any, any, any> = {
     author: {
       type: GraphQLString,
     },
-    ticketId: {
+    ticketsId: {
       type: new GraphQLList(GraphQLID),
     },
     client: {
@@ -100,7 +100,7 @@ export const updateProjectByID: GraphQLFieldConfig<any, any, any> = {
       data: {
         name: args.name,
         author: args.author,
-        ticketId: args.ticketId,
+        ticketsId: args.ticketsId,
         client: args.client,
         status: args.status,
         description: args.description,

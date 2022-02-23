@@ -30,6 +30,9 @@ const Ticket: any = new GraphQLObjectType({
     ressources: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
+    priority: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
     /* project: {
       type: new GraphQLList(Project),
       resolve: async (node) => {

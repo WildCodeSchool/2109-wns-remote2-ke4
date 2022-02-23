@@ -20,6 +20,9 @@ const Comment = new GraphQLObjectType({
     authorId: {
       type: new GraphQLNonNull(GraphQLString),
     },
+    ticketId: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
   }),
 });
 export default Comment;

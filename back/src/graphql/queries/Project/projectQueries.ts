@@ -3,7 +3,6 @@ import {
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLString,
 } from 'graphql';
 import Project from '../../types/projectType';
 import prisma from '../../../lib/prisma';

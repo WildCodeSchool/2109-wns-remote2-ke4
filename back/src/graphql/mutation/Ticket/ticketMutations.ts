@@ -89,6 +89,9 @@ export const updateTicketById: GraphQLFieldConfig<any, any, any> = {
     ressources: {
       type: new GraphQLList(GraphQLString),
     },
+    priority: {
+      type: GraphQLString,
+    },
   },
   type: new GraphQLNonNull(Ticket),
   resolve: async (_, args) => {
@@ -103,6 +106,7 @@ export const updateTicketById: GraphQLFieldConfig<any, any, any> = {
         description: args.description,
         userId: args.userId,
         ressources: args.ressources,
+        priority: args.priority,
       },
     });
   },

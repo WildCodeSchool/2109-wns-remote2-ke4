@@ -18,7 +18,7 @@ const Project: any = new GraphQLObjectType({
     author: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    ticketId: {
+    ticketsId: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
     client: {

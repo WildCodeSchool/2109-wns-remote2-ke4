@@ -22,6 +22,9 @@ export const registerComment: GraphQLFieldConfig<any, any, any> = {
     author: {
       type: GraphQLString,
     },
+    ticketId: {
+      type: GraphQLString,
+    },
   },
   type: new GraphQLNonNull(GraphQLID),
   resolve: async (_, args) => {
@@ -30,6 +33,7 @@ export const registerComment: GraphQLFieldConfig<any, any, any> = {
         postDate: args.postDate,
         content: args.content,
         authorId: args.author,
+        ticketId: args.ticketId,
       },
     });
     console.dir(post);
@@ -50,6 +54,9 @@ export const updateCommentById: GraphQLFieldConfig<any, any, any> = {
     },
     authorId: {
       type: GraphQLID,
+    },
+    ticketId: {
+      type: GraphQLString,
     },
   },
   type: new GraphQLNonNull(Comment),
