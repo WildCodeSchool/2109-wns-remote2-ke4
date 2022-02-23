@@ -124,7 +124,7 @@ const CreateProject = () => {
             style={{
               opacity: title !== '' ? 1 : 0.2,
             }}
-            type="submit"
+            onClick={() => {}}
             disabled={title === ''}
           >
             Create Project
