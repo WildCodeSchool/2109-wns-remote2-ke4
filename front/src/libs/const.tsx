@@ -9,34 +9,39 @@ export const devArrayNotAssign = [
   {
     id: uuidv4(),
     image: avatar4,
-
-    name: 'Lochlain Jsp',
+    firstName: 'Tochlain',
+    lastName: 'Jsp',
   },
   {
     id: uuidv4(),
     image: avatar5,
 
-    name: 'Nissim Jsp',
+    firstName: 'Nissim',
+    lastName: 'Jsp',
   },
   {
     id: uuidv4(),
     image: avatar6,
 
-    name: 'Maxime Vallee',
+    firstName: 'Maxime',
+    lastName: 'Vallee',
   },
   {
     id: uuidv4(),
     image: avatar1,
-    name: 'Thomas Thbaut',
+    firstName: 'Thomas',
+    lastName: 'Thbaut',
   },
   {
     id: uuidv4(),
     image: avatar2,
-    name: 'Yunus Jsp',
+    firstName: 'Yunus',
+    lastName: 'Jsp',
   },
   {
     id: uuidv4(),
     image: avatar3,
-    name: 'Pierre-Hugo Maillet',
+    firstName: 'Pierre-Hugo',
+    lastName: 'Maillet',
   },
 ];
