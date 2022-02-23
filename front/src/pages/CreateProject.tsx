@@ -15,6 +15,7 @@ import {
   GridLeft,
   GridMargin,
   GridOne,
+  GridTime,
   Input,
   Title,
 } from '../elements/createProject.styled';
@@ -112,33 +113,34 @@ const CreateProject = () => {
             </GridOne>
             <GridMargin item>
               <Input
-                label="Nom de societe"
+                label="Client"
                 value={societe}
                 onChange={(e) => setSociete(e.target.value)}
               />
             </GridMargin>
-            <GridMargin item>
-              <Input
-                label="Temps durée estimé"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              />
-            </GridMargin>
-            <GridMargin item>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Option durée
-                </InputLabel>
-                <Select
-                  value={optionTime}
-                  onChange={(e) => setOptionTime(e.target.value)}
-                >
-                  <MenuItem value={'jours'}>jours</MenuItem>
-                  <MenuItem value={'mois'}>mois</MenuItem>
-                  <MenuItem value={'années'}>années</MenuItem>
-                </Select>
-              </FormControl>
-            </GridMargin>
+            <GridTime container>
+              <Grid item sm={7}>
+                <Input
+                  label="Temps estimé"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+              </Grid>
+              <Grid sm={4}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Unité</InputLabel>
+                  <Select
+                    value={optionTime}
+                    onChange={(e) => setOptionTime(e.target.value)}
+                  >
+                    <MenuItem value={'jours'}>jours</MenuItem>
+                    <MenuItem value={'mois'}>mois</MenuItem>
+                    <MenuItem value={'années'}>années</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </GridTime>
+
             <GridMargin item>
               <Input
                 data-testid="description"

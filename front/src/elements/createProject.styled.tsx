@@ -33,6 +33,14 @@ export const GridMargin = styled(Grid)(() => ({
   marginBottom: '30px',
 }));
 
+export const GridTime = styled(Grid)(() => ({
+  width: '70%',
+  marginBottom: '30px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'baseline',
+}));
+
 export const Title = styled(Typography)(() => ({
   margin: '25px 0px',
 }));
