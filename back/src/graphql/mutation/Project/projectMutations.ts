@@ -16,13 +16,7 @@ export const registerProject: GraphQLFieldConfig<any, any, any> = {
     author: {
       type: GraphQLString,
     },
-    ticketsId: {
-      type: new GraphQLList(GraphQLString),
-    },
     client: {
-      type: GraphQLString,
-    },
-    status: {
       type: GraphQLString,
     },
     description: {
@@ -31,7 +25,7 @@ export const registerProject: GraphQLFieldConfig<any, any, any> = {
     user: {
       type: new GraphQLList(GraphQLString),
     },
-    investedTime: {
+    date: {
       type: GraphQLString,
     },
     estimatedTime: {
@@ -50,7 +44,7 @@ export const registerProject: GraphQLFieldConfig<any, any, any> = {
         description: args.description,
         userId: args.user,
         date: args.date,
-        investedTime: args.investedTime,
+        investedTime: '0',
         estimatedTime: args.estimatedTime,
       },
     });
