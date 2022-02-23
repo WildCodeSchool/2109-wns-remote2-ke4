@@ -16,17 +16,11 @@ export const registerTicket: GraphQLFieldConfig<any, any, any> = {
     project: {
       type: GraphQLString,
     },
-    status: {
-      type: GraphQLString,
-    },
     description: {
       type: GraphQLString,
     },
     user: {
       type: new GraphQLList(GraphQLString),
-    },
-    investedTime: {
-      type: GraphQLString,
     },
     estimatedTime: {
       type: GraphQLString,
