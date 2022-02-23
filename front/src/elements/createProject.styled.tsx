@@ -33,6 +33,14 @@ export const GridMargin = styled(Grid)(() => ({
   marginBottom: '30px',
 }));
 
+export const GridTime = styled(Grid)(() => ({
+  width: '70%',
+  marginBottom: '30px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'baseline',
+}));
+
 export const Title = styled(Typography)(() => ({
   margin: '25px 0px',
 }));
@@ -67,6 +75,8 @@ export const BoxContainer = styled(Box)(() => ({
   minHeight: '100vh',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
+  display: 'flex',
+  justifyContent: 'center',
 }));
 
 export const ButtonDev = styled(Button)(() => ({
