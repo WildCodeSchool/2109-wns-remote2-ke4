@@ -32,15 +32,6 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
     description: {
       type: GraphQLString,
     },
-    role: {
-      type: new GraphQLList(GraphQLString),
-    },
-    project: {
-      type: new GraphQLList(GraphQLString),
-    },
-    ticket: {
-      type: new GraphQLList(GraphQLString),
-    },
   },
   type: new GraphQLNonNull(GraphQLID),
   resolve: async (_, args) => {
