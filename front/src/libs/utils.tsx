@@ -6,3 +6,4 @@ export const capitalize = (s: string) => {
 export const url = window.location.pathname;
 
 export const pageWithNotHeader = ['/login', '/register'];
+export const pageWithImageBackground = ['/createProject'];

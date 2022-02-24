@@ -14,7 +14,6 @@ import {
   TitleSearch,
 } from '../../elements/ModalAssignDev.styles';
 import { capitalize } from '../../libs/utils';
-import Typography from '@mui/material/Typography';
 
 const ModalAssignCreateProject: React.FC<{
   open: boolean;
