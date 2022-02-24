@@ -5,7 +5,6 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/styles';
-import { fontSize } from '@mui/system';
 
 export const ModalStyles = styled(Modal)({
   display: 'flex',

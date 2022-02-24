@@ -27,7 +27,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'flex',
-      marginTop: '10px',
+      margin: '50px',
       maxWidth: 1200,
       width: '100%',
       background: '#fff',
