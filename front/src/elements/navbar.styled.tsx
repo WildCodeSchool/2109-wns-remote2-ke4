@@ -14,6 +14,11 @@ interface DivProps {
   visible: number;
 }
 
+interface OpacityProps {
+  opa?: number;
+  cursoroption?: string;
+}
+
 export const StyledNavbar = styled(Box)<DivProps>(({ theme, visible }) => ({
   width: '300px',
   height: '100vh',
@@ -82,38 +87,48 @@ export const ContainerOption = styled('div')(() => ({
   width: '100%',
 }));
 
-export const Option = styled(Box)(() => ({
+export const Option = styled(Box)<OpacityProps>(({ opa, cursoroption }) => ({
   display: 'flex',
+  alignItems: 'center',
   paddingLeft: '30px',
   width: '100%',
   marginTop: '25px',
-  cursor: 'pointer',
+  cursor: cursoroption,
+  opacity: opa,
 }));
 
 export const NavTypography = styled(Typography)(() => ({
   marginLeft: '15px',
+  fontSize: '28px',
 }));
-export const AccordionStyled = styled(Accordion)(() => ({
-  boxShadow: 'none',
-  marginTop: '15px',
-  '::before': {
-    display: 'none',
-  },
-  '& > div': {
-    padding: '0 29px',
-  },
-}));
+export const AccordionStyled = styled(Accordion)<OpacityProps>(
+  ({ opa, cursoroption }) => ({
+    boxShadow: 'none',
+    marginTop: '15px',
+    opacity: opa,
+    cursor: cursoroption,
+    '::before': {
+      display: 'none',
+    },
+    '& > div': {
+      padding: '0 29px',
+    },
+  })
+);
 
-export const AccordionDetailsStyled = styled(AccordionDetails)({
-  padding: '0px',
-});
-export const ListStyled = styled('li')({
+export const AccordionDetailsStyled = styled(AccordionDetails)<OpacityProps>(
+  ({ cursoroption }) => ({
+    padding: '0px',
+    cursor: cursoroption,
+  })
+);
+export const ListStyled = styled('li')<OpacityProps>(({ cursoroption }) => ({
   position: 'relative',
   fontSize: '20px',
   marginBottom: '10px',
   overflowWrap: 'break-word',
-  cursor: 'pointer',
+  cursor: cursoroption,
   '&:hover': {
     color: '#DAD6D6',
   },
-});
+}));

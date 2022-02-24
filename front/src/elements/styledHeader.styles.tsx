@@ -40,6 +40,7 @@ export const AvatarUser = styled('div')(() => ({
   backgroundPosition: 'center',
   backgroundSize: 'cover',
   marginLeft: '15px',
+  cursor: 'pointer',
 }));
 
 export const MenuBurger = styled(Box)<ArgsMenu>(({ colorMenuBurger }) => ({

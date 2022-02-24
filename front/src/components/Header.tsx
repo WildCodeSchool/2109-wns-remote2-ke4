@@ -8,6 +8,7 @@ import {
 } from '../elements/styledHeader.styles';
 import Badge from '@mui/material/Badge';
 import { makeStyles, createStyles } from '@mui/styles';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -21,8 +22,10 @@ const useStyles = makeStyles(() =>
 const Header: React.FC<{
   onChange: (b: boolean) => void;
   color: string;
-}> = ({ onChange, color }) => {
+  handleUrlPage: (str: string) => void;
+}> = ({ onChange, color, handleUrlPage }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <HeaderContainer>
@@ -39,7 +42,12 @@ const Header: React.FC<{
         >
           <Notifications colornotif={color} />
         </Badge>
-        <AvatarUser />
+        <AvatarUser
+          onClick={() => {
+            handleUrlPage('/updateprofil');
+            history.push('/updateprofil');
+          }}
+        />
       </DivNotifAvatar>
     </HeaderContainer>
   );

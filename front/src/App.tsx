@@ -7,7 +7,7 @@ import Board from './pages/Board';
 import { theme } from './Theme';
 import { ThemeProvider } from '@mui/system';
 import Header from './components/Header';
-import { url, pageWithNotHeader, pageWithImageBackground } from './libs/utils';
+import { pageWithNotHeader, pageWithImageBackground } from './libs/utils';
 import Navbar from './components/Navbar';
 import UpdateProfil from './pages/UpdateProfil';
 import NewPassword from './pages/NewPassword';
@@ -15,8 +15,15 @@ import background from './assets/images/background.jpg';
 import BodyApp from './components/Body';
 
 export default function App() {
+  const [urlPage, setUrlPage] = useState(window.location.pathname);
   const [navbar, setNavbar] = useState(false);
-  const statePageWithImageBackground = pageWithImageBackground.includes(url);
+
+  const statePageWithImageBackground =
+    pageWithImageBackground.includes(urlPage);
+
+  const handleUrlPage = (url: string) => {
+    setUrlPage(url);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -24,14 +31,22 @@ export default function App() {
         <BodyApp
           bBody={!statePageWithImageBackground ? '#fff' : `url(${background})`}
         >
-          {!pageWithNotHeader.includes(url) && (
+          {!pageWithNotHeader.includes(urlPage) && (
             <Header
               onChange={setNavbar}
               color={!statePageWithImageBackground ? '#000' : '#fff'}
+              handleUrlPage={handleUrlPage}
             />
           )}
-          <Navbar navbar={navbar} onChange={setNavbar} />
+          <Navbar
+            navbar={navbar}
+            onChange={setNavbar}
+            handleUrlPage={handleUrlPage}
+          />
           <Switch>
+            <Route exact path="/">
+              <p>Home</p>
+            </Route>
             <Route exact path="/board">
               <Board />
             </Route>
