@@ -7,9 +7,18 @@ import {
 } from 'graphql';
 import User from '../../types/userType';
 import prisma from '../../../lib/prisma';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { registerUserSchema } from '../../../joi/User';
+import { JWT_LOGIN_SECRET } from '../../../config/index';
 
-interface argstype {
-  // todo
+interface ArgsUser {
+  email: string;
+  mdp: string;
+  name: string;
+  firstname: string;
+  avatar?: string;
+  description: string;
 }
 
 export const registerUser: GraphQLFieldConfig<any, any, any> = {
@@ -33,23 +42,29 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
       type: GraphQLString,
     },
   },
-  type: new GraphQLNonNull(GraphQLID),
-  resolve: async (_, args) => {
-    const post = await prisma.user.create({
+  type: new GraphQLNonNull(GraphQLString),
+  resolve: async (_, args: ArgsUser) => {
+    registerUserSchema(args);
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashMdp = bcrypt.hashSync(args.mdp, salt);
+
+    const user = await prisma.user.create({
       data: {
         email: args.email,
-        mdp: args.mdp,
+        mdp: hashMdp,
         name: args.name,
         firstname: args.firstname,
         avatar: args.avatar,
         description: args.description,
-        role: args.role,
-        projectId: args.project,
-        ticketId: args.ticket,
       },
     });
-    console.dir(post);
-    return post.id;
+
+    if (!user) {
+      throw new Error("L'utilisateur n'a pas été créer");
+    }
+    const token = jwt.sign({ userId: user.id }, JWT_LOGIN_SECRET);
+    return token;
   },
 };
 

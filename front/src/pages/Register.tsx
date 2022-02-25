@@ -1,10 +1,12 @@
 import RegisterLogin from '../components/LoginRegister/RegisterLogin';
 import RegisterForm from '../components/LoginRegister/FormRegister';
 
-const Register = () => {
+const Register: React.FC<{ handleUrlPage: (url: string) => void }> = ({
+  handleUrlPage,
+}) => {
   return (
-    <RegisterLogin type="register" labelBtn="Creer un compte">
-      <RegisterForm />
+    <RegisterLogin type="register">
+      <RegisterForm handleUrlPage={handleUrlPage} />
     </RegisterLogin>
   );
 };

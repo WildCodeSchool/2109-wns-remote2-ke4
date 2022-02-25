@@ -57,14 +57,18 @@ const LoginUpdateProfil = () => {
         <InputPassword
           label="Mot de passe"
           state={showPasswordOne}
-          onChange={setShowPasswordOne}
+          onChangeView={setShowPasswordOne}
+          value=""
+          onChange={() => {}}
         />
       </Grid>
       <Grid item md={6} sm={12} xs={12}>
         <InputPassword
           label="Confirmer"
           state={showPasswordTwo}
-          onChange={setShowPasswordTwo}
+          onChangeView={setShowPasswordTwo}
+          value=""
+          onChange={() => {}}
         />
       </Grid>
       <Grid item md={6} sm={12} xs={12}>

@@ -54,7 +54,7 @@ export default function App() {
               <Login />
             </Route>
             <Route path="/register">
-              <Register />
+              <Register handleUrlPage={handleUrlPage} />
             </Route>
             <Route path="/createProject">
               <CreateProject />

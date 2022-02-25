@@ -1,10 +1,10 @@
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import { makeStyles, createStyles } from '@mui/styles';
 import workspace from '../../assets/images/workspace.jpg';
 import logo from '../../assets/images/logoKe4.png';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { TypographyStyled } from '../../elements/registerlogin.styled';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,10 +38,10 @@ const useStyles = makeStyles(() =>
 );
 const RegisterLogin: React.FC<{
   children?: any;
-  labelBtn: string;
   type: 'login' | 'register';
-}> = ({ children, labelBtn, type }) => {
+}> = ({ children, type }) => {
   const classes = useStyles();
+  const history = useHistory();
   return (
     <Grid container className={classes.container}>
       <Grid md={5} className={classes.img}></Grid>
@@ -49,37 +49,21 @@ const RegisterLogin: React.FC<{
         <Box className={classes.form}>
           <img src={logo} alt="logo" className={classes.logo} />
           {children}
-          <Button
-            style={{
-              background: '#000',
-              color: '#fff',
-              margin: '25px 0px',
-              padding: '10px 20px',
-            }}
-          >
-            {labelBtn}
-          </Button>
-          <Typography
+
+          <TypographyStyled
             variant="h6"
-            sx={{
-              color: 'blue',
-              position: 'relative',
-              '&::after': {
-                content: `''`,
-                display: 'block',
-                width: '100%',
-                height: '2px',
-                background: 'blue',
-                position: 'absolute',
-                bottom: 5,
-                left: 0,
-              },
+            onClick={() => {
+              if (type === 'register') {
+                history.push('/login');
+              } else {
+                history.push('/register');
+              }
             }}
           >
             {type === 'register'
               ? 'Already account ?'
               : 'Not already account ?'}
-          </Typography>
+          </TypographyStyled>
         </Box>
       </Grid>
     </Grid>
