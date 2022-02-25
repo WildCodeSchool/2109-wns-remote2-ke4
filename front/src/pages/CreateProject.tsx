@@ -90,7 +90,7 @@ const CreateProject = () => {
               required
               error={!title}
               label="Titre"
-              helperText="Ce champs est requis"
+              helperText="This field is required"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
