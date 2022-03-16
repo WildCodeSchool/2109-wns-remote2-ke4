@@ -4,10 +4,21 @@ services:
     ports:
       - 5050:5000
     command: npm run dev
-    volumes:
-      - ./server/src/:/app/src
   client:
     build: ./front
     ports:
       - 8080:3000
     command: npm run start
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5439:5439"
+    container_name: ke4_db
+    environment:
+      POSTGRES_PASSWORD: ke4db
+      POSTGRES_USER: ke4user
+      POSTGRES_DB: ke4
+
+
+

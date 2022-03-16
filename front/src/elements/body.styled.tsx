@@ -12,4 +12,5 @@ export const Body = styled(Box)<BodyProps>(() => ({
   flexDirection: 'column',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
+  alignItems: 'end',
 }));

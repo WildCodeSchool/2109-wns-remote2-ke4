@@ -4,14 +4,16 @@ import {
   GraphQLList,
   GraphQLNonNull,
 } from 'graphql';
-import User from '../../types/userType';
+import TypeUser from '../../types/userType';
 import prisma from '../../../lib/prisma';
+import Context from '@tsTypes/context';
+import { User } from '@prisma/client';
 
 const queriesUser: GraphQLFieldConfigMap<any, any> = {
   getAllUsers: {
-    type: new GraphQLList(User),
-    resolve: async () => {
-      const users = prisma.user.findMany();
+    type: new GraphQLList(TypeUser),
+    resolve: async (): Promise<User[]> => {
+      const users = await prisma.user.findMany();
       return users || [];
     },
   },
@@ -22,13 +24,30 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
         type: GraphQLID,
       },
     },
-    type: new GraphQLNonNull(User),
-    resolve: async (_, args) => {
-      return await prisma.user.findUnique({
+    type: new GraphQLNonNull(TypeUser),
+    resolve: async (_, args): Promise<User | null> => {
+      const user = await prisma.user.findUnique({
         where: {
           id: args.id,
         },
       });
+      return user;
+    },
+  },
+  getViewer: {
+    type: new GraphQLNonNull(TypeUser),
+    resolve: async (
+      _,
+      __,
+      context: Context
+    ): Promise<User | null | undefined> => {
+      if (!context.user) return;
+      const viewer = await prisma.user.findUnique({
+        where: {
+          id: context.user.id,
+        },
+      });
+      return viewer;
     },
   },
 };

@@ -1,71 +1,104 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  provider = "prisma-client-js"
 }
 
 model User {
-  id          String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  email       String    @unique
-  mdp         String    @unique
-  name        String
+  id          String        @id @default(cuid())
+  email       String        @unique
+  mdp         String
+  lastName    String
   firstname   String
   avatar      String?
   description String?
+  createdAt   DateTime      @default(now())
+  createdBy   String?
   role        String[]
-  project     Project[] @relation(fields: [projectId], references: [id])
-  projectId   String[]  @db.Array(ObjectId)
-  ticket      Ticket[]  @relation(fields: [ticketId], references: [id])
-  ticketId    String[]
   comment     Comment[]
-}
-
-model Ticket {
-  id            String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  name          String
-  project       Project[] @relation(fields: [projectId], references: [id])
-  projectId     String
-  status        String?
-  description   String
-  user          User[]    @relation(fields: [userId], references: [id])
-  userId        String[]  @db.Array(ObjectId)
-  comments      Comment[]
-  investedTime  String?
-  estimatedTime String
-  startDate     String
-  endDate       String?
-  ressources    String[]
-  priority      String
+  UserProject UserProject[]
+  UserTicket  UserTicket[]
 }
 
 model Project {
-  id            String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id            String        @id @default(cuid())
   name          String
   author        String
-  tickets       Ticket[] @relation(fields: [ticketsId], references: [id])
-  ticketsId     String[]
   client        String
   status        String?
   description   String
-  user          User[]   @relation(fields: [userId], references: [id])
-  userId        String[] @db.Array(ObjectId)
-  date          String
+  date          DateTime
   investedTime  String?
   estimatedTime String
+  createdAt     DateTime      @default(now())
+  createdBy     String?
+  updatedAt     DateTime?     @updatedAt
+  updatedBy     String?
+  tickets       Ticket[]
+  UserProject   UserProject[]
+}
+
+model UserProject {
+  id         String  @id @default(cuid())
+  userId     String
+  projectId  String
+  isFavorite Boolean @default(false)
+  User       User    @relation(fields: [userId], references: [id])
+  Project    Project @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+}
+
+model Ticket {
+  id            String         @id @default(cuid())
+  name          String
+  status        String?
+  description   String
+  comments      Comment[]
+  investedTime  String?
+  estimatedTime String
+  startDate     DateTime
+  endDate       DateTime?
+  ressources    String[]
+  priority      PriorityTicket
+  createdAt     DateTime       @default(now())
+  createdBy     String?
+  updatedAt     DateTime?      @updatedAt
+  updatedBy     String?
+  progress      Int            @default(0)
+  projectId     String
+  Project       Project        @relation(fields: [projectId], references: [id])
+  UserTicket    UserTicket[]
+}
+
+model UserTicket {
+  id       String @id @default(cuid())
+  userId   String
+  ticketId String
+  User     User   @relation(fields: [userId], references: [id])
+  Ticket   Ticket @relation(fields: [ticketId], references: [id])
+
+  @@unique([userId, ticketId])
 }
 
 model Comment {
-  id       String @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  postDate String
+  id       String   @id @default(cuid())
+  postDate DateTime @default(now())
   content  String
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
-  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  userId   String
   ticketId String
+  User     User     @relation(fields: [userId], references: [id])
+  ticket   Ticket   @relation(fields: [ticketId], references: [id])
+}
+
+enum PriorityTicket {
+  IMPORTANT
+  LIGHT
+  MEDIUM
+
 }

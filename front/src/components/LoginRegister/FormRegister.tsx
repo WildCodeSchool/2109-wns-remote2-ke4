@@ -4,10 +4,7 @@ import TextField from '@mui/material/TextField';
 import InputPassword from './InputPassword';
 import { useFormik } from 'formik';
 import { useMutation } from '@apollo/client';
-import {
-  ButtonStyled,
-  FormRegister,
-} from '../../elements/registerlogin.styled';
+import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { registerSchema } from '../../yup/Register';
 import {
   REGISTER_USER,
@@ -22,9 +19,11 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   const history = useHistory();
   const [showPasswordOne, setShowPasswordOne] = useState(false);
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies(['token']);
   const [registerUser, { loading, error }] = useMutation(REGISTER_USER);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit = async (values: ValuesRegisterUser) => {
     const { data } = await registerUser({
       variables: {
@@ -63,10 +62,9 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   if (error) {
     console.log('ERROR -->', error.message);
   }
-  console.log(formik.values);
 
   return (
-    <FormRegister
+    <Form
       onSubmit={(e) => {
         formik.handleSubmit(e);
       }}
@@ -159,7 +157,7 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
       <ButtonStyled type="submit" disabled={loading}>
         S'enrengister
       </ButtonStyled>
-    </FormRegister>
+    </Form>
   );
 };
 export default RegisterForm;

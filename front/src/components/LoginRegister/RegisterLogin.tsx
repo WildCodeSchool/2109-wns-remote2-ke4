@@ -3,8 +3,14 @@ import { makeStyles, createStyles } from '@mui/styles';
 import workspace from '../../assets/images/workspace.jpg';
 import logo from '../../assets/images/logoKe4.png';
 import Box from '@mui/material/Box';
-import { TypographyStyled } from '../../elements/registerlogin.styled';
-import { useHistory } from 'react-router-dom';
+import {
+  DivBtn,
+  TypographyPasswordForgot,
+  TypographyStyled,
+} from '../../elements/registerlogin.styled';
+import { useHistory, useParams } from 'react-router-dom';
+import ModalMdpForgot from './ModalPassword/Forgot';
+import { useState } from 'react';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,6 +48,10 @@ const RegisterLogin: React.FC<{
 }> = ({ children, type }) => {
   const classes = useStyles();
   const history = useHistory();
+  //@ts-ignore
+  const { token } = useParams();
+  const [open, setOpen] = useState<boolean>(false);
+  // const [openReset, setOpenReset] = useState<boolean>(true);
   return (
     <Grid container className={classes.container}>
       <Grid md={5} className={classes.img}></Grid>
@@ -49,23 +59,39 @@ const RegisterLogin: React.FC<{
         <Box className={classes.form}>
           <img src={logo} alt="logo" className={classes.logo} />
           {children}
-
-          <TypographyStyled
-            variant="h6"
-            onClick={() => {
-              if (type === 'register') {
-                history.push('/login');
-              } else {
-                history.push('/register');
-              }
-            }}
-          >
-            {type === 'register'
-              ? 'Already account ?'
-              : 'Not already account ?'}
-          </TypographyStyled>
+          <DivBtn>
+            <TypographyStyled
+              variant="h6"
+              onClick={() => {
+                if (type === 'register') {
+                  history.push('/login');
+                } else {
+                  history.push('/register');
+                }
+              }}
+            >
+              {type === 'register'
+                ? 'Already account ?'
+                : 'Not already account ?'}
+            </TypographyStyled>
+            {type === 'login' && (
+              <TypographyPasswordForgot
+                variant="h6"
+                onClick={() => setOpen(true)}
+              >
+                Mot de passe oublier ?
+              </TypographyPasswordForgot>
+            )}
+          </DivBtn>
         </Box>
       </Grid>
+      {!token && (
+        <ModalMdpForgot open={open} handleClose={() => setOpen(false)} />
+      )}
+      {/* {
+      token &&
+      // Modal Reset Password
+      } */}
     </Grid>
   );
 };

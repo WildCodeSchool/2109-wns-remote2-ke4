@@ -1,27 +1,29 @@
 import {
+  GraphQLBoolean,
   GraphQLFieldConfig,
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
-import User from '../../types/userType';
+import TypeUser from '../../types/userType';
 import prisma from '../../../lib/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { registerUserSchema } from '../../../joi/User';
 import { JWT_LOGIN_SECRET } from '../../../config/index';
+import { User } from '@prisma/client';
 
 interface ArgsUser {
   email: string;
   mdp: string;
-  name: string;
+  lastName: string;
   firstname: string;
   avatar?: string;
   description: string;
 }
 
-export const registerUser: GraphQLFieldConfig<any, any, any> = {
+export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
   args: {
     email: {
       type: GraphQLString,
@@ -29,7 +31,7 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
     mdp: {
       type: GraphQLString,
     },
-    name: {
+    lastName: {
       type: GraphQLString,
     },
     firstname: {
@@ -43,7 +45,7 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
     },
   },
   type: new GraphQLNonNull(GraphQLString),
-  resolve: async (_, args: ArgsUser) => {
+  resolve: async (_, args: ArgsUser): Promise<string | undefined> => {
     registerUserSchema(args);
 
     const salt = bcrypt.genSaltSync(10);
@@ -53,7 +55,7 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
       data: {
         email: args.email,
         mdp: hashMdp,
-        name: args.name,
+        lastName: args.lastName,
         firstname: args.firstname,
         avatar: args.avatar,
         description: args.description,
@@ -68,7 +70,7 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
   },
 };
 
-export const updateUserById: GraphQLFieldConfig<any, any, any> = {
+export const updateUser: GraphQLFieldConfig<any, any, any> = {
   args: {
     id: {
       type: GraphQLID,
@@ -79,7 +81,7 @@ export const updateUserById: GraphQLFieldConfig<any, any, any> = {
     mdp: {
       type: GraphQLString,
     },
-    name: {
+    lastName: {
       type: GraphQLString,
     },
     firstname: {
@@ -101,39 +103,49 @@ export const updateUserById: GraphQLFieldConfig<any, any, any> = {
       type: new GraphQLList(GraphQLString),
     },
   },
-  type: new GraphQLNonNull(User),
-  resolve: async (_, args) => {
-    return await prisma.user.update({
+  type: new GraphQLNonNull(TypeUser),
+  resolve: async (_, args): Promise<User | undefined> => {
+    const user = await prisma.user.update({
       where: {
         id: args.id,
       },
       data: {
         email: args.email,
         mdp: args.mdp,
-        name: args.name,
+        lastName: args.lastName,
         firstname: args.firstname,
         avatar: args.avatar,
         description: args.description,
         role: args.role,
-        project: args.project,
-        ticket: args.ticket,
       },
     });
+    return user;
   },
 };
 
-export const deleteUserById: GraphQLFieldConfig<any, any, any> = {
+export const deleteUser: GraphQLFieldConfig<any, any, any> = {
   args: {
     id: {
       type: GraphQLID,
     },
   },
-  type: new GraphQLNonNull(User),
-  resolve: async (_, args) => {
-    return await prisma.user.delete({
+  type: new GraphQLNonNull(GraphQLBoolean),
+  resolve: async (_, args): Promise<boolean | undefined> => {
+    await prisma.userTicket.deleteMany({
+      where: {
+        userId: args.id,
+      },
+    });
+    await prisma.userProject.deleteMany({
+      where: {
+        userId: args.id,
+      },
+    });
+    await prisma.user.delete({
       where: {
         id: args.id,
       },
     });
+    return true;
   },
 };
