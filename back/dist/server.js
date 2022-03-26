@@ -19,6 +19,13 @@ const graphql_1 = __importDefault(require("./graphql/graphql"));
 const prisma_1 = __importDefault(require("./lib/prisma"));
 const config_1 = require("./config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const module_alias_1 = __importDefault(require("module-alias"));
+const path_1 = __importDefault(require("path"));
+module_alias_1.default.addAliases({
+    '@lib': path_1.default.join(__dirname, 'lib'),
+    '@graphql': path_1.default.join(__dirname, '/graphql'),
+    '@tsTypes': path_1.default.join(__dirname, '/tsTypes'),
+});
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());

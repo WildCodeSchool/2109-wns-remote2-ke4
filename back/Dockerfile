@@ -1,12 +1,12 @@
-FROM node:lts-alpine
+FROM node:lts
 
-RUN mkdir /back
+
 
 WORKDIR /back
 COPY package*.json ./
 COPY tsconfig.json ./
-RUN npm i
-COPY src src
+RUN npm install 
+
+COPY . .
 RUN npx prisma generate --schema=./src/prisma/schema.prisma
-RUN npm run build
-CMD ["node", "dist/server.js"]
+CMD ["npm","run","dev"]

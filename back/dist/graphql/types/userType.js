@@ -15,16 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
 const projectType_1 = __importDefault(require("./projectType"));
 const prisma_1 = __importDefault(require("../../lib/prisma"));
-const User = new graphql_1.GraphQLObjectType({
-    name: 'user',
+const TypeUser = new graphql_1.GraphQLObjectType({
+    name: 'TypeUser',
     fields: () => ({
         id: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
         },
         email: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
-        },
-        mdp: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
         },
         lastName: {
@@ -55,5 +52,5 @@ const User = new graphql_1.GraphQLObjectType({
         },
     }),
 });
-exports.default = User;
+exports.default = TypeUser;
 //# sourceMappingURL=userType.js.map

@@ -8,17 +8,16 @@ import {
 } from 'graphql';
 import prisma from '../../../lib/prisma';
 import Context from '@tsTypes/context';
-import TypeProject from '@graphql/types/projectType';
+import TypeProject from '../../types/projectType';
 import { Project, UserProject } from '@prisma/client';
+import GraphQLDate from '../../GraphQlDate';
 
 export const createProject: GraphQLFieldConfig<any, any, any> = {
   args: {
     name: {
       type: GraphQLString,
     },
-    author: {
-      type: GraphQLString,
-    },
+
     client: {
       type: GraphQLString,
     },
@@ -32,7 +31,7 @@ export const createProject: GraphQLFieldConfig<any, any, any> = {
       type: new GraphQLList(GraphQLID),
     },
     date: {
-      type: GraphQLString,
+      type: GraphQLDate,
     },
     investedTime: {
       type: GraphQLString,
@@ -42,23 +41,23 @@ export const createProject: GraphQLFieldConfig<any, any, any> = {
     },
   },
   type: TypeProject,
-  resolve: async (_, args, context: Context): Promise<Project | undefined> => {
-    if (!context?.user) return;
+  resolve: async (_, args, { user }: Context): Promise<Project | undefined> => {
+    // if (!user) return;
     const project = await prisma.project.create({
       data: {
         name: args.name,
-        author: args.author,
+        author: 'cl17429p60000v1bwbizoulkw',
         client: args.client,
         status: args.status,
         description: args.description,
         date: args.date,
         investedTime: args.investedTime,
         estimatedTime: args.estimatedTime,
-        createdBy: context?.user?.id,
+        createdBy: 'cl17429p60000v1bwbizoulkw',
       },
     });
 
-    for (const userId of args.users) {
+    for (const userId of args.user) {
       await prisma.userProject.create({
         data: {
           userId: userId,
@@ -94,7 +93,7 @@ export const updateProject: GraphQLFieldConfig<any, any, any> = {
       type: new GraphQLList(GraphQLID),
     },
     date: {
-      type: GraphQLString,
+      type: GraphQLDate,
     },
     investedTime: {
       type: GraphQLString,
@@ -105,7 +104,7 @@ export const updateProject: GraphQLFieldConfig<any, any, any> = {
   },
   type: TypeProject,
   resolve: async (_, args, context: Context): Promise<Project | undefined> => {
-    if (!context?.user) return;
+    // if (!context?.user) return;
     const project = await prisma.project.update({
       where: {
         id: args.id,
@@ -119,7 +118,7 @@ export const updateProject: GraphQLFieldConfig<any, any, any> = {
         date: args.date,
         investedTime: args.investedTime,
         estimatedTime: args.estimatedTime,
-        updatedBy: context?.user?.id,
+        // updatedBy: context?.user?.id,
       },
     });
 
@@ -129,7 +128,7 @@ export const updateProject: GraphQLFieldConfig<any, any, any> = {
       },
     });
 
-    for (const userId of args.users) {
+    for (const userId of args.user) {
       await prisma.userProject.create({
         data: {
           userId: userId,
@@ -185,16 +184,12 @@ export const projectFav: GraphQLFieldConfig<any, any, any> = {
     },
   },
   type: TypeProject,
-  resolve: async (
-    _,
-    args,
-    context: Context
-  ): Promise<UserProject | undefined> => {
-    if (!context.user) return;
-    const project = await prisma.userProject.update({
+  resolve: async (_, args, context: Context): Promise<Project | undefined> => {
+    // if (!context.user) return;
+    await prisma.userProject.update({
       where: {
         userId_projectId: {
-          userId: context?.user?.id,
+          userId: 'cl17429p60000v1bwbizoulkw',
           projectId: args.projectId,
         },
       },
@@ -202,6 +197,12 @@ export const projectFav: GraphQLFieldConfig<any, any, any> = {
         isFavorite: args?.isFavorite,
       },
     });
-    return project;
+    const p = await prisma.project.findUnique({
+      where: {
+        id: args?.projectId,
+      },
+    });
+    if (!p) return;
+    return p;
   },
 };

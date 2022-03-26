@@ -26,13 +26,13 @@ const TypeUser = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
     },
     avatar: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     description: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     role: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      type: new GraphQLList(GraphQLString),
     },
     projects: {
       type: new GraphQLList(Project),

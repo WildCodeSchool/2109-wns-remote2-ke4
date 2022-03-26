@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserById = exports.updateUserById = exports.registerUser = void 0;
+exports.deleteUser = exports.updateUser = exports.registerUser = void 0;
 const graphql_1 = require("graphql");
 const userType_1 = __importDefault(require("../../types/userType"));
 const prisma_1 = __importDefault(require("../../../lib/prisma"));
@@ -63,7 +63,7 @@ exports.registerUser = {
         return token;
     }),
 };
-exports.updateUserById = {
+exports.updateUser = {
     args: {
         id: {
             type: graphql_1.GraphQLID,
@@ -98,7 +98,7 @@ exports.updateUserById = {
     },
     type: new graphql_1.GraphQLNonNull(userType_1.default),
     resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield prisma_1.default.user.update({
+        const user = yield prisma_1.default.user.update({
             where: {
                 id: args.id,
             },
@@ -112,9 +112,10 @@ exports.updateUserById = {
                 role: args.role,
             },
         });
+        return user;
     }),
 };
-exports.deleteUserById = {
+exports.deleteUser = {
     args: {
         id: {
             type: graphql_1.GraphQLID,

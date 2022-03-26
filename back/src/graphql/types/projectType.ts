@@ -21,22 +21,39 @@ const TypeProject: any = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
     },
     author: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
+      resolve: async (node: Project) => {
+        const author = await prisma.project.findUnique({
+          where: {
+            id: node.id,
+          },
+        });
+        if (!author) return;
+        console.log(author);
+        const res = await prisma.user.findUnique({
+          where: {
+            id: author.author,
+          },
+        });
+        console.log(res);
+        if (!res) return;
+        return res?.fullName;
+      },
     },
     client: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     status: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     description: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     investedTime: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     estimatedTime: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     devs: {
       type: new GraphQLList(User),
@@ -45,8 +62,11 @@ const TypeProject: any = new GraphQLObjectType({
           where: {
             projectId: node.id,
           },
+          include: {
+            User: true,
+          },
         });
-        return devs || [];
+        return devs.map((e) => e.User) || [];
       },
     },
     tickets: {

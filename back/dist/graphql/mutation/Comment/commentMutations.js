@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCommentById = exports.updateCommentById = exports.registerComment = void 0;
+exports.deleteComment = exports.createComment = void 0;
 const graphql_1 = require("graphql");
 const prisma_1 = __importDefault(require("../../../lib/prisma"));
-const GraphQlDate_1 = __importDefault(require("@graphql/GraphQlDate"));
-exports.registerComment = {
+const commentType_1 = __importDefault(require("../../types/commentType"));
+exports.createComment = {
     args: {
         postDate: {
-            type: GraphQlDate_1.default,
+            type: graphql_1.GraphQLString,
         },
         content: {
             type: graphql_1.GraphQLString,
@@ -28,7 +28,7 @@ exports.registerComment = {
             type: graphql_1.GraphQLString,
         },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
+    type: commentType_1.default,
     resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
         if (!context.user)
             return;
@@ -40,43 +40,10 @@ exports.registerComment = {
                 ticketId: args.ticketId,
             },
         });
-        return comment.id;
+        return comment;
     }),
 };
-exports.updateCommentById = {
-    args: {
-        id: {
-            type: graphql_1.GraphQLID,
-        },
-        postDate: {
-            type: graphql_1.GraphQLString,
-        },
-        content: {
-            type: graphql_1.GraphQLString,
-        },
-        ticketId: {
-            type: graphql_1.GraphQLString,
-        },
-    },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
-    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!context.user)
-            return;
-        const comment = yield prisma_1.default.comment.update({
-            where: {
-                id: args.id,
-            },
-            data: {
-                postDate: args.postDate,
-                content: args.content,
-                userId: context.user.id,
-                ticketId: args.ticketId,
-            },
-        });
-        return comment.id;
-    }),
-};
-exports.deleteCommentById = {
+exports.deleteComment = {
     args: {
         id: {
             type: graphql_1.GraphQLID,

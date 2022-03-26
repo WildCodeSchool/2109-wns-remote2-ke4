@@ -16,8 +16,8 @@ const graphql_1 = require("graphql");
 const userType_1 = __importDefault(require("./userType"));
 const prisma_1 = __importDefault(require("../../lib/prisma"));
 const ticketType_1 = __importDefault(require("./ticketType"));
-const Project = new graphql_1.GraphQLObjectType({
-    name: 'project',
+const TypeProject = new graphql_1.GraphQLObjectType({
+    name: 'TypeProject',
     fields: () => ({
         id: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
@@ -65,7 +65,18 @@ const Project = new graphql_1.GraphQLObjectType({
                 return tickets || [];
             }),
         },
+        numberDev: {
+            type: graphql_1.GraphQLInt,
+            resolve: (node) => __awaiter(void 0, void 0, void 0, function* () {
+                const count = yield prisma_1.default.userProject.count({
+                    where: {
+                        projectId: node.id,
+                    },
+                });
+                return count;
+            }),
+        },
     }),
 });
-exports.default = Project;
+exports.default = TypeProject;
 //# sourceMappingURL=projectType.js.map

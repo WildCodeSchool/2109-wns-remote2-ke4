@@ -12,32 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTicketById = exports.updateTicketById = exports.registerTicket = void 0;
-const GraphQlDate_1 = __importDefault(require("@graphql/GraphQlDate"));
+exports.deleteTicket = exports.updateTicket = exports.createTicket = void 0;
 const graphql_1 = require("graphql");
 const prisma_1 = __importDefault(require("../../../lib/prisma"));
-exports.registerTicket = {
+const ticketType_1 = __importDefault(require("../../types/ticketType"));
+exports.createTicket = {
     args: {
         name: {
             type: graphql_1.GraphQLString,
         },
-        project: {
+        status: {
             type: graphql_1.GraphQLString,
         },
         description: {
             type: graphql_1.GraphQLString,
-        },
-        user: {
-            type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
-        },
-        estimatedTime: {
-            type: graphql_1.GraphQLString,
-        },
-        startDate: {
-            type: GraphQlDate_1.default,
-        },
-        endDate: {
-            type: GraphQlDate_1.default,
         },
         ressources: {
             type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
@@ -52,24 +40,38 @@ exports.registerTicket = {
                 },
             }),
         },
+        users: {
+            type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
+        },
+        progress: {
+            type: graphql_1.GraphQLInt,
+        },
+        projectId: {
+            type: graphql_1.GraphQLString,
+        },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
-    resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+    type: ticketType_1.default,
+    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        if (!(context === null || context === void 0 ? void 0 : context.user))
+            return;
         const ticket = yield prisma_1.default.ticket.create({
             data: {
                 name: args.name,
-                projectId: args.project,
                 status: args.status,
                 description: args.description,
-                investedTime: args.investedTime,
-                estimatedTime: args.estimatedTime,
-                startDate: args.startDate,
-                endDate: args.endDate,
                 ressources: args.ressources,
                 priority: args.priority,
+                progress: args.progress,
+                endDate: args.endDate,
+                investedTime: args.investedTime,
+                estimatedTime: args.estimatedTime,
+                startDate: args === null || args === void 0 ? void 0 : args.startDate,
+                createdAt: (_a = context === null || context === void 0 ? void 0 : context.user) === null || _a === void 0 ? void 0 : _a.id,
+                projectId: args === null || args === void 0 ? void 0 : args.projectId,
             },
         });
-        for (const userId of args.user) {
+        for (const userId of args.users) {
             yield prisma_1.default.userTicket.create({
                 data: {
                     ticketId: ticket.id,
@@ -77,10 +79,10 @@ exports.registerTicket = {
                 },
             });
         }
-        return ticket.id;
+        return ticket;
     }),
 };
-exports.updateTicketById = {
+exports.updateTicket = {
     args: {
         id: {
             type: graphql_1.GraphQLID,
@@ -98,25 +100,43 @@ exports.updateTicketById = {
             type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
         },
         priority: {
-            type: graphql_1.GraphQLString,
+            type: new graphql_1.GraphQLEnumType({
+                name: 'EnumProrityTicketUpdate',
+                values: {
+                    IMPORTANT: { value: 'IMPORTANT' },
+                    LIGHT: { value: 'LIGHT' },
+                    MEDIUM: { value: 'MEDIUM' },
+                },
+            }),
         },
         users: {
             type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
         },
+        progress: {
+            type: graphql_1.GraphQLInt,
+        },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
-    resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+    type: ticketType_1.default,
+    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+        var _b;
+        if (!(context === null || context === void 0 ? void 0 : context.user))
+            return;
         const ticket = yield prisma_1.default.ticket.update({
             where: {
                 id: args.id,
             },
             data: {
                 name: args.name,
-                projectId: args.projectId,
                 status: args.status,
                 description: args.description,
                 ressources: args.ressources,
                 priority: args.priority,
+                progress: args.progress,
+                endDate: args.endDate,
+                investedTime: args.investedTime,
+                estimatedTime: args.estimatedTime,
+                startDate: args === null || args === void 0 ? void 0 : args.startDate,
+                updatedBy: (_b = context === null || context === void 0 ? void 0 : context.user) === null || _b === void 0 ? void 0 : _b.id,
             },
         });
         yield prisma_1.default.userTicket.deleteMany({
@@ -132,16 +152,16 @@ exports.updateTicketById = {
                 },
             });
         }
-        return ticket.id;
+        return ticket;
     }),
 };
-exports.deleteTicketById = {
+exports.deleteTicket = {
     args: {
         id: {
             type: graphql_1.GraphQLID,
         },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
+    type: graphql_1.GraphQLBoolean,
     resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
         yield prisma_1.default.userTicket.deleteMany({
             where: {

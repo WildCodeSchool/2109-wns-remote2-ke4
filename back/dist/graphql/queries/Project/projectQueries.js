@@ -31,11 +31,12 @@ const queriesProject = {
         },
         type: new graphql_1.GraphQLNonNull(projectType_1.default),
         resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
-            return yield prisma_1.default.project.findUnique({
+            const project = yield prisma_1.default.project.findUnique({
                 where: {
                     id: args.id,
                 },
             });
+            return project;
         }),
     },
     getAllProjectsByUserId: {
@@ -44,7 +45,7 @@ const queriesProject = {
                 type: graphql_1.GraphQLID,
             },
         },
-        type: projectType_1.default,
+        type: new graphql_1.GraphQLList(projectType_1.default),
         resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
             const projects = yield prisma_1.default.userProject.findMany({
                 where: {
@@ -60,7 +61,7 @@ const queriesProject = {
                 type: graphql_1.GraphQLID,
             },
         },
-        type: projectType_1.default,
+        type: new graphql_1.GraphQLList(projectType_1.default),
         resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
             if (!context.user)
                 return;
@@ -69,7 +70,7 @@ const queriesProject = {
                     userId: context.user.id,
                 },
             });
-            return projects || [];
+            return projects.sort((x) => ((x === null || x === void 0 ? void 0 : x.isFavorite) ? -1 : 1)) || [];
         }),
     },
 };

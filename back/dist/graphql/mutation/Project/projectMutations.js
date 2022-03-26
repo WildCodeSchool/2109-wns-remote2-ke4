@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.projectFav = exports.deleteProjectById = exports.updateProjectByID = exports.registerProject = void 0;
+exports.projectFav = exports.deleteProject = exports.updateProject = exports.createProject = void 0;
 const graphql_1 = require("graphql");
 const prisma_1 = __importDefault(require("../../../lib/prisma"));
-exports.registerProject = {
+const projectType_1 = __importDefault(require("../../types/projectType"));
+exports.createProject = {
     args: {
         name: {
             type: graphql_1.GraphQLString,
@@ -26,47 +27,55 @@ exports.registerProject = {
         client: {
             type: graphql_1.GraphQLString,
         },
+        status: {
+            type: graphql_1.GraphQLString,
+        },
         description: {
             type: graphql_1.GraphQLString,
         },
         user: {
-            type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
+            type: new graphql_1.GraphQLList(graphql_1.GraphQLID),
         },
         date: {
+            type: graphql_1.GraphQLString,
+        },
+        investedTime: {
             type: graphql_1.GraphQLString,
         },
         estimatedTime: {
             type: graphql_1.GraphQLString,
         },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
+    type: projectType_1.default,
     resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!context.user)
+        var _a;
+        if (!(context === null || context === void 0 ? void 0 : context.user))
             return;
-        const post = yield prisma_1.default.project.create({
+        const project = yield prisma_1.default.project.create({
             data: {
                 name: args.name,
-                author: context.user.id,
+                author: args.author,
                 client: args.client,
                 status: args.status,
                 description: args.description,
                 date: args.date,
-                investedTime: '0',
+                investedTime: args.investedTime,
                 estimatedTime: args.estimatedTime,
+                createdBy: (_a = context === null || context === void 0 ? void 0 : context.user) === null || _a === void 0 ? void 0 : _a.id,
             },
         });
         for (const userId of args.users) {
             yield prisma_1.default.userProject.create({
                 data: {
                     userId: userId,
-                    projectId: post === null || post === void 0 ? void 0 : post.id,
+                    projectId: project.id,
                 },
             });
         }
-        return post.id;
+        return project;
     }),
 };
-exports.updateProjectByID = {
+exports.updateProject = {
     args: {
         id: {
             type: graphql_1.GraphQLID,
@@ -99,8 +108,11 @@ exports.updateProjectByID = {
             type: graphql_1.GraphQLString,
         },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
-    resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+    type: projectType_1.default,
+    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+        var _b;
+        if (!(context === null || context === void 0 ? void 0 : context.user))
+            return;
         const project = yield prisma_1.default.project.update({
             where: {
                 id: args.id,
@@ -114,6 +126,7 @@ exports.updateProjectByID = {
                 date: args.date,
                 investedTime: args.investedTime,
                 estimatedTime: args.estimatedTime,
+                updatedBy: (_b = context === null || context === void 0 ? void 0 : context.user) === null || _b === void 0 ? void 0 : _b.id,
             },
         });
         yield prisma_1.default.userProject.deleteMany({
@@ -129,10 +142,10 @@ exports.updateProjectByID = {
                 },
             });
         }
-        return project.id;
+        return project;
     }),
 };
-exports.deleteProjectById = {
+exports.deleteProject = {
     args: {
         id: {
             type: graphql_1.GraphQLID,
@@ -172,15 +185,15 @@ exports.projectFav = {
             type: graphql_1.GraphQLBoolean,
         },
     },
-    type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
+    type: projectType_1.default,
     resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
+        var _c;
         if (!context.user)
             return;
-        yield prisma_1.default.userProject.update({
+        const project = yield prisma_1.default.userProject.update({
             where: {
                 userId_projectId: {
-                    userId: (_a = context === null || context === void 0 ? void 0 : context.user) === null || _a === void 0 ? void 0 : _a.id,
+                    userId: (_c = context === null || context === void 0 ? void 0 : context.user) === null || _c === void 0 ? void 0 : _c.id,
                     projectId: args.projectId,
                 },
             },
@@ -188,7 +201,7 @@ exports.projectFav = {
                 isFavorite: args === null || args === void 0 ? void 0 : args.isFavorite,
             },
         });
-        return true;
+        return project;
     }),
 };
 //# sourceMappingURL=projectMutations.js.map

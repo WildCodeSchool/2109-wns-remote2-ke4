@@ -18,7 +18,7 @@ interface ArgsUser {
   email: string;
   mdp: string;
   lastName: string;
-  firstname: string;
+  firstName: string;
   avatar?: string;
   description: string;
 }
@@ -34,7 +34,7 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
     lastName: {
       type: GraphQLString,
     },
-    firstname: {
+    firstName: {
       type: GraphQLString,
     },
     avatar: {
@@ -56,7 +56,7 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
         email: args.email,
         mdp: hashMdp,
         lastName: args.lastName,
-        firstname: args.firstname,
+        firstname: args.firstName,
         avatar: args.avatar,
         description: args.description,
       },
@@ -84,7 +84,7 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
     lastName: {
       type: GraphQLString,
     },
-    firstname: {
+    firstName: {
       type: GraphQLString,
     },
     avatar: {
@@ -95,12 +95,6 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
     },
     role: {
       type: GraphQLString,
-    },
-    project: {
-      type: new GraphQLList(GraphQLString),
-    },
-    ticket: {
-      type: new GraphQLList(GraphQLString),
     },
   },
   type: new GraphQLNonNull(TypeUser),
@@ -113,7 +107,7 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
         email: args.email,
         mdp: args.mdp,
         lastName: args.lastName,
-        firstname: args.firstname,
+        firstname: args.firstName,
         avatar: args.avatar,
         description: args.description,
         role: args.role,

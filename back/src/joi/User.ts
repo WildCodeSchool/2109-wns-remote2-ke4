@@ -4,7 +4,7 @@ import Joi from 'joi';
 export const registerUserSchema = (args) => {
   const schema = Joi.object({
     firstName: Joi.string().required(),
-    name: Joi.string().required(),
+    lastName: Joi.string().required(),
     email: Joi.string().email().required(),
     mdp: Joi.string()
       .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'))
@@ -14,6 +14,7 @@ export const registerUserSchema = (args) => {
     description: Joi.string(),
   }).validate(args, { abortEarly: false }).error;
   if (schema) {
+    console.log(schema);
     throw new Error('Les données entrer sont incorrect');
   }
 };

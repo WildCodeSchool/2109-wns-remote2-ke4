@@ -7,8 +7,7 @@ import {
 } from 'graphql';
 import prisma from '../../../lib/prisma';
 import Context from '@tsTypes/context';
-import GraphQLDate from '@graphql/GraphQlDate';
-import TypeComment from '@graphql/types/commentType';
+import TypeComment from '../../types/commentType';
 import { Comment } from '@prisma/client';
 
 export const createComment: GraphQLFieldConfig<any, any, any> = {

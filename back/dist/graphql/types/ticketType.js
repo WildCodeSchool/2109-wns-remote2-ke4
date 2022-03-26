@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
 const userType_1 = __importDefault(require("./userType"));
 const prisma_1 = __importDefault(require("../../lib/prisma"));
-const Ticket = new graphql_1.GraphQLObjectType({
-    name: 'ticket',
+const TypeTicket = new graphql_1.GraphQLObjectType({
+    name: 'TypeTicket',
     fields: () => ({
         id: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
@@ -36,6 +36,9 @@ const Ticket = new graphql_1.GraphQLObjectType({
         priority: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
         },
+        progress: {
+            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLInt),
+        },
         devs: {
             type: new graphql_1.GraphQLList(userType_1.default),
             resolve: (node) => __awaiter(void 0, void 0, void 0, function* () {
@@ -49,5 +52,5 @@ const Ticket = new graphql_1.GraphQLObjectType({
         },
     }),
 });
-exports.default = Ticket;
+exports.default = TypeTicket;
 //# sourceMappingURL=ticketType.js.map

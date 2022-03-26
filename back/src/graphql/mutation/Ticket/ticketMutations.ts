@@ -99,7 +99,7 @@ export const updateTicket: GraphQLFieldConfig<any, any, any> = {
     },
     priority: {
       type: new GraphQLEnumType({
-        name: 'EnumProrityTicket',
+        name: 'EnumProrityTicketUpdate',
         values: {
           IMPORTANT: { value: 'IMPORTANT' },
           LIGHT: { value: 'LIGHT' },

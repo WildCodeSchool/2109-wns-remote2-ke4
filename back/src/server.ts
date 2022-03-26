@@ -5,7 +5,15 @@ import schema from './graphql/graphql';
 import prisma from './lib/prisma';
 import { JWT_LOGIN_SECRET } from './config';
 import jwt from 'jsonwebtoken';
-import Context from './tsTypes/context';
+import Context from '@tsTypes/context';
+import moduleAlias from 'module-alias';
+import path from 'path';
+
+moduleAlias.addAliases({
+  '@lib': path.join(__dirname, 'lib'),
+  '@graphql': path.join(__dirname, '/graphql'),
+  '@tsTypes': path.join(__dirname, '/tsTypes'),
+});
 
 const app = express();
 

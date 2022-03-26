@@ -19,7 +19,7 @@ const queriesUser = {
     getAllUsers: {
         type: new graphql_1.GraphQLList(userType_1.default),
         resolve: () => __awaiter(void 0, void 0, void 0, function* () {
-            const users = prisma_1.default.user.findMany();
+            const users = yield prisma_1.default.user.findMany();
             return users || [];
         }),
     },

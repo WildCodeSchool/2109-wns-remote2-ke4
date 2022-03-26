@@ -19,7 +19,7 @@ const queriesTicket = {
     getAllTickets: {
         type: new graphql_1.GraphQLList(ticketType_1.default),
         resolve: () => __awaiter(void 0, void 0, void 0, function* () {
-            const tickets = prisma_1.default.ticket.findMany();
+            const tickets = yield prisma_1.default.ticket.findMany();
             return tickets || [];
         }),
     },
@@ -31,11 +31,12 @@ const queriesTicket = {
         },
         type: new graphql_1.GraphQLNonNull(ticketType_1.default),
         resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
-            return yield prisma_1.default.ticket.findUnique({
+            const ticket = yield prisma_1.default.ticket.findUnique({
                 where: {
                     id: args.id,
                 },
             });
+            return ticket;
         }),
     },
     getAllTicketsByProjectId: {
@@ -44,7 +45,7 @@ const queriesTicket = {
                 type: graphql_1.GraphQLID,
             },
         },
-        type: ticketType_1.default,
+        type: new graphql_1.GraphQLList(ticketType_1.default),
         resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
             const tickets = yield prisma_1.default.ticket.findMany({
                 where: {

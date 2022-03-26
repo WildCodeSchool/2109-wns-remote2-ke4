@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
 const userType_1 = __importDefault(require("./userType"));
 const prisma_1 = __importDefault(require("../../lib/prisma"));
-const Comment = new graphql_1.GraphQLObjectType({
-    name: 'comment',
+const TypeComment = new graphql_1.GraphQLObjectType({
+    name: 'TypeComment',
     fields: () => ({
         id: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLID),
@@ -45,5 +45,5 @@ const Comment = new graphql_1.GraphQLObjectType({
         },
     }),
 });
-exports.default = Comment;
+exports.default = TypeComment;
 //# sourceMappingURL=commentType.js.map

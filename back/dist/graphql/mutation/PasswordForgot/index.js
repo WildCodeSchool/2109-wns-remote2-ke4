@@ -74,9 +74,8 @@ exports.resetPassword = {
                 id: decodedToken.userId,
             },
         });
-        if (!user) {
-            return null;
-        }
+        if (!user)
+            return;
         yield prisma_1.default.user.update({
             where: {
                 id: user.id,

@@ -6,7 +6,7 @@ interface Args {
   subject: string;
   text?: string;
   html?: string;
-  attachment?: mailgun.messages.SendData['attachment'];
+  attachments?: any;
 }
 
 export const transporter = nodemailer.createTransport({
@@ -23,18 +23,18 @@ export const sendEmail = async ({
   to,
   subject,
   html,
-  attachment,
+  attachments,
   text,
 }: Args): Promise<any> => {
   try {
-    const email: any = await sendEmail({
+    const email: any = await transporter.sendMail({
       //@ts-ignore
       from: 'ke4service@outlook.com',
       to,
       subject,
       text,
       html,
-      attachment,
+      attachments,
     });
     console.info('EMAIL SEND -->', email);
     return email;
