@@ -10,6 +10,7 @@ import { JWT_LOGIN_SECRET } from '../../../config/index';
 import { sendEmail } from '../../../lib/nodemailer';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
+import Context from '@tsTypes/context';
 
 interface ArgsForgot {
   email: string;
@@ -20,6 +21,10 @@ interface ArgsReset {
   tokenURL: string;
 }
 
+export function emailIsValid(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 export const passwordForgot: GraphQLFieldConfig<any, any, ArgsForgot> = {
   args: {
     email: {
@@ -28,6 +33,11 @@ export const passwordForgot: GraphQLFieldConfig<any, any, ArgsForgot> = {
   },
   type: new GraphQLNonNull(GraphQLBoolean),
   resolve: async (_, args: ArgsForgot): Promise<boolean | undefined> => {
+    const formatEmail = emailIsValid(args?.email);
+
+    if (!formatEmail) {
+      throw new Error('Veuillez rentrer un email valide');
+    }
     const user = await prisma.user.findUnique({
       where: {
         email: args.email,
@@ -61,7 +71,11 @@ export const resetPassword: GraphQLFieldConfig<any, any, ArgsReset> = {
     },
   },
   type: new GraphQLNonNull(GraphQLBoolean),
-  resolve: async (_, args: ArgsReset): Promise<boolean | undefined> => {
+  resolve: async (
+    _,
+    args: ArgsReset,
+    context: Context
+  ): Promise<boolean | undefined> => {
     const { newMdp, tokenURL } = args;
     const schemaResetMdp = Joi.object({
       tokenURL: Joi.string().required(),
@@ -69,7 +83,7 @@ export const resetPassword: GraphQLFieldConfig<any, any, ArgsReset> = {
     }).validate({ newMdp, tokenURL }, { abortEarly: false }).error;
 
     if (schemaResetMdp) {
-      throw new Error('Les données entrer sont incorrect');
+      throw new Error('Veuillez remplir les champs correctement');
     }
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(newMdp, salt);
@@ -86,6 +100,53 @@ export const resetPassword: GraphQLFieldConfig<any, any, ArgsReset> = {
     await prisma.user.update({
       where: {
         id: user.id,
+      },
+      data: {
+        mdp: hashPassword,
+      },
+    });
+
+    return true;
+  },
+};
+
+export const resetPasswordViewer: GraphQLFieldConfig<any, any, any> = {
+  args: {
+    oldPassword: {
+      type: GraphQLString,
+    },
+    newMdp: {
+      type: GraphQLString,
+    },
+  },
+  type: new GraphQLNonNull(GraphQLBoolean),
+  resolve: async (_, args, context: Context): Promise<boolean | undefined> => {
+    if (context?.user) return;
+    const { newMdp, oldPassword } = args;
+    const schema = Joi.object({
+      oldPassword: Joi.string().required(),
+      newMdp: Joi.string().required(),
+    }).validate({ newMdp, oldPassword }, { abortEarly: false }).error;
+
+    if (schema) {
+      throw new Error('Veuillez remplir les champs correctement');
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: context?.user?.id,
+      },
+    });
+
+    if (!user?.mdp !== args?.newMdp) {
+      throw new Error('Le mot de passe initial est invalide');
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = bcrypt.hashSync(newMdp, salt);
+
+    await prisma.user.update({
+      where: {
+        id: user?.id,
       },
       data: {
         mdp: hashPassword,

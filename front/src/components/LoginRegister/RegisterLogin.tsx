@@ -8,9 +8,7 @@ import {
   TypographyPasswordForgot,
   TypographyStyled,
 } from '../../elements/registerlogin.styled';
-import { useHistory, useParams } from 'react-router-dom';
-import ModalMdpForgot from './ModalPassword/Forgot';
-import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,12 +43,11 @@ const useStyles = makeStyles(() =>
 const RegisterLogin: React.FC<{
   children?: any;
   type: 'login' | 'register';
-}> = ({ children, type }) => {
+  handleUrlPage: (str: string) => void;
+}> = ({ children, type, handleUrlPage }) => {
   const classes = useStyles();
   const history = useHistory();
   //@ts-ignore
-  const { token } = useParams();
-  const [open, setOpen] = useState<boolean>(false);
   // const [openReset, setOpenReset] = useState<boolean>(true);
   return (
     <Grid container className={classes.container}>
@@ -77,7 +74,10 @@ const RegisterLogin: React.FC<{
             {type === 'login' && (
               <TypographyPasswordForgot
                 variant="h6"
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  handleUrlPage('/newpassword');
+                  history.push('/newpassword');
+                }}
               >
                 Mot de passe oublier ?
               </TypographyPasswordForgot>
@@ -85,13 +85,6 @@ const RegisterLogin: React.FC<{
           </DivBtn>
         </Box>
       </Grid>
-      {!token && (
-        <ModalMdpForgot open={open} handleClose={() => setOpen(false)} />
-      )}
-      {/* {
-      token &&
-      // Modal Reset Password
-      } */}
     </Grid>
   );
 };

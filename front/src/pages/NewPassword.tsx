@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { makeStyles, createStyles } from '@mui/styles';
-import AlertTitle from '@mui/material/AlertTitle';
 import {
-  AlertMessage,
   ButtonCancel,
   ButtonSend,
   TextFieldNewPassword,
 } from '../elements/newPassword.styles';
+import { useMutationForgotPassword } from '../graphql/Mutation/User';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,16 +47,41 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const NewPassword = () => {
+const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
+  handleUrlPage,
+}) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
+  const history = useHistory();
+  const [resetMdp, { loading }] = useMutationForgotPassword({
+    onCompleted: () => {
+      toast.success(
+        `Un email vous a été envoyer à ${email} pour la réinitialisation de votre mot de passe`
+      );
+      setTimeout(() => {
+        handleUrlPage('/login');
+        history.push('/login');
+      }, 4000);
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const onSubmit = async () => {
+    await resetMdp({
+      variables: {
+        email,
+      },
+    });
+  };
   return (
     <div className={classes.container}>
       <Typography variant="inherit" className={classes.title}>
-        Retrouver votre compte
+        Réinitialisation du mot de passe
       </Typography>
       <Typography variant="inherit" className={classes.subtitle}>
-        Veuillez entrer votre adresse e-mail pour rechercher votre compte
+        Veuillez entrer votre adresse e-mail pour poursuivre la procédure
       </Typography>
       <div className={classes.line}></div>
       <TextFieldNewPassword
@@ -66,13 +92,19 @@ const NewPassword = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <AlertMessage severity="success">
-        <AlertTitle>Success</AlertTitle>
-        Un mot de passe vous a été envoyer sur <strong>thomas@gmail.com</strong>
-      </AlertMessage>
       <div className={classes.containerBtn}>
-        <ButtonCancel>Annuler</ButtonCancel>
-        <ButtonSend disabled={!email}>Envoyer</ButtonSend>
+        <ButtonCancel
+          disabled={loading}
+          onClick={() => {
+            handleUrlPage('/login');
+            history.push('/login');
+          }}
+        >
+          Annuler
+        </ButtonCancel>
+        <ButtonSend disabled={!email || loading} onClick={() => onSubmit()}>
+          Envoyer
+        </ButtonSend>
       </div>
     </div>
   );

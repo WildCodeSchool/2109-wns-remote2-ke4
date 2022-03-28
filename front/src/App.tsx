@@ -69,9 +69,7 @@ export default function App() {
               <Route path="/login">
                 <Login handleUrlPage={handleUrlPage} />
               </Route>
-              <Route path="/login/:token">
-                <Login handleUrlPage={handleUrlPage} />
-              </Route>
+
               <Route path="/register">
                 <Register handleUrlPage={handleUrlPage} />
               </Route>
@@ -91,7 +89,7 @@ export default function App() {
                 <UpdateProfil />
               </Route>
               <Route path="/newpassword">
-                <NewPassword />
+                <NewPassword handleUrlPage={handleUrlPage} />
               </Route>
               <Route path="/cards">
                 <AllCards />

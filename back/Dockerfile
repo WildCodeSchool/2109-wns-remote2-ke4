@@ -8,5 +8,4 @@ COPY tsconfig.json ./
 RUN npm install 
 
 COPY . .
-RUN npx prisma generate --schema=./src/prisma/schema.prisma
 CMD ["npm","run","dev"]

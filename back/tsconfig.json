@@ -12,20 +12,16 @@
     "strictNullChecks": true,                   
      "alwaysStrict": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      // "*": ["node_modules/*", "src/types/*"]
+     
       "@lib/*":["src/lib/*"],
       "@config/*": ["src/config/*"],
       "@joi/*": ["src/joi/*"],
       "@graphql/*": ["src/graphql/*"],
       "@tsTypes/*": ["src/tsTypes/*"],
     },
-    "typeRoots": [
-      "node_modules/@types",
-      "src/types"
-    ],
-     "types": ["node"],
+    "types": ["node"],
     "esModuleInterop": true,
   },
   "include": ["./src/**/*.ts"],

@@ -3,15 +3,20 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import InputPassword from './InputPassword';
 import { useFormik } from 'formik';
-import { useMutation } from '@apollo/client';
 import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { registerSchema } from '../../yup/Register';
-import {
-  REGISTER_USER,
-  ValuesRegisterUser,
-} from '../../graphql/Mutation/RegisterUser';
+import { useMutationRegisterUser } from '../../graphql/Mutation/User';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
+interface PropsValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  mdp: string;
+  description: string;
+}
 
 const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   handleUrlPage,
@@ -21,36 +26,39 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies(['token']);
-  const [registerUser, { loading, error }] = useMutation(REGISTER_USER);
+  const [registerUser, { loading }] = useMutationRegisterUser({
+    onCompleted: (data) => {
+      const token = data;
+      setCookie('token', token);
+      handleUrlPage('/');
+      history.push('/');
+    },
+    onError: (err) => toast.error(`${err.message}`),
+  });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (values: ValuesRegisterUser) => {
-    const { data } = await registerUser({
+  const onSubmit = async (values: PropsValues) => {
+    await registerUser({
       variables: {
         firstName: values.firstName,
-        name: values.name,
+        lastName: values.lastName,
         email: values.email,
         mdp: values.mdp,
         description: values.description,
       },
     });
-    const token = data?.token;
-    setCookie('token', token);
-    handleUrlPage('/');
-    history.push('/');
   };
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      name: '',
-      email: '',
-      mdp: '',
-      mdp2: '',
-      description: '',
+      firstName: 'Jean',
+      lastName: 'Duc',
+      email: 'jean@outlook.com',
+      mdp: 'Jean28600@',
+      mdp2: 'Jean28600@',
+      description: 'Je suis Jean',
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
-      console.log(values);
+      onSubmit(values);
     },
   });
   const handleChange = (key: string, newValue: any) => {
@@ -59,9 +67,6 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
       [key]: newValue,
     });
   };
-  if (error) {
-    console.log('ERROR -->', error.message);
-  }
 
   return (
     <Form
@@ -89,13 +94,13 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
             id="outlined-required"
             fullWidth
             label="Nom"
-            name="name"
+            name="lastName"
             variant="outlined"
             margin="normal"
-            value={formik.values.name}
-            onChange={(e) => handleChange('name', e.target.value)}
-            error={formik.touched.name && Boolean(formik.errors.name)}
-            helperText={formik.touched.name && formik.errors.name}
+            value={formik.values.lastName}
+            onChange={(e) => handleChange('lastName', e.target.value)}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helperText={formik.touched.lastName && formik.errors.lastName}
           />
         </Grid>
         <Grid item md={6} sm={12} xs={12}>

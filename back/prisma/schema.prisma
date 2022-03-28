@@ -14,7 +14,7 @@ model User {
   email       String        @unique
   mdp         String
   lastName    String
-  firstname   String
+  firstName   String
   fullName    String?
   avatar      String?
   description String?

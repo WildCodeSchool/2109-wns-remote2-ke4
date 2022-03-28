@@ -22,7 +22,7 @@ const TypeUser = new GraphQLObjectType({
     lastName: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    firstname: {
+    firstName: {
       type: new GraphQLNonNull(GraphQLString),
     },
     avatar: {

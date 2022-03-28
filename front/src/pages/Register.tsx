@@ -5,7 +5,7 @@ const Register: React.FC<{ handleUrlPage: (url: string) => void }> = ({
   handleUrlPage,
 }) => {
   return (
-    <RegisterLogin type="register">
+    <RegisterLogin type="register" handleUrlPage={handleUrlPage}>
       <RegisterForm handleUrlPage={handleUrlPage} />
     </RegisterLogin>
   );

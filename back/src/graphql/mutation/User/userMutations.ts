@@ -46,6 +46,8 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
   },
   type: new GraphQLNonNull(GraphQLString),
   resolve: async (_, args: ArgsUser): Promise<string | undefined> => {
+    console.log('ARgsUser', args);
+    const fullName = args?.firstName + ' ' + args?.lastName;
     registerUserSchema(args);
 
     const salt = bcrypt.genSaltSync(10);
@@ -56,7 +58,8 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
         email: args.email,
         mdp: hashMdp,
         lastName: args.lastName,
-        firstname: args.firstName,
+        firstName: args.firstName,
+        fullName,
         avatar: args.avatar,
         description: args.description,
       },
@@ -78,9 +81,6 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
     email: {
       type: GraphQLString,
     },
-    mdp: {
-      type: GraphQLString,
-    },
     lastName: {
       type: GraphQLString,
     },
@@ -99,15 +99,16 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
   },
   type: new GraphQLNonNull(TypeUser),
   resolve: async (_, args): Promise<User | undefined> => {
+    const fullName = args?.firstName + ' ' + args?.lastName;
     const user = await prisma.user.update({
       where: {
         id: args.id,
       },
       data: {
         email: args.email,
-        mdp: args.mdp,
         lastName: args.lastName,
-        firstname: args.firstName,
+        firstName: args.firstName,
+        fullName,
         avatar: args.avatar,
         description: args.description,
         role: args.role,

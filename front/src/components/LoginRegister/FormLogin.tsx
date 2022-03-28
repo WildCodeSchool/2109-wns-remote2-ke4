@@ -6,10 +6,15 @@ import { styled } from '@mui/material/styles';
 import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { useFormik } from 'formik';
 import { loginSchema } from '../../yup/Login';
-import { useMutation } from '@apollo/client';
-import { LOGIN_USER, ValuesLoginUser } from '../../graphql/Mutation/Login';
+import { useMutationLogin } from '../../graphql/Mutation/User';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
+interface LoginFormValues {
+  email: string;
+  mdp: string;
+}
 
 const GridContainer = styled(Grid)(({ theme }) => ({
   padding: '0px 100px',
@@ -23,34 +28,39 @@ const LoginForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   handleUrlPage,
 }) => {
   const history = useHistory();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies(['token']);
-  const [login, { loading, error }] = useMutation(LOGIN_USER);
+  const [login, { loading }] = useMutationLogin({
+    onCompleted: (data) => {
+      const token = data?.token;
+      setCookie('token', token);
+      handleUrlPage('/');
+      history.push('/');
+    },
+    onError: (err) => toast.error(`${err.message}`),
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (values: ValuesLoginUser) => {
-    const { data } = await login({
+  const onSubmit = async (values: LoginFormValues) => {
+    await login({
       variables: {
         email: values.email,
         mdp: values.mdp,
       },
     });
-    const token = data?.token;
-    setCookie('token', token);
-    handleUrlPage('/');
-    history.push('/');
   };
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      mdp: '',
+      email: 'jean@outlook.com',
+      mdp: 'Jean28600@',
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      console.log(values);
+      onSubmit(values);
     },
   });
 
@@ -61,9 +71,6 @@ const LoginForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
     });
   };
 
-  if (error) {
-    console.log('ERROR -->', error.message);
-  }
   return (
     <Form
       onSubmit={(e) => {

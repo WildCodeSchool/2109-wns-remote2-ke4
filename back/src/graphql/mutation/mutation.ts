@@ -13,7 +13,11 @@ import {
   projectFav,
 } from './Project/projectMutations';
 import { login } from './Login';
-import { passwordForgot, resetPassword } from './PasswordForgot';
+import {
+  passwordForgot,
+  resetPassword,
+  resetPasswordViewer,
+} from './PasswordForgot';
 
 const mutations = new GraphQLObjectType({
   name: 'RootMutation',
@@ -39,6 +43,7 @@ const mutations = new GraphQLObjectType({
     login,
     passwordForgot,
     resetPassword,
+    resetPasswordViewer,
   }),
 });
 export default mutations;

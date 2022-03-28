@@ -5,12 +5,16 @@ services:
     build: ./back
     restart: always
     ports:
-      - 5050:5000
+      - 4000:4000
+    volumes:
+     - ./back/src:/back/src  
   
   client:
     build: ./front
     ports:
-      - 8080:3000
+      - 3000:3000
+    volumes:
+     - ./front/src:/app/src
    
   db:
     image: postgres
@@ -19,7 +23,7 @@ services:
 
     restart: always
     ports:
-      - 5438:5432
+      - 5432:5432
     container_name: ke4_db
     environment:
       POSTGRES_PASSWORD: ke4db

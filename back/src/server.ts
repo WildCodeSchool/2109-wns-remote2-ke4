@@ -1,3 +1,10 @@
+import moduleAlias from 'module-alias';
+import path from 'path';
+moduleAlias.addAliases({
+  '@lib': path.join(__dirname, 'lib'),
+  '@graphql': path.join(__dirname, '/graphql'),
+  '@tsTypes': path.join(__dirname, '/tsTypes'),
+});
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import cors from 'cors';
@@ -6,17 +13,8 @@ import prisma from './lib/prisma';
 import { JWT_LOGIN_SECRET } from './config';
 import jwt from 'jsonwebtoken';
 import Context from '@tsTypes/context';
-import moduleAlias from 'module-alias';
-import path from 'path';
-
-moduleAlias.addAliases({
-  '@lib': path.join(__dirname, 'lib'),
-  '@graphql': path.join(__dirname, '/graphql'),
-  '@tsTypes': path.join(__dirname, '/tsTypes'),
-});
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 

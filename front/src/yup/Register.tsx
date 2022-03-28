@@ -4,7 +4,7 @@ export const registerSchema = Yup.object().shape({
   firstName: Yup.string()
     .min(1, 'Veuillez rentrer un prénom correct')
     .required('Veuillez rentrer un prénom'),
-  name: Yup.string()
+  lastName: Yup.string()
     .min(1, 'Veuillez rentrer un nom correct')
     .required('Veuillez rentrer un nom'),
   email: Yup.string()
