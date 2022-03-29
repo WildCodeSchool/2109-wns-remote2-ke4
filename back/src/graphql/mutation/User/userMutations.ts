@@ -21,6 +21,7 @@ interface ArgsUser {
   firstName: string;
   avatar?: string;
   description: string;
+  pseudo: string;
 }
 
 export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
@@ -37,6 +38,9 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
     firstName: {
       type: GraphQLString,
     },
+    pseudo: {
+      type: GraphQLString,
+    },
     avatar: {
       type: GraphQLString,
     },
@@ -46,7 +50,6 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
   },
   type: new GraphQLNonNull(GraphQLString),
   resolve: async (_, args: ArgsUser): Promise<string | undefined> => {
-    console.log('ARgsUser', args);
     const fullName = args?.firstName + ' ' + args?.lastName;
     registerUserSchema(args);
 
@@ -59,6 +62,7 @@ export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
         mdp: hashMdp,
         lastName: args.lastName,
         firstName: args.firstName,
+        pseudo: args.pseudo,
         fullName,
         avatar: args.avatar,
         description: args.description,
@@ -93,6 +97,9 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
     description: {
       type: GraphQLString,
     },
+    pseudo: {
+      type: GraphQLString,
+    },
     role: {
       type: GraphQLString,
     },
@@ -109,6 +116,7 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
         lastName: args.lastName,
         firstName: args.firstName,
         fullName,
+        pseudo: args?.pseudo,
         avatar: args.avatar,
         description: args.description,
         role: args.role,

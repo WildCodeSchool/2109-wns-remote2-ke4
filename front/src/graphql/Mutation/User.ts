@@ -9,6 +9,7 @@ export const REGISTER_USER = gql`
     $email: String
     $mdp: String
     $description: String
+    $pseudo: String
   ) {
     registerUser(
       firstName: $firstName
@@ -16,6 +17,7 @@ export const REGISTER_USER = gql`
       email: $email
       mdp: $mdp
       description: $description
+      pseudo: $pseudo
     )
   }
 `;

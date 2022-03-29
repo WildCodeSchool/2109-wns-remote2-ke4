@@ -35,7 +35,7 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
     },
   },
   getViewer: {
-    type: new GraphQLNonNull(TypeUser),
+    type: TypeUser,
     resolve: async (
       _,
       __,
@@ -47,7 +47,7 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
           id: context.user.id,
         },
       });
-      return viewer;
+      return viewer || null;
     },
   },
 };

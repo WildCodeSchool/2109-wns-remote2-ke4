@@ -35,7 +35,8 @@ const LoginForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   const [_, setCookie] = useCookies(['token']);
   const [login, { loading }] = useMutationLogin({
     onCompleted: (data) => {
-      const token = data?.token;
+      const token = data?.login;
+
       setCookie('token', token);
       handleUrlPage('/');
       history.push('/');

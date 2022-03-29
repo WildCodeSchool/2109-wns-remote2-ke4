@@ -13,4 +13,5 @@ export const Body = styled(Box)<BodyProps>(() => ({
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   alignItems: 'end',
+  position: 'relative',
 }));

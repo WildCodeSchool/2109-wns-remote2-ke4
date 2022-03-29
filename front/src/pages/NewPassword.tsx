@@ -64,6 +64,8 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
       }, 4000);
     },
     onError: (err) => {
+      console.log('JE PASSE ICI');
+
       toast.error(err.message);
     },
   });

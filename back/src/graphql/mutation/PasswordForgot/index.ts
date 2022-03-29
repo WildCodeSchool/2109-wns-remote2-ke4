@@ -119,26 +119,22 @@ export const resetPasswordViewer: GraphQLFieldConfig<any, any, any> = {
       type: GraphQLString,
     },
   },
-  type: new GraphQLNonNull(GraphQLBoolean),
+  type: GraphQLBoolean,
   resolve: async (_, args, context: Context): Promise<boolean | undefined> => {
-    if (context?.user) return;
-    const { newMdp, oldPassword } = args;
-    const schema = Joi.object({
-      oldPassword: Joi.string().required(),
-      newMdp: Joi.string().required(),
-    }).validate({ newMdp, oldPassword }, { abortEarly: false }).error;
+    if (!context?.user) return;
 
-    if (schema) {
-      throw new Error('Veuillez remplir les champs correctement');
-    }
+    const { newMdp, oldPassword } = args;
 
     const user = await prisma.user.findUnique({
       where: {
         id: context?.user?.id,
       },
     });
+    if (!user) return;
 
-    if (!user?.mdp !== args?.newMdp) {
+    const validOldPassword = bcrypt.compare(user?.mdp, oldPassword);
+
+    if (!validOldPassword) {
       throw new Error('Le mot de passe initial est invalide');
     }
     const salt = bcrypt.genSaltSync(10);

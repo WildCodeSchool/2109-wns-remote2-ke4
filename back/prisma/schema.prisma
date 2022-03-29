@@ -15,7 +15,8 @@ model User {
   mdp         String
   lastName    String
   firstName   String
-  fullName    String?
+  fullName    String
+  pseudo      String
   avatar      String?
   description String?
   createdAt   DateTime      @default(now())
@@ -75,6 +76,7 @@ model Ticket {
   projectId     String
   Project       Project        @relation(fields: [projectId], references: [id])
   UserTicket    UserTicket[]
+
 }
 
 model UserTicket {
@@ -101,5 +103,4 @@ enum PriorityTicket {
   IMPORTANT
   LIGHT
   MEDIUM
-
 }

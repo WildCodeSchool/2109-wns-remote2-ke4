@@ -34,6 +34,7 @@ async function startApolloServer() {
               id: decoded.userId,
             },
           });
+
           if (!user) return {};
           return { user };
         } catch (err) {

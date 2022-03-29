@@ -6,6 +6,7 @@ export const registerUserSchema = (args) => {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
+    pseudo: Joi.string().required(),
     mdp: Joi.string()
       .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'))
       .min(8)

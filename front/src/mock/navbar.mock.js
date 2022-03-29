@@ -12,6 +12,7 @@ export const navbarOption = [
     icon: <Home />,
     link: '/board',
     disabled:false,
+    
   },
   {
     label: 'Profil',
@@ -45,6 +46,6 @@ export const navbarOption = [
     label: 'Disconnection',
     icon: <Deconnect />,
     link: '/login',
-    disabled:true,
+    disabled:false,
   },
 ];

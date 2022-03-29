@@ -16,6 +16,7 @@ interface PropsValues {
   email: string;
   mdp: string;
   description: string;
+  pseudo: string;
 }
 
 const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
@@ -28,12 +29,13 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
   const [_, setCookie] = useCookies(['token']);
   const [registerUser, { loading }] = useMutationRegisterUser({
     onCompleted: (data) => {
-      const token = data;
+      const token = data?.registerUser;
+
       setCookie('token', token);
       handleUrlPage('/');
       history.push('/');
     },
-    onError: (err) => toast.error(`${err.message}`),
+    onError: (err) => toast.error(err.message),
   });
 
   const onSubmit = async (values: PropsValues) => {
@@ -44,17 +46,19 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         email: values.email,
         mdp: values.mdp,
         description: values.description,
+        pseudo: values.pseudo,
       },
     });
   };
   const formik = useFormik({
     initialValues: {
-      firstName: 'Jean',
-      lastName: 'Duc',
-      email: 'jean@outlook.com',
-      mdp: 'Jean28600@',
-      mdp2: 'Jean28600@',
-      description: 'Je suis Jean',
+      firstName: '',
+      lastName: '',
+      email: '',
+      mdp: '',
+      mdp2: '',
+      description: '',
+      pseudo: '',
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
@@ -101,6 +105,20 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
             onChange={(e) => handleChange('lastName', e.target.value)}
             error={formik.touched.lastName && Boolean(formik.errors.lastName)}
             helperText={formik.touched.lastName && formik.errors.lastName}
+          />
+        </Grid>
+        <Grid item md={6} sm={12} xs={12}>
+          <TextField
+            id="outlined-required"
+            fullWidth
+            label="Pseudo"
+            name="pseudo"
+            variant="outlined"
+            margin="normal"
+            value={formik.values.pseudo}
+            onChange={(e) => handleChange('pseudo', e.target.value)}
+            error={formik.touched.pseudo && Boolean(formik.errors.pseudo)}
+            helperText={formik.touched.pseudo && formik.errors.pseudo}
           />
         </Grid>
         <Grid item md={6} sm={12} xs={12}>

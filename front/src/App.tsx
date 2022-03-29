@@ -16,6 +16,9 @@ import BodyApp from './components/Body';
 import { styled } from '@mui/system';
 import AllCards from './pages/Cards';
 import MyProjects from './pages/MyProjects';
+import UpdatePassword from './pages/UpdatePassword';
+import { useQueryViewer } from './graphql/Queries/User';
+import { ViewerProvider } from './context/Viewer';
 
 interface DivProps {
   widthNav: string;
@@ -34,6 +37,7 @@ export const BodyWithNavbar = styled('div')<DivProps>(
 );
 
 export default function App() {
+  const { data, loading, error } = useQueryViewer();
   const [urlPage, setUrlPage] = useState(window.location.pathname);
   const [navbar, setNavbar] = useState(false);
   const statePageWithImageBackground =
@@ -42,6 +46,16 @@ export default function App() {
   const handleUrlPage = (url: string) => {
     setUrlPage(url);
   };
+
+  const viewer = data?.getViewer || {};
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (error) {
+    return <h1>Error message: {error.message}</h1>;
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -73,27 +87,32 @@ export default function App() {
               <Route path="/register">
                 <Register handleUrlPage={handleUrlPage} />
               </Route>
-              <Route exact path="/">
-                <p>Home</p>
-              </Route>
-              <Route path="/board">
-                <Board />
-              </Route>
-              <Route path="/mesprojets">
-                <MyProjects />
-              </Route>
-              <Route path="/createProject">
-                <CreateProject />
-              </Route>
-              <Route path="/updateprofil">
-                <UpdateProfil />
-              </Route>
-              <Route path="/newpassword">
-                <NewPassword handleUrlPage={handleUrlPage} />
-              </Route>
-              <Route path="/cards">
-                <AllCards />
-              </Route>
+              <ViewerProvider value={viewer}>
+                <Route exact path="/">
+                  <p>Home</p>
+                </Route>
+                <Route path="/board">
+                  <Board />
+                </Route>
+                <Route path="/mesprojets">
+                  <MyProjects />
+                </Route>
+                <Route path="/createProject">
+                  <CreateProject />
+                </Route>
+                <Route path="/updateprofil">
+                  <UpdateProfil />
+                </Route>
+                <Route path="/updatepassword">
+                  <UpdatePassword handleUrlPage={handleUrlPage} />
+                </Route>
+                <Route path="/newpassword">
+                  <NewPassword handleUrlPage={handleUrlPage} />
+                </Route>
+                <Route path="/cards">
+                  <AllCards />
+                </Route>
+              </ViewerProvider>
             </Switch>
           </BodyWithNavbar>
         </BodyApp>

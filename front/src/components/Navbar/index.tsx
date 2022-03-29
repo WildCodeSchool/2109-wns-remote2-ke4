@@ -16,6 +16,7 @@ import { navbarOption } from '../../mock/navbar.mock';
 import { useHistory } from 'react-router-dom';
 import { AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useCookies } from 'react-cookie';
 
 export const getOptionsNavbar = (
   label: string,
@@ -25,15 +26,22 @@ export const getOptionsNavbar = (
   history: any,
   key: any,
   handleUrlPage: (str: string) => void,
-  projects?: { name: string; linkProject: string }[] | null
+  projects?: { name: string; linkProject: string }[] | null,
+  onClick?: () => void
 ) => {
   if (label !== 'Project') {
     return (
       <Option
         key={key}
         onClick={() => {
-          handleUrlPage(link);
-          history.push(link);
+          if (label === 'Disconnection' && onClick) {
+            onClick();
+            handleUrlPage(link);
+            history.push(link);
+          } else {
+            handleUrlPage(link);
+            history.push(link);
+          }
         }}
         opa={disabled ? 0.4 : 1}
         cursoroption={disabled ? 'default' : 'pointer'}
@@ -80,6 +88,17 @@ const Navbar: React.FC<{
   handleUrlPage: (str: string) => void;
 }> = ({ onChange, navbar, handleUrlPage }) => {
   const history = useHistory();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, __, removeCookie] = useCookies(['token']);
+
+  const onDisconnect = () => {
+    removeCookie('token');
+    onChange(false);
+    setTimeout(() => {
+      handleUrlPage('/login');
+      history.push('/login');
+    }, 1000);
+  };
 
   return (
     <StyledNavbar visible={navbar ? 0 : -310}>
@@ -108,7 +127,8 @@ const Navbar: React.FC<{
             history,
             index,
             handleUrlPage,
-            project
+            project,
+            onDisconnect
           )
         )}
       </ContainerOption>

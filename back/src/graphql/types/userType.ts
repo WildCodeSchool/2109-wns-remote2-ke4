@@ -25,6 +25,12 @@ const TypeUser = new GraphQLObjectType({
     firstName: {
       type: new GraphQLNonNull(GraphQLString),
     },
+    pseudo: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    fullName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
     avatar: {
       type: GraphQLString,
     },
