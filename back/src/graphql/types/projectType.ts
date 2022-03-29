@@ -4,10 +4,15 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLList,
+  GraphQLInt,
 } from 'graphql';
+import User from './userType';
+import prisma from '../../lib/prisma';
+import { Project } from '@prisma/client';
+import Ticket from './ticketType';
 
-const Project: any = new GraphQLObjectType({
-  name: 'project',
+const TypeProject: any = new GraphQLObjectType({
+  name: 'TypeProject',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -16,29 +21,76 @@ const Project: any = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
     },
     author: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    ticketsId: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      type: GraphQLString,
+      resolve: async (node: Project) => {
+        const author = await prisma.project.findUnique({
+          where: {
+            id: node.id,
+          },
+        });
+        if (!author) return;
+        console.log(author);
+        const res = await prisma.user.findUnique({
+          where: {
+            id: author.author,
+          },
+        });
+        console.log(res);
+        if (!res) return;
+        return res?.fullName;
+      },
     },
     client: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     status: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     description: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    user: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      type: GraphQLString,
     },
     investedTime: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     estimatedTime: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
+    },
+    devs: {
+      type: new GraphQLList(User),
+      resolve: async (node: Project) => {
+        const devs = await prisma.userProject.findMany({
+          where: {
+            projectId: node.id,
+          },
+          include: {
+            User: true,
+          },
+        });
+        return devs.map((e) => e.User) || [];
+      },
+    },
+    tickets: {
+      type: new GraphQLList(Ticket),
+      resolve: async (node: Project) => {
+        const tickets = await prisma.ticket.findMany({
+          where: {
+            projectId: node.id,
+          },
+        });
+        return tickets || [];
+      },
+    },
+    numberDev: {
+      type: GraphQLInt,
+      resolve: async (node: Project) => {
+        const count = await prisma.userProject.count({
+          where: {
+            projectId: node.id,
+          },
+        });
+        return count;
+      },
     },
   }),
 });
-export default Project;
+export default TypeProject;

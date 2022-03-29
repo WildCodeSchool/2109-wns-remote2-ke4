@@ -1,9 +1,11 @@
-FROM node:lts-alpine
+FROM node:lts
 
-RUN mkdir /back
+
+
 WORKDIR /back
 COPY package*.json ./
 COPY tsconfig.json ./
-RUN npm i
-COPY src src
-CMD npm start
+RUN npm install 
+
+COPY . .
+CMD ["npm","run","dev"]
