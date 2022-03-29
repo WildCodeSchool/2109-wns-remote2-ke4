@@ -1,45 +1,49 @@
 import { GraphQLObjectType } from 'graphql/type';
+import { createComment, deleteComment } from './Comment/commentMutations';
+import { registerUser, updateUser, deleteUser } from './User/userMutations';
 import {
-  registerComment,
-  updateCommentById,
-  deleteCommentById,
-} from './Comment/commentMutations';
-import {
-  registerUser,
-  updateUserById,
-  deleteUserById,
-} from './User/userMutations';
-import {
-  registerTicket,
-  updateTicketById,
-  deleteTicketById,
+  createTicket,
+  updateTicket,
+  deleteTicket,
 } from './Ticket/ticketMutations';
 import {
-  registerProject,
-  updateProjectByID,
-  deleteProjectById,
+  createProject,
+  updateProject,
+  deleteProject,
+  projectFav,
 } from './Project/projectMutations';
+import { login } from './Login';
+import {
+  passwordForgot,
+  resetPassword,
+  resetPasswordViewer,
+} from './PasswordForgot';
 
 const mutations = new GraphQLObjectType({
   name: 'RootMutation',
   description: 'Mutations of Ke4',
   // @ts-ignore
   fields: () => ({
-    registerComment,
-    updateCommentById,
-    deleteCommentById,
+    createComment,
+    deleteComment,
 
     registerUser,
-    updateUserById,
-    deleteUserById,
+    updateUser,
+    deleteUser,
 
-    registerTicket,
-    updateTicketById,
-    deleteTicketById,
+    createTicket,
+    updateTicket,
+    deleteTicket,
 
-    registerProject,
-    updateProjectByID,
-    deleteProjectById,
+    createProject,
+    updateProject,
+    deleteProject,
+    projectFav,
+
+    login,
+    passwordForgot,
+    resetPassword,
+    resetPasswordViewer,
   }),
 });
 export default mutations;

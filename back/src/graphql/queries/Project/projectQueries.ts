@@ -4,13 +4,15 @@ import {
   GraphQLList,
   GraphQLNonNull,
 } from 'graphql';
-import Project from '../../types/projectType';
+import TypeProject from '../../types/projectType';
 import prisma from '../../../lib/prisma';
+import Context from '@tsTypes/context';
+import { Project, UserProject } from '@prisma/client';
 
 const queriesProject: GraphQLFieldConfigMap<any, any> = {
   getAllProjects: {
-    type: new GraphQLList(Project),
-    resolve: async () => {
+    type: new GraphQLList(TypeProject),
+    resolve: async (): Promise<Project[]> => {
       const projects = await prisma.project.findMany();
       return projects || [];
     },
@@ -22,13 +24,52 @@ const queriesProject: GraphQLFieldConfigMap<any, any> = {
         type: GraphQLID,
       },
     },
-    type: new GraphQLNonNull(Project),
-    resolve: async (_, args) => {
-      return await prisma.project.findUnique({
+    type: new GraphQLNonNull(TypeProject),
+    resolve: async (_, args): Promise<Project | null> => {
+      const project = await prisma.project.findUnique({
         where: {
           id: args.id,
         },
       });
+      return project;
+    },
+  },
+
+  getAllProjectsByUserId: {
+    args: {
+      id: {
+        type: GraphQLID,
+      },
+    },
+    type: new GraphQLList(TypeProject),
+    resolve: async (_, args): Promise<UserProject[]> => {
+      const projects = await prisma.userProject.findMany({
+        where: {
+          userId: args?.id,
+        },
+      });
+      return projects || [];
+    },
+  },
+  getAllProjectsByViewer: {
+    args: {
+      id: {
+        type: GraphQLID,
+      },
+    },
+    type: new GraphQLList(TypeProject),
+    resolve: async (
+      _,
+      args,
+      context: Context
+    ): Promise<UserProject[] | undefined> => {
+      if (!context.user) return;
+      const projects = await prisma.userProject.findMany({
+        where: {
+          userId: context.user.id,
+        },
+      });
+      return projects.sort((x) => (x?.isFavorite ? -1 : 1)) || [];
     },
   },
 };

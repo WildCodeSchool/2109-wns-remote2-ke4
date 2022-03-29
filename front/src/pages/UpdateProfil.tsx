@@ -4,7 +4,6 @@ import avatar from '../assets/images/avatar1.jpg';
 import { makeStyles, createStyles } from '@mui/styles';
 import { styled } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
-import Button from '@mui/material/Button';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import FormUpdateProfil from '../components/UpdateProfile/FormUpdateProfil';
 
@@ -17,13 +16,6 @@ const FabLabel = styled(Fab)(() => ({
   width: '45px',
   height: '45px',
   background: '#07DFCD',
-}));
-
-const ButtonUpdate = styled(Button)(() => ({
-  padding: '10px 20px',
-  background: '#07DFCD',
-  color: '#FFF',
-  marginTop: '35px',
 }));
 
 const useStyles = makeStyles(() =>
@@ -84,7 +76,6 @@ const UpdateProfil = () => {
         </label>
       </div>
       <FormUpdateProfil />
-      <ButtonUpdate>Modifier</ButtonUpdate>
     </div>
   );
 };

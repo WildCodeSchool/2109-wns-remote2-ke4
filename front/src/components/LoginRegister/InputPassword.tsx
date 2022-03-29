@@ -6,11 +6,27 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import FormHelperText from '@mui/material/FormHelperText';
+
 const InputPassword: React.FC<{
   label: string;
   state: boolean;
-  onChange: (b: boolean) => void;
-}> = ({ state, onChange, label }) => {
+  onChangeView: (b: boolean) => void;
+  value: any;
+  onChange: any;
+  name?: string;
+  error?: any;
+  helperText?: any;
+}> = ({
+  state,
+  onChangeView,
+  label,
+  value,
+  onChange,
+  name,
+  error,
+  helperText,
+}) => {
   return (
     <FormControl variant="outlined" fullWidth margin="normal">
       <InputLabel htmlFor="password" variant="outlined">
@@ -20,13 +36,16 @@ const InputPassword: React.FC<{
         fullWidth
         id="password"
         label="Mot de passe"
-        name="password"
+        name={name}
+        value={value}
+        onChange={onChange}
         type={state ? 'text' : 'password'}
+        error={error}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
               aria-label="toggle password visibility"
-              onClick={() => onChange(!state)}
+              onClick={() => onChangeView(!state)}
               edge="end"
             >
               {state ? <Visibility /> : <VisibilityOff />}
@@ -34,6 +53,7 @@ const InputPassword: React.FC<{
           </InputAdornment>
         }
       />
+      {helperText && <FormHelperText error>{helperText}</FormHelperText>}
     </FormControl>
   );
 };
