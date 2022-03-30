@@ -23,16 +23,16 @@ exports.transporter = nodemailer_1.default.createTransport({
         pass: 'Passwordke4@',
     },
 });
-const sendEmail = ({ to, subject, html, attachment, text, }) => __awaiter(void 0, void 0, void 0, function* () {
+const sendEmail = ({ to, subject, html, attachments, text, }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const email = yield (0, exports.sendEmail)({
+        const email = yield exports.transporter.sendMail({
             //@ts-ignore
             from: 'ke4service@outlook.com',
             to,
             subject,
             text,
             html,
-            attachment,
+            attachments,
         });
         console.info('EMAIL SEND -->', email);
         return email;

@@ -26,22 +26,41 @@ const TypeProject = new graphql_1.GraphQLObjectType({
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
         },
         author: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
+            resolve: (node) => __awaiter(void 0, void 0, void 0, function* () {
+                const author = yield prisma_1.default.project.findUnique({
+                    where: {
+                        id: node.id,
+                    },
+                });
+                if (!author)
+                    return;
+                console.log(author);
+                const res = yield prisma_1.default.user.findUnique({
+                    where: {
+                        id: author.author,
+                    },
+                });
+                console.log(res);
+                if (!res)
+                    return;
+                return res === null || res === void 0 ? void 0 : res.fullName;
+            }),
         },
         client: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         status: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         description: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         investedTime: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         estimatedTime: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         devs: {
             type: new graphql_1.GraphQLList(userType_1.default),
@@ -50,8 +69,11 @@ const TypeProject = new graphql_1.GraphQLObjectType({
                     where: {
                         projectId: node.id,
                     },
+                    include: {
+                        User: true,
+                    },
                 });
-                return devs || [];
+                return devs.map((e) => e.User) || [];
             }),
         },
         tickets: {

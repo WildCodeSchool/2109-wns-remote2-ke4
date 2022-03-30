@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.passwordForgot = void 0;
+exports.resetPasswordViewer = exports.resetPassword = exports.passwordForgot = exports.emailIsValid = void 0;
 const graphql_1 = require("graphql");
 const prisma_1 = __importDefault(require("../../../lib/prisma"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -20,6 +20,10 @@ const index_1 = require("../../../config/index");
 const nodemailer_1 = require("../../../lib/nodemailer");
 const joi_1 = __importDefault(require("joi"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+function emailIsValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+exports.emailIsValid = emailIsValid;
 exports.passwordForgot = {
     args: {
         email: {
@@ -28,6 +32,10 @@ exports.passwordForgot = {
     },
     type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
     resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+        const formatEmail = emailIsValid(args === null || args === void 0 ? void 0 : args.email);
+        if (!formatEmail) {
+            throw new Error('Veuillez rentrer un email valide');
+        }
         const user = yield prisma_1.default.user.findUnique({
             where: {
                 email: args.email,
@@ -56,14 +64,14 @@ exports.resetPassword = {
         },
     },
     type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
-    resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
         const { newMdp, tokenURL } = args;
         const schemaResetMdp = joi_1.default.object({
             tokenURL: joi_1.default.string().required(),
             newMdp: joi_1.default.string().required(),
         }).validate({ newMdp, tokenURL }, { abortEarly: false }).error;
         if (schemaResetMdp) {
-            throw new Error('Les données entrer sont incorrect');
+            throw new Error('Veuillez remplir les champs correctement');
         }
         const salt = bcrypt_1.default.genSaltSync(10);
         const hashPassword = bcrypt_1.default.hashSync(newMdp, salt);
@@ -79,6 +87,45 @@ exports.resetPassword = {
         yield prisma_1.default.user.update({
             where: {
                 id: user.id,
+            },
+            data: {
+                mdp: hashPassword,
+            },
+        });
+        return true;
+    }),
+};
+exports.resetPasswordViewer = {
+    args: {
+        oldPassword: {
+            type: graphql_1.GraphQLString,
+        },
+        newMdp: {
+            type: graphql_1.GraphQLString,
+        },
+    },
+    type: graphql_1.GraphQLBoolean,
+    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        if (!(context === null || context === void 0 ? void 0 : context.user))
+            return;
+        const { newMdp, oldPassword } = args;
+        const user = yield prisma_1.default.user.findUnique({
+            where: {
+                id: (_a = context === null || context === void 0 ? void 0 : context.user) === null || _a === void 0 ? void 0 : _a.id,
+            },
+        });
+        if (!user)
+            return;
+        const validOldPassword = bcrypt_1.default.compare(user === null || user === void 0 ? void 0 : user.mdp, oldPassword);
+        if (!validOldPassword) {
+            throw new Error('Le mot de passe initial est invalide');
+        }
+        const salt = bcrypt_1.default.genSaltSync(10);
+        const hashPassword = bcrypt_1.default.hashSync(newMdp, salt);
+        yield prisma_1.default.user.update({
+            where: {
+                id: user === null || user === void 0 ? void 0 : user.id,
             },
             data: {
                 mdp: hashPassword,

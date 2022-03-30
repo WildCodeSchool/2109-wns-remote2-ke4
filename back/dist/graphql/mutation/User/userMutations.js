@@ -31,7 +31,10 @@ exports.registerUser = {
         lastName: {
             type: graphql_1.GraphQLString,
         },
-        firstname: {
+        firstName: {
+            type: graphql_1.GraphQLString,
+        },
+        pseudo: {
             type: graphql_1.GraphQLString,
         },
         avatar: {
@@ -43,6 +46,7 @@ exports.registerUser = {
     },
     type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
     resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+        const fullName = (args === null || args === void 0 ? void 0 : args.firstName) + ' ' + (args === null || args === void 0 ? void 0 : args.lastName);
         (0, User_1.registerUserSchema)(args);
         const salt = bcrypt_1.default.genSaltSync(10);
         const hashMdp = bcrypt_1.default.hashSync(args.mdp, salt);
@@ -51,7 +55,9 @@ exports.registerUser = {
                 email: args.email,
                 mdp: hashMdp,
                 lastName: args.lastName,
-                firstname: args.firstname,
+                firstName: args.firstName,
+                pseudo: args.pseudo,
+                fullName,
                 avatar: args.avatar,
                 description: args.description,
             },
@@ -71,13 +77,10 @@ exports.updateUser = {
         email: {
             type: graphql_1.GraphQLString,
         },
-        mdp: {
-            type: graphql_1.GraphQLString,
-        },
         lastName: {
             type: graphql_1.GraphQLString,
         },
-        firstname: {
+        firstName: {
             type: graphql_1.GraphQLString,
         },
         avatar: {
@@ -86,27 +89,26 @@ exports.updateUser = {
         description: {
             type: graphql_1.GraphQLString,
         },
-        role: {
+        pseudo: {
             type: graphql_1.GraphQLString,
         },
-        project: {
-            type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
-        },
-        ticket: {
-            type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
+        role: {
+            type: graphql_1.GraphQLString,
         },
     },
     type: new graphql_1.GraphQLNonNull(userType_1.default),
     resolve: (_, args) => __awaiter(void 0, void 0, void 0, function* () {
+        const fullName = (args === null || args === void 0 ? void 0 : args.firstName) + ' ' + (args === null || args === void 0 ? void 0 : args.lastName);
         const user = yield prisma_1.default.user.update({
             where: {
                 id: args.id,
             },
             data: {
                 email: args.email,
-                mdp: args.mdp,
                 lastName: args.lastName,
-                firstname: args.firstname,
+                firstName: args.firstName,
+                fullName,
+                pseudo: args === null || args === void 0 ? void 0 : args.pseudo,
                 avatar: args.avatar,
                 description: args.description,
                 role: args.role,
