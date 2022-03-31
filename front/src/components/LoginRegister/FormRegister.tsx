@@ -19,9 +19,7 @@ interface PropsValues {
   pseudo: string;
 }
 
-const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
-  handleUrlPage,
-}) => {
+const RegisterForm = () => {
   const history = useHistory();
   const [showPasswordOne, setShowPasswordOne] = useState(false);
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
@@ -32,8 +30,8 @@ const RegisterForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
       const token = data?.registerUser;
 
       setCookie('token', token);
-      handleUrlPage('/');
-      history.push('/');
+
+      history.push('/ke4');
     },
     onError: (err) => toast.error(err.message),
   });

@@ -1,6 +1,5 @@
 import { styled } from '@mui/system';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import avatar from '../assets/images/avatar1.jpg';
 import Box from '@mui/material/Box';
 interface ArgsMenu {
   colorMenuBurger: string;
@@ -32,11 +31,11 @@ export const Notifications = styled(NotificationsIcon)<ArgsNotification>(
   })
 );
 
-export const AvatarUser = styled('div')(() => ({
+export const AvatarUser = styled('div')<{ image: string }>(({ image }) => ({
   width: '40px',
   height: '40px',
   borderRadius: '50%',
-  background: `url(${avatar})`,
+  background: image,
   backgroundPosition: 'center',
   backgroundSize: 'cover',
   marginLeft: '15px',

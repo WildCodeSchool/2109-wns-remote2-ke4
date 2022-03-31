@@ -1,64 +1,84 @@
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import { useContext } from 'react';
-import ViewerContext from '../../context/Viewer';
-import Button from '@mui/material/Button';
-import { useMutationUpdaterUser } from '../../graphql/Mutation/User';
-import { updateUserSchema } from '../../yup/UpdateUser';
 import { useFormik } from 'formik';
+import { updateUserSchema } from '../../yup/UpdateUser';
+import { useMutationUpdaterUser } from '../../graphql/Mutation/User';
+import Button from '@mui/material/Button';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
 const GridContainerUpdate = styled(Grid)(({ theme }) => ({
-  padding: '0px 20px',
+  padding: '0px 150px',
 
   [theme.breakpoints.down('md')]: {
     padding: '0px 50px',
   },
 }));
 
-const ButtonUpdate = styled(Button)(() => ({
-  padding: '10px 20px',
-  background: '#07DFCD',
-  color: '#FFF',
-  marginTop: '35px',
-}));
-
 const Form = styled('form')(() => ({
-  width: '100%',
-  maxWidth: '900px',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  width: '100%',
+  maxWidth: '1100px',
+}));
+const ButtonSend = styled(Button)(() => ({
+  padding: '10px 15px',
+  background: '#07DFCD',
+  fontWeight: 'bold',
+  fontSize: '17px',
+  color: '#FFF',
+  maxWidth: '150px',
+  cursor: 'pointer',
+}));
+const ButtonPass = styled(Button)(() => ({
+  padding: '10px 15px',
+  background: 'transparent',
+  fontWeight: 'bold',
+  fontSize: '17px',
+  color: '#000',
+  border: '1px solid #000',
+  maxWidth: '180px',
+  marginLeft: '15px',
+  cursor: 'pointer',
 }));
 
-const LoginUpdateProfil = () => {
-  const viewer = useContext(ViewerContext);
-  console.log('Viewer', viewer);
+const Div = styled('div')(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+  marginTop: '16px',
+}));
 
+const UpdateProfil: React.FC<{ viewer: any }> = ({ viewer }) => {
   const [updateUser, { loading }] = useMutationUpdaterUser();
-
+  const history = useHistory();
   const onSubmit = async (values: any) => {
+    const { firstName, lastName, email, description, pseudo } = values;
     await updateUser({
       variables: {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        mdp: values.mdp,
-        description: values.description,
-        pseudo: values.pseudo,
+        firstName,
+        lastName,
+        email,
+        description,
+        pseudo,
       },
+      onCompleted: () => {
+        toast.success('Vos informations ont bien été sauvegarder');
+      },
+      onError: (err) => toast.error(err.message),
     });
   };
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      description: '',
-      pseudo: '',
+      firstName: viewer?.firstName,
+      lastName: viewer?.lastName,
+      email: viewer?.email,
+      description: viewer?.description,
+      pseudo: viewer?.pseudo,
     },
     validationSchema: updateUserSchema,
-    onSubmit: (values: any) => {
+    onSubmit: (values) => {
       onSubmit(values);
     },
   });
@@ -69,14 +89,22 @@ const LoginUpdateProfil = () => {
     });
   };
 
+  const oldDataSame =
+    formik.values.firstName === viewer?.firstName &&
+    formik.values.lastName === viewer?.lastName &&
+    formik.values.pseudo === viewer?.pseudo &&
+    formik.values.description === viewer?.description &&
+    formik.values.email === viewer?.email;
+
   return (
-    <Form>
+    <Form onSubmit={formik.handleSubmit}>
       <GridContainerUpdate container spacing={1}>
         <Grid item md={6} sm={12} xs={12}>
           <TextField
             id="outlined-required"
             fullWidth
             label="Prenom"
+            name="firstName"
             variant="outlined"
             margin="normal"
             value={formik.values.firstName}
@@ -121,17 +149,17 @@ const LoginUpdateProfil = () => {
             value={formik.values.email}
             onChange={(e) => handleChange('email', e.target.value)}
             error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
+            helperText={formik.touched.email && formik.errors.firstName}
           />
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item sm={12} xs={12}>
           <TextField
             fullWidth
             id="outlined-multiline-static"
             label="Description"
             multiline
-            rows={2}
+            rows={3}
             value={formik.values.description}
             onChange={(e) => handleChange('description', e.target.value)}
             error={
@@ -141,10 +169,15 @@ const LoginUpdateProfil = () => {
           />
         </Grid>
       </GridContainerUpdate>
-      <ButtonUpdate type="submit" disabled={loading}>
-        Modifier
-      </ButtonUpdate>
+      <Div>
+        <ButtonSend type="submit" disabled={loading || oldDataSame}>
+          Sauvegarder
+        </ButtonSend>
+        <ButtonPass onClick={() => history.push('/updatepassword')}>
+          Modifier mot de passe
+        </ButtonPass>
+      </Div>
     </Form>
   );
 };
-export default LoginUpdateProfil;
+export default UpdateProfil;

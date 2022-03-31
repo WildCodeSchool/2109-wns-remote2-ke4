@@ -29,11 +29,12 @@ export const useMutationRegisterUser = (options?: MutationHookOptions) =>
 
 export const UPDATE_USER = gql`
   mutation UpdateUser(
-    $id: ID!
+    $id: ID
     $firstName: String
     $lastName: String
     $email: String
     $description: String
+    $pseudo: String
   ) {
     updateUser(
       id: $id
@@ -41,12 +42,14 @@ export const UPDATE_USER = gql`
       lastName: $lastName
       email: $email
       description: $description
+      pseudo: $pseudo
     ) {
       id
       firstName
       lastName
       email
       description
+      pseudo
     }
   }
 `;
@@ -82,8 +85,8 @@ export interface ValueResetMdpUser {
 // RESET PASSWORD LOGIN
 
 export const RESET_PASSWORD = gql`
-  mutation ResetPassword($email: String, $mdp: String) {
-    resetPassword(email: $email, mdp: $mdp)
+  mutation ResetPassword($tokenURL: String, $newMdp: String) {
+    resetPassword(tokenURL: $tokenURL, newMdp: $newMdp)
   }
 `;
 

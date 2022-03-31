@@ -6,6 +6,7 @@ moduleAlias.addAliases({
   '@tsTypes': path.join(__dirname, '/tsTypes'),
 });
 import { ApolloServer } from 'apollo-server-express';
+import { graphqlUploadExpress } from 'graphql-upload';
 import express from 'express';
 import cors from 'cors';
 import schema from './graphql/graphql';
@@ -44,7 +45,7 @@ async function startApolloServer() {
     },
   });
   await apolloServer.start();
-
+  app.use(graphqlUploadExpress());
   apolloServer.applyMiddleware({ app, path: '/graphql' });
 }
 

@@ -18,6 +18,8 @@ import {
   resetPassword,
   resetPasswordViewer,
 } from './PasswordForgot';
+import { createWorkColleague, deleteWorkColleague } from './Reseaux';
+import { uploadAvatar } from './Avatar';
 
 const mutations = new GraphQLObjectType({
   name: 'RootMutation',
@@ -44,6 +46,11 @@ const mutations = new GraphQLObjectType({
     passwordForgot,
     resetPassword,
     resetPasswordViewer,
+
+    createWorkColleague,
+    deleteWorkColleague,
+
+    uploadAvatar,
   }),
 });
 export default mutations;

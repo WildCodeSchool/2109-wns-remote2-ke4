@@ -9,6 +9,7 @@ import {
 import Badge from '@mui/material/Badge';
 import { makeStyles, createStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
+import defaultAvatar from '../assets/images/default_profile.png';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,8 +23,8 @@ const useStyles = makeStyles(() =>
 const Header: React.FC<{
   onChange: (b: boolean) => void;
   color: string;
-  handleUrlPage: (str: string) => void;
-}> = ({ onChange, color, handleUrlPage }) => {
+  viewer: any;
+}> = ({ onChange, color, viewer }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -44,9 +45,13 @@ const Header: React.FC<{
         </Badge>
         <AvatarUser
           onClick={() => {
-            handleUrlPage('/updateprofil');
             history.push('/updateprofil');
           }}
+          image={
+            viewer?.avatar
+              ? `url(http://localhost:4000/avatar/${viewer?.avatar})`
+              : `url(${defaultAvatar})`
+          }
         />
       </DivNotifAvatar>
     </HeaderContainer>

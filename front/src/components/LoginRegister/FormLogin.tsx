@@ -24,9 +24,7 @@ const GridContainer = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const LoginForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
-  handleUrlPage,
-}) => {
+const LoginForm = () => {
   const history = useHistory();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -38,8 +36,8 @@ const LoginForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
       const token = data?.login;
 
       setCookie('token', token);
-      handleUrlPage('/');
-      history.push('/');
+
+      history.push('/ke4');
     },
     onError: (err) => toast.error(`${err.message}`),
   });

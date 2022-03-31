@@ -15,10 +15,16 @@ import background from './assets/images/background.jpg';
 import BodyApp from './components/Body';
 import { styled } from '@mui/system';
 import AllCards from './pages/Cards';
-import MyProjects from './pages/MyProjects';
+import HomeAccount from './pages/HomeAccount';
 import UpdatePassword from './pages/UpdatePassword';
 import { useQueryViewer } from './graphql/Queries/User';
 import { ViewerProvider } from './context/Viewer';
+import Reseaux from './pages/Reseaux';
+import Home from './pages/Home';
+import ResetPassword from './pages/resetPassword';
+import { Toaster } from 'react-hot-toast';
+
+import Footer from './components/Footer';
 
 interface DivProps {
   widthNav: string;
@@ -38,14 +44,10 @@ export const BodyWithNavbar = styled('div')<DivProps>(
 
 export default function App() {
   const { data, loading, error } = useQueryViewer();
-  const [urlPage, setUrlPage] = useState(window.location.pathname);
   const [navbar, setNavbar] = useState(false);
-  const statePageWithImageBackground =
-    pageWithImageBackground.includes(urlPage);
-
-  const handleUrlPage = (url: string) => {
-    setUrlPage(url);
-  };
+  const statePageWithImageBackground = pageWithImageBackground.includes(
+    window.location.pathname
+  );
 
   const viewer = data?.getViewer || {};
 
@@ -56,46 +58,51 @@ export default function App() {
   if (error) {
     return <h1>Error message: {error.message}</h1>;
   }
+  // if (viewer && (window.location.pathname === '/login' || '/register')) {
+  //   history.push('/');
+  // }
+
+  // if (viewer === {} && (window.location.pathname !== '/login' || '/register')) {
+  //   history.push('/login');
+  // }
 
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <Toaster position="bottom-center" />
         <BodyApp>
-          <Navbar
-            navbar={navbar}
-            onChange={setNavbar}
-            handleUrlPage={handleUrlPage}
-          />
+          <Navbar navbar={navbar} onChange={setNavbar} />
+
           <BodyWithNavbar
             widthNav={navbar ? 'calc(100% - 300px)' : '100%'}
             bBody={
               !statePageWithImageBackground ? '#fff' : `url(${background})`
             }
           >
-            {!pageWithNotHeader.includes(urlPage) && (
+            {!pageWithNotHeader.includes(window.location.pathname) && (
               <Header
                 onChange={setNavbar}
                 color={!statePageWithImageBackground ? '#000' : '#fff'}
-                handleUrlPage={handleUrlPage}
+                viewer={viewer}
               />
             )}
             <Switch>
               <Route path="/login">
-                <Login handleUrlPage={handleUrlPage} />
+                <Login />
               </Route>
 
               <Route path="/register">
-                <Register handleUrlPage={handleUrlPage} />
+                <Register />
               </Route>
               <ViewerProvider value={viewer}>
                 <Route exact path="/">
-                  <p>Home</p>
+                  <Home />
                 </Route>
-                <Route path="/board">
+                <Route exact path="/ke4">
+                  {viewer && <HomeAccount viewer={viewer} />}
+                </Route>
+                <Route path="/project/:id">
                   <Board />
-                </Route>
-                <Route path="/mesprojets">
-                  <MyProjects />
                 </Route>
                 <Route path="/createProject">
                   <CreateProject />
@@ -104,18 +111,25 @@ export default function App() {
                   <UpdateProfil />
                 </Route>
                 <Route path="/updatepassword">
-                  <UpdatePassword handleUrlPage={handleUrlPage} />
+                  <UpdatePassword />
                 </Route>
                 <Route path="/newpassword">
-                  <NewPassword handleUrlPage={handleUrlPage} />
+                  <NewPassword viewer={viewer} />
+                </Route>
+                <Route path="/resetpassword/:token">
+                  <ResetPassword viewer={viewer} />
                 </Route>
                 <Route path="/cards">
                   <AllCards />
+                </Route>
+                <Route path="/reseaux">
+                  <Reseaux viewer={viewer} />
                 </Route>
               </ViewerProvider>
             </Switch>
           </BodyWithNavbar>
         </BodyApp>
+        <Footer />
       </Router>
     </ThemeProvider>
   );

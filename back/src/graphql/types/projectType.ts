@@ -29,13 +29,13 @@ const TypeProject: any = new GraphQLObjectType({
           },
         });
         if (!author) return;
-        console.log(author);
+
         const res = await prisma.user.findUnique({
           where: {
             id: author.author,
           },
         });
-        console.log(res);
+
         if (!res) return;
         return res?.fullName;
       },

@@ -15,7 +15,6 @@ export const registerUserSchema = (args) => {
     description: Joi.string(),
   }).validate(args, { abortEarly: false }).error;
   if (schema) {
-    console.log(schema);
     throw new Error('Les données entrer sont incorrect');
   }
 };

@@ -33,6 +33,14 @@ const TypeUser = new GraphQLObjectType({
     },
     avatar: {
       type: GraphQLString,
+      resolve: async (node: User) => {
+        const avatar = await prisma.user.findUnique({
+          where: {
+            id: node.id,
+          },
+        });
+        return avatar ? avatar?.avatar : null;
+      },
     },
     description: {
       type: GraphQLString,

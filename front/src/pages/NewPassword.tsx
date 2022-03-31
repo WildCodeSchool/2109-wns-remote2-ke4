@@ -47,9 +47,7 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
-  handleUrlPage,
-}) => {
+const NewPassword: React.FC<{ viewer: any }> = ({ viewer }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const history = useHistory();
@@ -59,13 +57,10 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         `Un email vous a été envoyer à ${email} pour la réinitialisation de votre mot de passe`
       );
       setTimeout(() => {
-        handleUrlPage('/login');
-        history.push('/login');
+        viewer ? history.push('/ke4') : history.push('/login');
       }, 4000);
     },
     onError: (err) => {
-      console.log('JE PASSE ICI');
-
       toast.error(err.message);
     },
   });
@@ -95,15 +90,7 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         onChange={(e) => setEmail(e.target.value)}
       />
       <div className={classes.containerBtn}>
-        <ButtonCancel
-          disabled={loading}
-          onClick={() => {
-            handleUrlPage('/login');
-            history.push('/login');
-          }}
-        >
-          Annuler
-        </ButtonCancel>
+        <ButtonCancel disabled={loading}>Annuler</ButtonCancel>
         <ButtonSend disabled={!email || loading} onClick={() => onSubmit()}>
           Envoyer
         </ButtonSend>
