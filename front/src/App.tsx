@@ -124,6 +124,9 @@ export default function App() {
               <Route path="/createProject">
                 <CreateProject />
               </Route>
+              <Route path="/createTicket">
+                <CreateTicket />
+              </Route>
               <Route path="/updateprofil">
                 <UpdateProfil viewer={viewer} />
               </Route>

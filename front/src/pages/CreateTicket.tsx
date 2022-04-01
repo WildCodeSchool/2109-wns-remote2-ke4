@@ -28,16 +28,12 @@ import { LocalizationProvider } from '@mui/lab';
 import LuxonUtils from '@mui/lab/AdapterLuxon';
 import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
 import { devArrayNotAssign } from '../libs/const';
-import { ErrorSharp } from '@mui/icons-material';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
+      margin: '60px',
       display: 'flex',
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
       maxWidth: 1200,
       width: '100%',
       background: '#fff',
@@ -45,7 +41,6 @@ const useStyles = makeStyles(() =>
       borderRadius: '25px',
       boxShadow: '24px',
       overflow: 'hidden',
-
       zIndex: 1,
       minHeight: '500px',
     },
