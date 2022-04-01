@@ -3,6 +3,7 @@ import {
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
+  GraphQLString,
 } from 'graphql';
 import TypeUser from '../../types/userType';
 import prisma from '../../../lib/prisma';
@@ -36,18 +37,35 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
   },
   getViewer: {
     type: TypeUser,
-    resolve: async (
-      _,
-      __,
-      context: Context
-    ): Promise<User | null | undefined> => {
-      if (!context.user) return;
+    resolve: async (_, __, context: Context): Promise<User | null> => {
+      if (!context.user) return null;
       const viewer = await prisma.user.findUnique({
         where: {
           id: context.user.id,
         },
       });
       return viewer || null;
+    },
+  },
+  getSearchUser: {
+    args: {
+      search: {
+        type: GraphQLString,
+      },
+    },
+    type: new GraphQLList(TypeUser),
+    resolve: async (_, args, context: Context): Promise<User[] | undefined> => {
+      // if (!context.user) return;
+      if (args.search.length < 4) return [];
+      const result = await prisma.user.findMany({
+        where: {
+          fullName: {
+            contains: args?.search,
+          },
+        },
+        orderBy: { lastName: 'asc' },
+      });
+      return result || [];
     },
   },
 };

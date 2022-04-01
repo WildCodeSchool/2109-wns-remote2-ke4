@@ -6,9 +6,10 @@ moduleAlias.addAliases({
   '@tsTypes': path.join(__dirname, '/tsTypes'),
 });
 import { ApolloServer } from 'apollo-server-express';
+import { graphqlUploadExpress } from 'graphql-upload';
 import express from 'express';
 import cors from 'cors';
-import schema from './graphql/graphql';
+import schema from './graphql';
 import prisma from './lib/prisma';
 import { JWT_LOGIN_SECRET } from './config';
 import jwt from 'jsonwebtoken';
@@ -17,6 +18,7 @@ import Context from '@tsTypes/context';
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/avatar', express.static(__dirname + '/avatar'));
 
 async function startApolloServer() {
   const apolloServer = new ApolloServer({
@@ -44,7 +46,7 @@ async function startApolloServer() {
     },
   });
   await apolloServer.start();
-
+  app.use(graphqlUploadExpress());
   apolloServer.applyMiddleware({ app, path: '/graphql' });
 }
 

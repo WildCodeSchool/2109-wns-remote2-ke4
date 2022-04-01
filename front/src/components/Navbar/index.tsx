@@ -25,22 +25,25 @@ export const getOptionsNavbar = (
   disabled: boolean,
   history: any,
   key: any,
-  handleUrlPage: (str: string) => void,
+  onClose: () => void,
   projects?: { name: string; linkProject: string }[] | null,
   onClick?: () => void
 ) => {
-  if (label !== 'Project') {
+  if (label !== 'Mes Projets') {
     return (
       <Option
         key={key}
         onClick={() => {
-          if (label === 'Disconnection' && onClick) {
+          if (label === 'Deconection' && onClick) {
             onClick();
-            handleUrlPage(link);
+
             history.push(link);
           } else {
-            handleUrlPage(link);
-            history.push(link);
+            if (label !== 'Mes projets') {
+              onClose();
+
+              history.push(link);
+            }
           }
         }}
         opa={disabled ? 0.4 : 1}
@@ -68,7 +71,7 @@ export const getOptionsNavbar = (
               <ListStyled
                 key={index}
                 onClick={() => {
-                  handleUrlPage(project.linkProject);
+                  onClose();
                   history.push(project.linkProject);
                 }}
               >
@@ -85,19 +88,22 @@ export const getOptionsNavbar = (
 const Navbar: React.FC<{
   onChange: (b: boolean) => void;
   navbar: boolean;
-  handleUrlPage: (str: string) => void;
-}> = ({ onChange, navbar, handleUrlPage }) => {
+}> = ({ onChange, navbar }) => {
   const history = useHistory();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, __, removeCookie] = useCookies(['token']);
 
-  const onDisconnect = () => {
+  const onDisconnect = async () => {
     removeCookie('token');
     onChange(false);
     setTimeout(() => {
-      handleUrlPage('/login');
-      history.push('/login');
+      history.push('/');
     }, 1000);
+  };
+
+  const closeNav = () => {
+    onChange(false);
   };
 
   return (
@@ -107,8 +113,8 @@ const Navbar: React.FC<{
           src={logo}
           alt="logo"
           onClick={() => {
-            handleUrlPage('/');
-            history.push('/');
+            history.push('/ke4');
+            onChange(false);
           }}
         />
         <Close
@@ -126,7 +132,8 @@ const Navbar: React.FC<{
             disabled,
             history,
             index,
-            handleUrlPage,
+
+            closeNav,
             project,
             onDisconnect
           )

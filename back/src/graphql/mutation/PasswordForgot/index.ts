@@ -51,10 +51,10 @@ export const passwordForgot: GraphQLFieldConfig<any, any, ArgsForgot> = {
     await sendEmail({
       to: user.email,
       subject: 'Réinitialisation du mot de passe',
-      text: `Bonjour, Veuillez cliquez sur ce lien pour mettre à jour votre nouveau mot de passe: http://localhost:3000/login`,
-      html: `<p>Bonjour<br /><br />Veuillez cliquez sur ce lien pour mettre à jour votre nouveau mot de passe: <a href='http://localhost:3000/login/${encodeURIComponent(
+      text: `Bonjour, Veuillez cliquez sur ce lien pour mettre à jour votre nouveau mot de passe: http://localhost:3000/resetpassword`,
+      html: `<p>Bonjour<br /><br />Veuillez cliquez sur ce lien pour mettre à jour votre nouveau mot de passe: <a href='http://localhost:3000/resetpassword/${encodeURIComponent(
         token
-      )}'>http://localhost:3000/login</a></p>`,
+      )}'>http://localhost:3000/resetpassword</a></p>`,
     });
 
     return true;

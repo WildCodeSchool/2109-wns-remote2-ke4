@@ -43,8 +43,7 @@ const useStyles = makeStyles(() =>
 const RegisterLogin: React.FC<{
   children?: any;
   type: 'login' | 'register';
-  handleUrlPage: (str: string) => void;
-}> = ({ children, type, handleUrlPage }) => {
+}> = ({ children, type }) => {
   const classes = useStyles();
   const history = useHistory();
   //@ts-ignore
@@ -75,7 +74,6 @@ const RegisterLogin: React.FC<{
               <TypographyPasswordForgot
                 variant="h6"
                 onClick={() => {
-                  handleUrlPage('/newpassword');
                   history.push('/newpassword');
                 }}
               >

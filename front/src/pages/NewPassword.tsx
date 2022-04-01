@@ -6,9 +6,10 @@ import {
   ButtonSend,
   TextFieldNewPassword,
 } from '../elements/newPassword.styles';
-import { useMutationForgotPassword } from '../graphql/Mutation/User';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
+import { TypeUser } from '../types';
+import { usePasswordForgotMutation } from '../graphql/Mutation/User/User.mutation';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,25 +48,22 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
-  handleUrlPage,
+const NewPassword: React.FC<{ viewer: TypeUser | undefined | null }> = ({
+  viewer,
 }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const history = useHistory();
-  const [resetMdp, { loading }] = useMutationForgotPassword({
+  const [resetMdp, { loading }] = usePasswordForgotMutation({
     onCompleted: () => {
       toast.success(
         `Un email vous a été envoyer à ${email} pour la réinitialisation de votre mot de passe`
       );
       setTimeout(() => {
-        handleUrlPage('/login');
-        history.push('/login');
+        viewer ? history.push('/ke4') : history.push('/login');
       }, 4000);
     },
     onError: (err) => {
-      console.log('JE PASSE ICI');
-
       toast.error(err.message);
     },
   });
@@ -95,15 +93,7 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         onChange={(e) => setEmail(e.target.value)}
       />
       <div className={classes.containerBtn}>
-        <ButtonCancel
-          disabled={loading}
-          onClick={() => {
-            handleUrlPage('/login');
-            history.push('/login');
-          }}
-        >
-          Annuler
-        </ButtonCancel>
+        <ButtonCancel disabled={loading}>Annuler</ButtonCancel>
         <ButtonSend disabled={!email || loading} onClick={() => onSubmit()}>
           Envoyer
         </ButtonSend>

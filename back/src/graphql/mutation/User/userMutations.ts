@@ -13,6 +13,8 @@ import jwt from 'jsonwebtoken';
 import { registerUserSchema } from '../../../joi/User';
 import { JWT_LOGIN_SECRET } from '../../../config/index';
 import { User } from '@prisma/client';
+import Joi from 'joi';
+import Context from '@tsTypes/context';
 
 interface ArgsUser {
   email: string;
@@ -91,9 +93,6 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
     firstName: {
       type: GraphQLString,
     },
-    avatar: {
-      type: GraphQLString,
-    },
     description: {
       type: GraphQLString,
     },
@@ -105,20 +104,38 @@ export const updateUser: GraphQLFieldConfig<any, any, any> = {
     },
   },
   type: new GraphQLNonNull(TypeUser),
-  resolve: async (_, args): Promise<User | undefined> => {
+  resolve: async (_, args, context: Context): Promise<User | undefined> => {
+    if (!context?.user) return;
+    const { firstName, lastName, email, description, pseudo } = args;
+
+    const schema = Joi.object({
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      pseudo: Joi.string().required(),
+      description: Joi.string().optional().allow(''),
+    }).validate(
+      { firstName, lastName, email, pseudo, description },
+      { abortEarly: false }
+    ).error;
+
+    if (schema) {
+      throw new Error('Veuillez rentrer les données correctement');
+    }
+
     const fullName = args?.firstName + ' ' + args?.lastName;
     const user = await prisma.user.update({
       where: {
-        id: args.id,
+        id: args.id || context?.user?.id,
       },
       data: {
-        email: args.email,
-        lastName: args.lastName,
-        firstName: args.firstName,
+        email,
+        lastName,
+        firstName,
         fullName,
-        pseudo: args?.pseudo,
+        pseudo,
         avatar: args.avatar,
-        description: args.description,
+        description,
         role: args.role,
       },
     });

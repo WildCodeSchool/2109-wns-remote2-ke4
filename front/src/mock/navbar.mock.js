@@ -8,9 +8,9 @@ import {
 
 export const navbarOption = [
   {
-    label: 'Board',
+    label: 'Accueil',
     icon: <Home />,
-    link: '/board',
+    link: '/ke4',
     disabled:false,
     
   },
@@ -21,16 +21,16 @@ export const navbarOption = [
     disabled:false,
   },
   {
-    label: 'Team',
+    label: 'Mon Réseau',
     icon: <Team />,
-    link: '/team',
-    disabled:true,
+    link: '/reseaux',
+    disabled:false,
   },
   {
-    label: 'Project',
+    label: 'Mes Projets',
     icon: <Work />,
-    link: '/project',
-    disabled:true,
+    link: '/mesprojets',
+    disabled:false,
     project:[
       {
         name:'Projet 1',
@@ -43,9 +43,9 @@ export const navbarOption = [
     ]
   },
   {
-    label: 'Disconnection',
+    label: 'Deconection',
     icon: <Deconnect />,
-    link: '/login',
+    link: '/',
     disabled:false,
   },
 ];
