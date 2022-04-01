@@ -44,8 +44,11 @@ const Reseaux: React.FC<{ viewer: TypeUser | undefined | null }> = ({
     },
   });
   const users = data?.getSearchUser || [];
-  const { data: dataColleagues, loading: loadingColleagues } =
-    useGetAllColleaguesQuery();
+  const {
+    data: dataColleagues,
+    loading: loadingColleagues,
+    refetch,
+  } = useGetAllColleaguesQuery();
   const colleagues = dataColleagues?.getManyWorkColleague;
 
   if (loadingColleagues) {
@@ -90,24 +93,25 @@ const Reseaux: React.FC<{ viewer: TypeUser | undefined | null }> = ({
                   variables: {
                     workColleagueId: option.id,
                   },
-                  update: (cache, { data }) => {
-                    cache.modify({
-                      //@ts-ignore
-                      id: cache.identify(dataColleagues?.getManyWorkColleague),
+                  // update: (cache, { data }) => {
+                  //   cache.modify({
+                  //     //@ts-ignore
+                  //     id: cache.identify(dataColleagues?.getManyWorkColleague),
 
-                      fields: {
-                        getManyWorkColleague(existingColleagues = []) {
-                          const newColleague = cache.writeFragment({
-                            data: data?.createWorkColleague,
-                            fragment: FragmentColleagueFragmentDoc,
-                          });
-                          const result = [...existingColleagues, newColleague];
-                          return result;
-                        },
-                      },
-                    });
-                  },
+                  //     fields: {
+                  //       getManyWorkColleague(existingColleagues = []) {
+                  //         const newColleague = cache.writeFragment({
+                  //           data: data?.createWorkColleague,
+                  //           fragment: FragmentColleagueFragmentDoc,
+                  //         });
+                  //         const result = [...existingColleagues, newColleague];
+                  //         return result;
+                  //       },
+                  //     },
+                  //   });
+                  // },
                   onCompleted: (data: any) => {
+                    refetch();
                     toast.success(
                       `${data?.createWorkColleague?.fullName} a bien été ajouter à votre réseau`
                     );

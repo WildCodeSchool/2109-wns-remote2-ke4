@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import CreateProject from './pages/CreateProject';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import Board from './pages/Board';
 import { theme } from './Theme';
 import { ThemeProvider } from '@mui/system';
@@ -67,8 +72,11 @@ export default function App() {
   }
 
   if (
-    (!viewer && window.location.pathname !== '/login') ||
-    (!viewer && window.location.pathname !== '/register')
+    !viewer &&
+    window.location.pathname !== '/login' &&
+    window.location.pathname !== '/register' &&
+    window.location.pathname !== '/' &&
+    window.location.pathname !== '/newpassword'
   ) {
     window.location.replace('/login');
   }

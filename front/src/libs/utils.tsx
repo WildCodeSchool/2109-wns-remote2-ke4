@@ -8,5 +8,5 @@ export const pageWithImageBackground = [
   '/createProject',
   '/ke4',
   '/reseaux',
-  'project/:id',
+  `/project`,
 ];
