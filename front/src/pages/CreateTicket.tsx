@@ -4,8 +4,11 @@ import {
   GridMargin,
   Input,
   Title,
-} from '../elements/createProject.styled';
-import React, { useState } from 'react';
+  AvatarDiv,
+  BoxAvatarDev,
+  Cancel,
+} from '../elements/createProject.styles';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import imgCreateProject from '../assets/images/imgCreateProject.jpeg';
 import Grid from '@mui/material/Grid';
@@ -22,6 +25,11 @@ import {
 import DatePicker from '@mui/lab/DatePicker';
 import { LocalizationProvider } from '@mui/lab';
 import LuxonUtils from '@mui/lab/AdapterLuxon';
+import avatar1 from '../assets/images/avatar1.jpg';
+import avatar2 from '../assets/images/avatar2.jpg';
+import avatar3 from '../assets/images/avatar3.jpg';
+import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
+import { devArrayNotAssign } from '../libs/const';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -49,13 +57,25 @@ const useStyles = makeStyles(() =>
   })
 );
 
+const columnsFromBackend = {
+  assigned: {
+    name: 'Assigned',
+    items: [],
+  },
+  notAssigned: {
+    name: 'Not Assigned',
+    items: devArrayNotAssign,
+  },
+};
+
 const CreateTicket = () => {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [project, setProject] = useState<String>('');
   const projects = ['project1', 'project2']; // MOCK
   const [description, setDescription] = useState('');
-  const [dev, setDev] = useState('');
+  const [open, setOpen] = useState<boolean>(false);
+  const [columns, setColumns] = useState(columnsFromBackend);
   const [estimatedTimeUnit, setEstimatedTimeUnit] = useState('');
   const [estimatedTime, setEstimatedTime] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -63,6 +83,65 @@ const CreateTicket = () => {
   const [ressources, setRessources] = useState<String[]>([]);
   const [newRessource, setNewRessource] = useState<String>('');
   const [priority, setPriority] = useState('');
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const removeDev = (id: string) => {
+    let columnsCopy = {
+      ...columns,
+      assigned: {
+        name: columns.assigned.name,
+        items: [...columns.assigned.items],
+      },
+      notAssigned: {
+        name: columns.notAssigned.name,
+        items: [...columns.notAssigned.items],
+      },
+    };
+    let itemToMove: any;
+    columnsCopy.assigned.items = columnsCopy.assigned.items.filter(
+      (item: any) => {
+        itemToMove = item;
+        return item.id !== id;
+      }
+    );
+    columnsCopy.notAssigned.items.push(itemToMove);
+    setColumns(columnsCopy);
+  };
+
+  useEffect(() => {}, [columns]);
+
+  function submission() {
+    if (
+      name !== '' &&
+      priority !== '' &&
+      project !== '' &&
+      description !== '' &&
+      startDate &&
+      dueDate &&
+      startDate >= dueDate
+    ) {
+      console.log('fetch de la morkitu');
+      /* fetch('http://localhost:4000/', {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({
+          name: name,
+          priority: priority,
+          project: project,
+          description: description,
+          developpeurs: columns.assigned.items,
+          estimatedTime: estimatedTime,
+          startDate: startDate,
+          dueDate: dueDate,
+          ressources: ressources,
+        }),
+      }); */
+    }
+  }
 
   return (
     <BoxContainer>
@@ -133,7 +212,24 @@ const CreateTicket = () => {
               onChange={(e) => setDescription(e.target.value)}
             />
           </GridMargin>
-          <GridMargin item>Trigger modal</GridMargin>
+          <GridMargin item>
+            <Button onClick={handleOpen}>+ Inviter des utilisateurs</Button>
+            <BoxAvatarDev data-testid="AvatarDev">
+              {columns.assigned.items.map((item: any) => (
+                <AvatarDiv
+                  style={{
+                    background: `url(${item.image})`,
+                  }}
+                  key={item.id}
+                >
+                  <Cancel
+                    onClick={() => removeDev(item.id)}
+                    data-testid="delete"
+                  ></Cancel>
+                </AvatarDiv>
+              ))}
+            </BoxAvatarDev>
+          </GridMargin>
           <GridMargin item>
             <Box className={classes.doubleInput}>
               <Input
@@ -215,11 +311,13 @@ const CreateTicket = () => {
               variant="outlined"
               sx={{ marginTop: '5px', marginRight: '5px' }}
               onClick={() => {
-                setRessources([...ressources, newRessource]);
-                setNewRessource('');
+                if (newRessource !== '') {
+                  setRessources([...ressources, newRessource]);
+                  setNewRessource('');
+                }
               }}
             >
-              Add
+              ajouter ressource
             </Button>
             {ressources.map((ressource, index) => {
               return (
@@ -236,7 +334,14 @@ const CreateTicket = () => {
             })}
           </GridMargin>
           <GridMargin>
-            <Button variant="outlined">Submit TODO</Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                submission();
+              }}
+            >
+              Enregistrer
+            </Button>
           </GridMargin>
         </GridLeft>
         <Grid
@@ -247,6 +352,12 @@ const CreateTicket = () => {
           }}
         ></Grid>
       </Box>
+      <ModalAssignCreate
+        open={open}
+        handleClose={handleClose}
+        columns={columns}
+        setColumns={setColumns}
+      />
     </BoxContainer>
   );
 };

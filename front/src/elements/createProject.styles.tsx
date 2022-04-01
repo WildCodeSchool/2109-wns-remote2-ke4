@@ -1,7 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import background from '../assets/images/background.jpg';
 import Avatar from '@mui/material/Avatar';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { styled } from '@mui/material/styles';
@@ -33,6 +32,14 @@ export const GridMargin = styled(Grid)(() => ({
   marginBottom: '30px',
 }));
 
+export const GridTime = styled(Grid)(() => ({
+  width: '70%',
+  marginBottom: '30px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'baseline',
+}));
+
 export const Title = styled(Typography)(() => ({
   margin: '25px 0px',
 }));
@@ -62,11 +69,10 @@ export const AvatarDiv = styled(Avatar)(() => ({
 }));
 
 export const BoxContainer = styled(Box)(() => ({
-  background: `url(${background})`,
   width: '100%',
-  minHeight: '100vh',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  background: 'transparent',
 }));
 
 export const ButtonDev = styled(Button)(() => ({

@@ -1,101 +1,125 @@
 import React, { useState } from 'react';
-import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { onDragEnd } from '../../libs/onDragEnd';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@mui/material';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Avatar from '@mui/material/Avatar';
+  AvatarStyles,
+  CardDev,
+  Column,
+  ColumnDev,
+  DivColumns,
+  ModalStyles,
+  PaperModal,
+  InputStyled,
+  TitleSearch,
+} from '../../elements/modalAssignDev.styles';
 import { capitalize } from '../../libs/utils';
-import {
-  devArrayAssign,
-  devArrayNotAssign,
-} from '../../mock/devCreateProject.mock';
-import {
-  ContainerTable,
-  StyledAvatar,
-  StyledTableRow,
-  StyledTextFiled,
-  TableCellBorderRight,
-  TableCellContainer,
-  TableCellLine,
-} from '../../elements/modalAssignDev';
 
 const ModalAssignCreateProject: React.FC<{
   open: boolean;
   handleClose: () => void;
-}> = ({ open, handleClose }) => {
-  const [stateDevArrayAssign, setDevArrayAssign] = useState(devArrayAssign);
-  const [stateDevArrayNotAssign, setDevArrayNotAssign] =
-    useState(devArrayNotAssign);
-  const [searchAssignDev, setSearchAssignDev] = useState('');
-  const [searchNotAssignDev, setNotSearchAssignDev] = useState('');
-
+  columns: {
+    [x: string]: {
+      name: string;
+      items: {
+        id: string;
+        image: string;
+        lastName: string;
+        firstName: string;
+      }[];
+    };
+  };
+  setColumns: any;
+}> = ({ open, handleClose, columns, setColumns }) => {
+  const [search, setSearch] = useState('');
   return (
-    <Modal
+    <ModalStyles
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <ContainerTable data-testid="table-modal">
-        <Table aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <TableCellBorderRight align="center">
-                <Typography variant="h6">Assigned</Typography>
-                <StyledTextFiled
-                  label="Search"
-                  value={searchAssignDev}
-                  onChange={(e) => setSearchAssignDev(e.target.value)}
-                />
-              </TableCellBorderRight>
-              <TableCell align="center">
-                <Typography variant="h6">Not assigned</Typography>
-                <StyledTextFiled
-                  label="Search"
-                  value={searchNotAssignDev}
-                  onChange={(e) => setNotSearchAssignDev(e.target.value)}
-                />
-              </TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            <TableCellContainer component="th" scope="row">
-              {stateDevArrayAssign
-                .filter((d) => d.name.startsWith(capitalize(searchAssignDev)))
-                .map((dev) => (
-                  <div key={dev.id}>
-                    <StyledTableRow>
-                      <StyledAvatar src={dev.image} />
-                      <Typography>{dev?.name}</Typography>
-                    </StyledTableRow>
-                  </div>
-                ))}
-            </TableCellContainer>
-            <TableCellLine component="th" scope="row">
-              {stateDevArrayNotAssign
-                .filter((d) =>
-                  d.name.startsWith(capitalize(searchNotAssignDev))
-                )
-                .map((dev) => (
-                  <div key={dev.id}>
-                    <StyledTableRow>
-                      <StyledAvatar src={dev.image} />
-                      <Typography>{dev?.name}</Typography>
-                    </StyledTableRow>
-                  </div>
-                ))}
-            </TableCellLine>
-          </TableBody>
-        </Table>
-      </ContainerTable>
-    </Modal>
+      <Fade in={open}>
+        <PaperModal>
+          <TitleSearch>Rechercher des développeurs</TitleSearch>
+          <InputStyled
+            fullWidth
+            label="Rechercher"
+            value={search}
+            onChange={(e: any) => setSearch(e.target.value)}
+          />
+          <DivColumns>
+            <DragDropContext
+              onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+            >
+              {Object.entries(columns).map(([columnId, column], index) => {
+                return (
+                  <ColumnDev key={columnId}>
+                    <h2>{column.name}</h2>
+                    <div style={{ margin: 0 }}>
+                      <Droppable droppableId={columnId} key={columnId}>
+                        {(provided, snapshot) => {
+                          return (
+                            <Column
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                            >
+                              {column.items
+                                .filter(
+                                  (_item) =>
+                                    _item.lastName.startsWith(
+                                      capitalize(search)
+                                    ) ||
+                                    _item.firstName.startsWith(
+                                      capitalize(search)
+                                    )
+                                )
+                                .map((item, index) => {
+                                  return (
+                                    <Draggable
+                                      key={item.id}
+                                      draggableId={item.id}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <CardDev
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              backgroundColor:
+                                                snapshot.isDragging
+                                                  ? '#000'
+                                                  : '#72caa9',
+                                              ...provided.draggableProps.style,
+                                            }}
+                                          >
+                                            <AvatarStyles
+                                              src={item?.image}
+                                              alt="logo"
+                                            />
+                                            {item.firstName} {item.lastName}
+                                          </CardDev>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  );
+                                })}
+                              {provided.placeholder}
+                            </Column>
+                          );
+                        }}
+                      </Droppable>
+                    </div>
+                  </ColumnDev>
+                );
+              })}
+            </DragDropContext>
+          </DivColumns>
+        </PaperModal>
+      </Fade>
+    </ModalStyles>
   );
 };
 export default ModalAssignCreateProject;
