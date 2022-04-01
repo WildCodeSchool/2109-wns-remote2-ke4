@@ -3,6 +3,7 @@ import { MyProjectsMock } from '../mock/myprojects.mock';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { useHistory } from 'react-router-dom';
+import { TypeUser } from '../types';
 
 export const ButtonProject = styled(Button)({
   padding: '10px 20px',
@@ -16,7 +17,9 @@ export const ButtonProject = styled(Button)({
   },
 });
 
-const HomeAccount: React.FC<{ viewer: any }> = ({ viewer }) => {
+const HomeAccount: React.FC<{ viewer: TypeUser | undefined | null }> = ({
+  viewer,
+}) => {
   const history = useHistory();
   return (
     <div

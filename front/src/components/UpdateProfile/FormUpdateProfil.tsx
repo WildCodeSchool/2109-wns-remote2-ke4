@@ -3,10 +3,11 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import { updateUserSchema } from '../../yup/UpdateUser';
-import { useMutationUpdaterUser } from '../../graphql/Mutation/User';
 import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
+import { TypeUser } from '../../types';
+import { useUpdateUserMutation } from '../../graphql/Mutation/User/User.mutation';
 
 const GridContainerUpdate = styled(Grid)(({ theme }) => ({
   padding: '0px 150px',
@@ -50,8 +51,10 @@ const Div = styled('div')(() => ({
   marginTop: '16px',
 }));
 
-const UpdateProfil: React.FC<{ viewer: any }> = ({ viewer }) => {
-  const [updateUser, { loading }] = useMutationUpdaterUser();
+const UpdateProfil: React.FC<{ viewer: TypeUser | undefined | null }> = ({
+  viewer,
+}) => {
+  const [updateUser, { loading }] = useUpdateUserMutation();
   const history = useHistory();
   const onSubmit = async (values: any) => {
     const { firstName, lastName, email, description, pseudo } = values;

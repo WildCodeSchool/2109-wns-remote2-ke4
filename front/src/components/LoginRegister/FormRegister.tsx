@@ -5,10 +5,10 @@ import InputPassword from './InputPassword';
 import { useFormik } from 'formik';
 import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { registerSchema } from '../../yup/Register';
-import { useMutationRegisterUser } from '../../graphql/Mutation/User';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useCreateUserMutation } from '../../graphql/Mutation/User/User.mutation';
 
 interface PropsValues {
   firstName: string;
@@ -25,13 +25,13 @@ const RegisterForm = () => {
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies(['token']);
-  const [registerUser, { loading }] = useMutationRegisterUser({
+  const [registerUser, { loading }] = useCreateUserMutation({
     onCompleted: (data) => {
       const token = data?.registerUser;
 
       setCookie('token', token);
 
-      history.push('/ke4');
+      window.location.replace('/ke4');
     },
     onError: (err) => toast.error(err.message),
   });

@@ -4,4 +4,9 @@ export const capitalize = (s: string) => {
 };
 
 export const pageWithNotHeader = ['/login', '/register', '/newpassword', '/'];
-export const pageWithImageBackground = ['/createProject', '/ke4', '/reseaux'];
+export const pageWithImageBackground = [
+  '/createProject',
+  '/ke4',
+  '/reseaux',
+  'project/:id',
+];

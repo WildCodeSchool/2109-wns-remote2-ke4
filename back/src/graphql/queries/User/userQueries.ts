@@ -37,12 +37,8 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
   },
   getViewer: {
     type: TypeUser,
-    resolve: async (
-      _,
-      __,
-      context: Context
-    ): Promise<User | null | undefined> => {
-      if (!context.user) return;
+    resolve: async (_, __, context: Context): Promise<User | null> => {
+      if (!context.user) return null;
       const viewer = await prisma.user.findUnique({
         where: {
           id: context.user.id,

@@ -7,10 +7,10 @@ import Grid from '@mui/material/Grid';
 import InputPassword from '../components/LoginRegister/InputPassword';
 import { useFormik } from 'formik';
 import { passwordSchema } from '../yup/Password';
-import { useMutationResetPasswordViewer } from '../graphql/Mutation/User';
 import { TypographyPasswordForgot } from '../elements/updatepassword.styled';
 import { FormUpdatePassword } from '../elements/updatepassword.styled';
 import toast from 'react-hot-toast';
+import { useResetPasswordViewerMutation } from '../graphql/Mutation/User/User.mutation';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -57,7 +57,7 @@ const NewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const classes = useStyles();
   const history = useHistory();
-  const [updatePassword, { loading, error }] = useMutationResetPasswordViewer();
+  const [updatePassword, { loading, error }] = useResetPasswordViewerMutation();
 
   const onSubmit = async (values: any) => {
     await updatePassword({

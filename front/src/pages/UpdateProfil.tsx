@@ -5,9 +5,9 @@ import { styled } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import FormUpdateProfil from '../components/UpdateProfile/FormUpdateProfil';
-import { useContext, useRef } from 'react';
-import ViewerContext from '../context/Viewer';
-import { useMutationUploadAvatar } from '../graphql/Mutation/Avatar';
+import { useRef } from 'react';
+import { TypeUser } from '../types';
+import { useUploadAvatarMutation } from '../graphql/Mutation/Avatar/Avatar.mutation';
 
 const AvatarUpdate = styled('div')(() => ({
   width: '100%',
@@ -58,10 +58,12 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const UpdateProfil = () => {
+const UpdateProfil: React.FC<{ viewer: TypeUser | undefined | null }> = ({
+  viewer,
+}) => {
   const classes = useStyles();
-  const viewer: any = useContext(ViewerContext);
-  const [updateAvatar, { loading }] = useMutationUploadAvatar();
+
+  const [updateAvatar, { loading }] = useUploadAvatarMutation();
   const fileInput = useRef(null);
 
   return (
@@ -85,16 +87,17 @@ const UpdateProfil = () => {
             type="file"
             ref={fileInput}
             className={classes.none}
-            onChange={async (event) => {
-              const file = event.target.files ? event.target.files[0] : null;
-              if (!file) return;
-              if (!event.target.validity.valid) return;
+            onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+              if (!e.target.files) {
+                return;
+              }
 
+              const file = e.target.files[0];
               console.log(file);
 
-              await updateAvatar({
+              updateAvatar({
                 variables: {
-                  file: file,
+                  file: file ? file : 'kelk',
                 },
               });
             }}

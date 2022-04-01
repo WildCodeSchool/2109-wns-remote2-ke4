@@ -16,6 +16,7 @@ export const HeaderContainer = styled('div')(() => ({
   alignItems: 'center',
   padding: '0px 40px',
   background: 'transparent',
+  width: '93%',
 }));
 
 export const DivNotifAvatar = styled('div')(() => ({

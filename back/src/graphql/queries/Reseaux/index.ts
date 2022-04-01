@@ -12,11 +12,10 @@ import { User } from '@prisma/client';
 const queriesReseaux: GraphQLFieldConfigMap<any, any> = {
   getManyWorkColleague: {
     type: new GraphQLList(TypeUser),
-    resolve: async (_, __, context: Context) => {
-      if (!context?.user) return;
+    resolve: async (_, __, context: Context): Promise<User[]> => {
       const workColleagues = await prisma.reseaux.findMany({
         where: {
-          userId: context.user.id,
+          userId: context?.user?.id,
         },
         include: {
           WorkColleague: true,

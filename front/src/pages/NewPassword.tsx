@@ -6,9 +6,10 @@ import {
   ButtonSend,
   TextFieldNewPassword,
 } from '../elements/newPassword.styles';
-import { useMutationForgotPassword } from '../graphql/Mutation/User';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
+import { TypeUser } from '../types';
+import { usePasswordForgotMutation } from '../graphql/Mutation/User/User.mutation';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,11 +48,13 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const NewPassword: React.FC<{ viewer: any }> = ({ viewer }) => {
+const NewPassword: React.FC<{ viewer: TypeUser | undefined | null }> = ({
+  viewer,
+}) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const history = useHistory();
-  const [resetMdp, { loading }] = useMutationForgotPassword({
+  const [resetMdp, { loading }] = usePasswordForgotMutation({
     onCompleted: () => {
       toast.success(
         `Un email vous a été envoyer à ${email} pour la réinitialisation de votre mot de passe`

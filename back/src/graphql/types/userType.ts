@@ -4,6 +4,7 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLList,
+  GraphQLInt,
 } from 'graphql';
 import Project from './projectType';
 import prisma from '../../lib/prisma';
@@ -39,7 +40,7 @@ const TypeUser = new GraphQLObjectType({
             id: node.id,
           },
         });
-        return avatar ? avatar?.avatar : null;
+        return avatar?.avatar ? avatar.avatar : null;
       },
     },
     description: {
@@ -57,6 +58,28 @@ const TypeUser = new GraphQLObjectType({
           },
         });
         return projects || [];
+      },
+    },
+    numberFriendly: {
+      type: GraphQLInt,
+      resolve: async (node: User) => {
+        const friendly = await prisma.reseaux.count({
+          where: {
+            userId: node.id,
+          },
+        });
+        return friendly;
+      },
+    },
+    dateMember: {
+      type: GraphQLString,
+      resolve: async (node: User) => {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: node.id,
+          },
+        });
+        return user?.createdAt.toLocaleDateString('fr-FR');
       },
     },
   }),

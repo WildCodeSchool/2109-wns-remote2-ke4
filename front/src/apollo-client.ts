@@ -3,9 +3,9 @@ import { setContext } from '@apollo/client/link/context';
 import cookie from 'cookie';
 import { createUploadLink } from 'apollo-upload-client';
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
-});
+// const httpLink = createHttpLink({
+//   uri: 'http://localhost:4000/graphql',
+// });
 
 const uploadLink = createUploadLink({
   uri: 'http://localhost:4000/graphql',
@@ -22,10 +22,10 @@ const authLink = setContext((_, { headers }) => {
     },
   };
 });
-const _authLink = authLink.concat(httpLink);
+// const _authLink = authLink.concat(httpLink);
 
 const client = new ApolloClient({
-  link: _authLink.concat(uploadLink),
+  link: authLink.concat(uploadLink),
   cache: new InMemoryCache(),
 });
 

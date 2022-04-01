@@ -18,32 +18,35 @@ import { useState } from 'react';
 import { capitalize } from '../libs/utils';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
-import {
-  fragmentColleague,
-  useMutationCreateWorkColleague,
-  useMutationDeleteWorkColleague,
-} from '../graphql/Mutation/Reseaux';
 import defaultAvatar from '../assets/images/default_profile.png';
-import { useQuerySearchUser } from '../graphql/Queries/User';
-import { useQueryAllColleagues } from '../graphql/Queries/Reseaux';
 import toast from 'react-hot-toast';
+import { TypeUser } from '../types';
+import {
+  FragmentColleagueFragmentDoc,
+  useCreateWorkColleagueMutation,
+  useDeleteWorkColleagueMutation,
+} from '../graphql/Mutation/Reseaux/Reseaux.mutation';
+import { useGetAllColleaguesQuery } from '../graphql/Queries/Reseaux/Reseaux.query';
+import { useSearchUsersQuery } from '../graphql/Queries/User/User.query';
 
-const Reseaux: React.FC<{ viewer: any }> = ({ viewer }) => {
-  const [createWorkColleague] = useMutationCreateWorkColleague();
-  const [deleteWorkColleague] = useMutationDeleteWorkColleague();
+const Reseaux: React.FC<{ viewer: TypeUser | undefined | null }> = ({
+  viewer,
+}) => {
+  const [createWorkColleague] = useCreateWorkColleagueMutation();
+  const [deleteWorkColleague] = useDeleteWorkColleagueMutation();
   const [search, setSearch] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setOpen] = useState(false);
-  const { data, loading } = useQuerySearchUser({
+  const { data, loading } = useSearchUsersQuery({
     skip: search.length < 4,
     variables: {
       search: search,
     },
   });
-  const users: any = data?.getSearchUser || [];
+  const users = data?.getSearchUser || [];
   const { data: dataColleagues, loading: loadingColleagues } =
-    useQueryAllColleagues();
-  const colleagues = dataColleagues?.getManyWorkColleague || [];
+    useGetAllColleaguesQuery();
+  const colleagues = dataColleagues?.getManyWorkColleague;
 
   if (loadingColleagues) {
     return <h1>Loading...</h1>;
@@ -87,16 +90,16 @@ const Reseaux: React.FC<{ viewer: any }> = ({ viewer }) => {
                   variables: {
                     workColleagueId: option.id,
                   },
-                  update: (cache, { data: { createWorkColleague } }) => {
+                  update: (cache, { data }) => {
                     cache.modify({
+                      //@ts-ignore
                       id: cache.identify(dataColleagues?.getManyWorkColleague),
 
                       fields: {
                         getManyWorkColleague(existingColleagues = []) {
-                          console.log('HELLO');
                           const newColleague = cache.writeFragment({
-                            data: createWorkColleague,
-                            fragment: fragmentColleague,
+                            data: data?.createWorkColleague,
+                            fragment: FragmentColleagueFragmentDoc,
                           });
                           const result = [...existingColleagues, newColleague];
                           return result;
@@ -104,7 +107,7 @@ const Reseaux: React.FC<{ viewer: any }> = ({ viewer }) => {
                       },
                     });
                   },
-                  onCompleted: (data) => {
+                  onCompleted: (data: any) => {
                     toast.success(
                       `${data?.createWorkColleague?.fullName} a bien été ajouter à votre réseau`
                     );
@@ -125,7 +128,7 @@ const Reseaux: React.FC<{ viewer: any }> = ({ viewer }) => {
               <SpanEmail>{option?.pseudo}</SpanEmail>
             </DivOption>
           )}
-          options={users.filter((el: any) => el.id !== viewer.id)}
+          options={users.filter((el: any) => el.id !== viewer?.id)}
           loading={loading}
           renderInput={(params) => (
             <TextField
@@ -144,7 +147,7 @@ const Reseaux: React.FC<{ viewer: any }> = ({ viewer }) => {
           )}
         />
         <DivListColleague>
-          {colleagues.map((colleagues: any) => (
+          {(colleagues || []).map((colleagues: any) => (
             <DivColleague key={colleagues.id}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <AvatarList

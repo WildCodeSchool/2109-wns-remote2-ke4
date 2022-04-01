@@ -1,0 +1,25 @@
+query GetViewer {
+  getViewer {
+    id
+    firstName
+    lastName
+    pseudo
+    fullName
+    email
+    description
+    avatar
+    numberFriendly
+    dateMember
+  }
+}
+
+query SearchUsers($search: String) {
+  getSearchUser(search: $search) {
+    id
+    firstName
+    lastName
+    email
+    avatar
+    pseudo
+  }
+}

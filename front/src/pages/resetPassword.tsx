@@ -5,12 +5,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import InputPassword from '../components/LoginRegister/InputPassword';
 import { useFormik } from 'formik';
-import { useMutationResetPassword } from '../graphql/Mutation/User';
 import { FormUpdatePassword } from '../elements/updatepassword.styled';
 import { passwordSchema } from '../yup/Password';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import toast from 'react-hot-toast';
+import { TypeUser } from '../types';
+import { useResetPasswordMutation } from '../graphql/Mutation/User/User.mutation';
 
 export const BTN = styled(Button)({
   padding: '10px 20px',
@@ -67,11 +68,14 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const ResetPassword: React.FC<{ viewer: any }> = ({ viewer }, props) => {
+const ResetPassword: React.FC<{ viewer: TypeUser | undefined | null }> = (
+  { viewer },
+  props
+) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const classes = useStyles();
   const history = useHistory();
-  const [resetPassword, { loading }] = useMutationResetPassword();
+  const [resetPassword, { loading }] = useResetPasswordMutation();
   const params: { token: string } = useParams();
 
   const onSubmit = async (values: any) => {
