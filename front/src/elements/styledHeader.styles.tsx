@@ -1,7 +1,13 @@
 import { styled } from '@mui/system';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import avatar from '../assets/images/avatar1.jpg';
-import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+interface ArgsMenu {
+  colorMenuBurger: string;
+}
+
+interface ArgsNotification {
+  colornotif: string;
+}
 
 export const HeaderContainer = styled('div')(() => ({
   height: '100px',
@@ -9,6 +15,8 @@ export const HeaderContainer = styled('div')(() => ({
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '0px 40px',
+  background: 'transparent',
+  width: '93%',
 }));
 
 export const DivNotifAvatar = styled('div')(() => ({
@@ -17,32 +25,37 @@ export const DivNotifAvatar = styled('div')(() => ({
   alignItems: 'center',
 }));
 
-export const Notifications = styled(NotificationsIcon)(() => ({
-  color: '#000',
-  fontSize: '35px',
-}));
+export const Notifications = styled(NotificationsIcon)<ArgsNotification>(
+  ({ colornotif }) => ({
+    color: colornotif,
+    fontSize: '35px',
+  })
+);
 
-export const AvatarUser = styled('div')(() => ({
+export const AvatarUser = styled('div')<{ image: string }>(({ image }) => ({
   width: '40px',
   height: '40px',
   borderRadius: '50%',
-  background: `url(${avatar})`,
+  background: image,
   backgroundPosition: 'center',
   backgroundSize: 'cover',
   marginLeft: '15px',
+  cursor: 'pointer',
 }));
 
-export const MenuBurger = styled('div')(() => ({
+export const MenuBurger = styled(Box)<ArgsMenu>(({ colorMenuBurger }) => ({
   width: '40px',
   height: '4px',
-  background: '#000',
+  background: colorMenuBurger,
+  cursor: 'pointer',
   borderRadius: '15px',
   position: 'relative',
   '&::after': {
     content: "''",
     display: 'block',
     position: 'absolute',
-    background: '#000',
+    background: colorMenuBurger,
+    cursor: 'pointer',
 
     width: '100%',
     height: '4px',
@@ -52,8 +65,9 @@ export const MenuBurger = styled('div')(() => ({
   '&::before': {
     content: "''",
     display: 'block',
+    cursor: 'pointer',
     position: 'absolute',
-    background: '#000',
+    background: colorMenuBurger,
     borderRadius: '15px',
     width: '100%',
     height: '4px',
@@ -61,3 +75,10 @@ export const MenuBurger = styled('div')(() => ({
     left: 0,
   },
 }));
+
+export const DivMenyBurger = styled('div')({
+  display: 'flex',
+  height: '50px',
+  alignItems: 'center',
+  cursor: 'pointer',
+});

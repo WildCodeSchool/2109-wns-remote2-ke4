@@ -3,7 +3,7 @@ import RegisterForm from '../components/LoginRegister/FormRegister';
 
 const Register = () => {
   return (
-    <RegisterLogin type="register" labelBtn="Creer un compte">
+    <RegisterLogin type="register">
       <RegisterForm />
     </RegisterLogin>
   );

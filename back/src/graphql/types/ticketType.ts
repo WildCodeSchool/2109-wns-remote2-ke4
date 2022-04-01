@@ -4,18 +4,19 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLList,
+  GraphQLInt,
 } from 'graphql';
+import User from './userType';
+import prisma from '../../lib/prisma';
+import { Ticket } from '@prisma/client';
 
-const Ticket: any = new GraphQLObjectType({
-  name: 'ticket',
+const TypeTicket: any = new GraphQLObjectType({
+  name: 'TypeTicket',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
     },
     name: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    projectId: {
       type: new GraphQLNonNull(GraphQLString),
     },
     status: {
@@ -24,26 +25,26 @@ const Ticket: any = new GraphQLObjectType({
     description: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    userId: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-    },
     ressources: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
     },
     priority: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    /* project: {
-      type: new GraphQLList(Project),
-      resolve: async (node) => {
-        const project = await prisma.project.findUnique({
+    progress: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    devs: {
+      type: new GraphQLList(User),
+      resolve: async (node: Ticket) => {
+        const devs = await prisma.userTicket.findMany({
           where: {
-            id: node.projectId,
+            ticketId: node.id,
           },
         });
-        return project;
+        return devs || [];
       },
-    }, */
+    },
   }),
 });
-export default Ticket;
+export default TypeTicket;

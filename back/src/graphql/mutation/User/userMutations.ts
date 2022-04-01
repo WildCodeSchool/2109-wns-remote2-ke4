@@ -1,18 +1,32 @@
 import {
+  GraphQLBoolean,
   GraphQLFieldConfig,
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
-import User from '../../types/userType';
+import TypeUser from '../../types/userType';
 import prisma from '../../../lib/prisma';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { registerUserSchema } from '../../../joi/User';
+import { JWT_LOGIN_SECRET } from '../../../config/index';
+import { User } from '@prisma/client';
+import Joi from 'joi';
+import Context from '@tsTypes/context';
 
-interface argstype {
-  // todo
+interface ArgsUser {
+  email: string;
+  mdp: string;
+  lastName: string;
+  firstName: string;
+  avatar?: string;
+  description: string;
+  pseudo: string;
 }
 
-export const registerUser: GraphQLFieldConfig<any, any, any> = {
+export const registerUser: GraphQLFieldConfig<any, any, ArgsUser> = {
   args: {
     email: {
       type: GraphQLString,
@@ -20,10 +34,13 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
     mdp: {
       type: GraphQLString,
     },
-    name: {
+    lastName: {
       type: GraphQLString,
     },
-    firstname: {
+    firstName: {
+      type: GraphQLString,
+    },
+    pseudo: {
       type: GraphQLString,
     },
     avatar: {
@@ -33,27 +50,36 @@ export const registerUser: GraphQLFieldConfig<any, any, any> = {
       type: GraphQLString,
     },
   },
-  type: new GraphQLNonNull(GraphQLID),
-  resolve: async (_, args) => {
-    const post = await prisma.user.create({
+  type: new GraphQLNonNull(GraphQLString),
+  resolve: async (_, args: ArgsUser): Promise<string | undefined> => {
+    const fullName = args?.firstName + ' ' + args?.lastName;
+    registerUserSchema(args);
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashMdp = bcrypt.hashSync(args.mdp, salt);
+
+    const user = await prisma.user.create({
       data: {
         email: args.email,
-        mdp: args.mdp,
-        name: args.name,
-        firstname: args.firstname,
+        mdp: hashMdp,
+        lastName: args.lastName,
+        firstName: args.firstName,
+        pseudo: args.pseudo,
+        fullName,
         avatar: args.avatar,
         description: args.description,
-        role: args.role,
-        projectId: args.project,
-        ticketId: args.ticket,
       },
     });
-    console.dir(post);
-    return post.id;
+
+    if (!user) {
+      throw new Error("L'utilisateur n'a pas été créer");
+    }
+    const token = jwt.sign({ userId: user.id }, JWT_LOGIN_SECRET);
+    return token;
   },
 };
 
-export const updateUserById: GraphQLFieldConfig<any, any, any> = {
+export const updateUser: GraphQLFieldConfig<any, any, any> = {
   args: {
     id: {
       type: GraphQLID,
@@ -61,64 +87,85 @@ export const updateUserById: GraphQLFieldConfig<any, any, any> = {
     email: {
       type: GraphQLString,
     },
-    mdp: {
+    lastName: {
       type: GraphQLString,
     },
-    name: {
-      type: GraphQLString,
-    },
-    firstname: {
-      type: GraphQLString,
-    },
-    avatar: {
+    firstName: {
       type: GraphQLString,
     },
     description: {
+      type: GraphQLString,
+    },
+    pseudo: {
       type: GraphQLString,
     },
     role: {
       type: GraphQLString,
     },
-    project: {
-      type: new GraphQLList(GraphQLString),
-    },
-    ticket: {
-      type: new GraphQLList(GraphQLString),
-    },
   },
-  type: new GraphQLNonNull(User),
-  resolve: async (_, args) => {
-    return await prisma.user.update({
+  type: new GraphQLNonNull(TypeUser),
+  resolve: async (_, args, context: Context): Promise<User | undefined> => {
+    if (!context?.user) return;
+    const { firstName, lastName, email, description, pseudo } = args;
+
+    const schema = Joi.object({
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      pseudo: Joi.string().required(),
+      description: Joi.string().optional().allow(''),
+    }).validate(
+      { firstName, lastName, email, pseudo, description },
+      { abortEarly: false }
+    ).error;
+
+    if (schema) {
+      throw new Error('Veuillez rentrer les données correctement');
+    }
+
+    const fullName = args?.firstName + ' ' + args?.lastName;
+    const user = await prisma.user.update({
       where: {
-        id: args.id,
+        id: args.id || context?.user?.id,
       },
       data: {
-        email: args.email,
-        mdp: args.mdp,
-        name: args.name,
-        firstname: args.firstname,
+        email,
+        lastName,
+        firstName,
+        fullName,
+        pseudo,
         avatar: args.avatar,
-        description: args.description,
+        description,
         role: args.role,
-        project: args.project,
-        ticket: args.ticket,
       },
     });
+    return user;
   },
 };
 
-export const deleteUserById: GraphQLFieldConfig<any, any, any> = {
+export const deleteUser: GraphQLFieldConfig<any, any, any> = {
   args: {
     id: {
       type: GraphQLID,
     },
   },
-  type: new GraphQLNonNull(User),
-  resolve: async (_, args) => {
-    return await prisma.user.delete({
+  type: new GraphQLNonNull(GraphQLBoolean),
+  resolve: async (_, args): Promise<boolean | undefined> => {
+    await prisma.userTicket.deleteMany({
+      where: {
+        userId: args.id,
+      },
+    });
+    await prisma.userProject.deleteMany({
+      where: {
+        userId: args.id,
+      },
+    });
+    await prisma.user.delete({
       where: {
         id: args.id,
       },
     });
+    return true;
   },
 };

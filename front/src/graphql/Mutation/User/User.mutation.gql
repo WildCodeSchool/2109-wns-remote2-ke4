@@ -1,0 +1,58 @@
+mutation CreateUser(
+  $firstName: String
+  $lastName: String
+  $email: String
+  $mdp: String
+  $description: String
+  $pseudo: String
+) {
+  registerUser(
+    firstName: $firstName
+    lastName: $lastName
+    email: $email
+    mdp: $mdp
+    description: $description
+    pseudo: $pseudo
+  )
+}
+
+mutation UpdateUser(
+  $id: ID
+  $firstName: String
+  $lastName: String
+  $email: String
+  $description: String
+  $pseudo: String
+) {
+  updateUser(
+    id: $id
+    firstName: $firstName
+    lastName: $lastName
+    email: $email
+    description: $description
+    pseudo: $pseudo
+  ) {
+    id
+    firstName
+    lastName
+    email
+    description
+    pseudo
+  }
+}
+
+mutation LoginUser($email: String, $mdp: String) {
+  login(email: $email, mdp: $mdp)
+}
+
+mutation PasswordForgot($email: String) {
+  passwordForgot(email: $email)
+}
+
+mutation ResetPassword($tokenURL: String, $newMdp: String) {
+  resetPassword(tokenURL: $tokenURL, newMdp: $newMdp)
+}
+
+mutation ResetPasswordViewer($oldPassword: String, $newMdp: String) {
+  resetPasswordViewer(oldPassword: $oldPassword, newMdp: $newMdp)
+}

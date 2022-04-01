@@ -4,31 +4,24 @@ import {
   GraphQLList,
   GraphQLNonNull,
 } from 'graphql';
-import Comment from '../../types/commentType';
+import TypeComment from '../../types/commentType';
 import prisma from '../../../lib/prisma';
+import { Comment } from '@prisma/client';
 
 const queriesComment: GraphQLFieldConfigMap<any, any> = {
-  getAllComments: {
-    type: new GraphQLList(Comment),
-    resolve: async () => {
-      const comments = await prisma.comment.findMany();
-      return comments || [];
-    },
-  },
-
-  getCommentById: {
-    args: {
-      id: {
-        type: GraphQLID,
-      },
-    },
-    type: new GraphQLNonNull(Comment),
-    resolve: async (_, args) => {
-      return await prisma.comment.findUnique({
+  getAllCommentsByTicketId: {
+    args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+    type: new GraphQLList(TypeComment),
+    resolve: async (_, args): Promise<Comment[]> => {
+      const comments = await prisma.comment.findMany({
         where: {
-          id: args.id,
+          ticketId: args?.id,
+        },
+        orderBy: {
+          postDate: 'desc',
         },
       });
+      return comments || [];
     },
   },
 };
