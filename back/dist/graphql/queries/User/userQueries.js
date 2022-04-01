@@ -40,7 +40,7 @@ const queriesUser = {
         }),
     },
     getViewer: {
-        type: new graphql_1.GraphQLNonNull(userType_1.default),
+        type: userType_1.default,
         resolve: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             if (!context.user)
                 return;
@@ -49,7 +49,7 @@ const queriesUser = {
                     id: context.user.id,
                 },
             });
-            return viewer;
+            return viewer || null;
         }),
     },
 };

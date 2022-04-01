@@ -16,12 +16,10 @@ exports.projectFav = exports.deleteProject = exports.updateProject = exports.cre
 const graphql_1 = require("graphql");
 const prisma_1 = __importDefault(require("../../../lib/prisma"));
 const projectType_1 = __importDefault(require("../../types/projectType"));
+const GraphQlDate_1 = __importDefault(require("../../GraphQlDate"));
 exports.createProject = {
     args: {
         name: {
-            type: graphql_1.GraphQLString,
-        },
-        author: {
             type: graphql_1.GraphQLString,
         },
         client: {
@@ -37,7 +35,7 @@ exports.createProject = {
             type: new graphql_1.GraphQLList(graphql_1.GraphQLID),
         },
         date: {
-            type: graphql_1.GraphQLString,
+            type: GraphQlDate_1.default,
         },
         investedTime: {
             type: graphql_1.GraphQLString,
@@ -47,24 +45,22 @@ exports.createProject = {
         },
     },
     type: projectType_1.default,
-    resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
-        if (!(context === null || context === void 0 ? void 0 : context.user))
-            return;
+    resolve: (_, args, { user }) => __awaiter(void 0, void 0, void 0, function* () {
+        // if (!user) return;
         const project = yield prisma_1.default.project.create({
             data: {
                 name: args.name,
-                author: args.author,
+                author: 'cl17429p60000v1bwbizoulkw',
                 client: args.client,
                 status: args.status,
                 description: args.description,
                 date: args.date,
                 investedTime: args.investedTime,
                 estimatedTime: args.estimatedTime,
-                createdBy: (_a = context === null || context === void 0 ? void 0 : context.user) === null || _a === void 0 ? void 0 : _a.id,
+                createdBy: 'cl17429p60000v1bwbizoulkw',
             },
         });
-        for (const userId of args.users) {
+        for (const userId of args.user) {
             yield prisma_1.default.userProject.create({
                 data: {
                     userId: userId,
@@ -99,7 +95,7 @@ exports.updateProject = {
             type: new graphql_1.GraphQLList(graphql_1.GraphQLID),
         },
         date: {
-            type: graphql_1.GraphQLString,
+            type: GraphQlDate_1.default,
         },
         investedTime: {
             type: graphql_1.GraphQLString,
@@ -110,9 +106,7 @@ exports.updateProject = {
     },
     type: projectType_1.default,
     resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-        var _b;
-        if (!(context === null || context === void 0 ? void 0 : context.user))
-            return;
+        // if (!context?.user) return;
         const project = yield prisma_1.default.project.update({
             where: {
                 id: args.id,
@@ -126,7 +120,7 @@ exports.updateProject = {
                 date: args.date,
                 investedTime: args.investedTime,
                 estimatedTime: args.estimatedTime,
-                updatedBy: (_b = context === null || context === void 0 ? void 0 : context.user) === null || _b === void 0 ? void 0 : _b.id,
+                // updatedBy: context?.user?.id,
             },
         });
         yield prisma_1.default.userProject.deleteMany({
@@ -134,7 +128,7 @@ exports.updateProject = {
                 projectId: project.id,
             },
         });
-        for (const userId of args.users) {
+        for (const userId of args.user) {
             yield prisma_1.default.userProject.create({
                 data: {
                     userId: userId,
@@ -187,13 +181,11 @@ exports.projectFav = {
     },
     type: projectType_1.default,
     resolve: (_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
-        var _c;
-        if (!context.user)
-            return;
-        const project = yield prisma_1.default.userProject.update({
+        // if (!context.user) return;
+        yield prisma_1.default.userProject.update({
             where: {
                 userId_projectId: {
-                    userId: (_c = context === null || context === void 0 ? void 0 : context.user) === null || _c === void 0 ? void 0 : _c.id,
+                    userId: 'cl17429p60000v1bwbizoulkw',
                     projectId: args.projectId,
                 },
             },
@@ -201,7 +193,14 @@ exports.projectFav = {
                 isFavorite: args === null || args === void 0 ? void 0 : args.isFavorite,
             },
         });
-        return project;
+        const p = yield prisma_1.default.project.findUnique({
+            where: {
+                id: args === null || args === void 0 ? void 0 : args.projectId,
+            },
+        });
+        if (!p)
+            return;
+        return p;
     }),
 };
 //# sourceMappingURL=projectMutations.js.map

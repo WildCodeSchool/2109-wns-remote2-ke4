@@ -9,8 +9,9 @@ const joi_1 = __importDefault(require("joi"));
 const registerUserSchema = (args) => {
     const schema = joi_1.default.object({
         firstName: joi_1.default.string().required(),
-        name: joi_1.default.string().required(),
+        lastName: joi_1.default.string().required(),
         email: joi_1.default.string().email().required(),
+        pseudo: joi_1.default.string().required(),
         mdp: joi_1.default.string()
             .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'))
             .min(8)
@@ -19,6 +20,7 @@ const registerUserSchema = (args) => {
         description: joi_1.default.string(),
     }).validate(args, { abortEarly: false }).error;
     if (schema) {
+        console.log(schema);
         throw new Error('Les données entrer sont incorrect');
     }
 };

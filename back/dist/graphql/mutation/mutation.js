@@ -27,6 +27,7 @@ const mutations = new type_1.GraphQLObjectType({
         login: Login_1.login,
         passwordForgot: PasswordForgot_1.passwordForgot,
         resetPassword: PasswordForgot_1.resetPassword,
+        resetPasswordViewer: PasswordForgot_1.resetPasswordViewer,
     }),
 });
 exports.default = mutations;

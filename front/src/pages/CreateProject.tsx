@@ -18,9 +18,8 @@ import {
   GridTime,
   Input,
   Title,
-} from '../elements/createProject.styled';
+} from '../elements/createProject.styles';
 import { devArrayNotAssign } from '../libs/const';
-import { v4 as uuidv4 } from 'uuid';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const useStyles = makeStyles(() =>
@@ -43,11 +42,11 @@ const useStyles = makeStyles(() =>
 );
 
 const columnsFromBackend = {
-  [uuidv4()]: {
+  assigned: {
     name: 'Assigned',
     items: [],
   },
-  [uuidv4()]: {
+  notAssigned: {
     name: 'Not Assigned',
     items: devArrayNotAssign,
   },
@@ -126,7 +125,7 @@ const CreateProject = () => {
                   onChange={(e) => setTime(e.target.value)}
                 />
               </Grid>
-              <Grid sm={4}>
+              <Grid sm={4} item>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Unité</InputLabel>
                   <Select

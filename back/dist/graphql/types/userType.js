@@ -27,17 +27,23 @@ const TypeUser = new graphql_1.GraphQLObjectType({
         lastName: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
         },
-        firstname: {
+        firstName: {
+            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+        },
+        pseudo: {
+            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+        },
+        fullName: {
             type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
         },
         avatar: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         description: {
-            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+            type: graphql_1.GraphQLString,
         },
         role: {
-            type: new graphql_1.GraphQLNonNull(new graphql_1.GraphQLList(graphql_1.GraphQLString)),
+            type: new graphql_1.GraphQLList(graphql_1.GraphQLString),
         },
         projects: {
             type: new graphql_1.GraphQLList(projectType_1.default),
