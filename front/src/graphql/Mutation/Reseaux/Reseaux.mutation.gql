@@ -1,0 +1,19 @@
+fragment FragmentColleague on TypeUser {
+  id
+  firstName
+  lastName
+  fullName
+  pseudo
+  email
+  avatar
+}
+
+mutation CreateWorkColleague($workColleagueId: ID!) {
+  createWorkColleague(workColleagueId: $workColleagueId) {
+    ...FragmentColleague
+  }
+}
+
+mutation DeleteWorkColleague($workColleagueId: ID!) {
+  deleteWorkColleague(workColleagueId: $workColleagueId)
+}

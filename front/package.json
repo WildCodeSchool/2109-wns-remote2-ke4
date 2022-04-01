@@ -6,6 +6,11 @@
     "@apollo/client": "^3.5.5",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
+    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/near-operation-file-preset": "^2.2.9",
+    "@graphql-codegen/typescript": "2.4.8",
+    "@graphql-codegen/typescript-operations": "2.3.5",
+    "@graphql-codegen/typescript-react-apollo": "3.2.11",
     "@mui/icons-material": "^5.2.0",
     "@mui/lab": "^5.0.0-alpha.56",
     "@mui/material": "^5.2.0",
@@ -17,6 +22,7 @@
     "@types/node": "^12.20.36",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
+    "apollo-upload-client": "^17.0.0",
     "cookie": "^0.4.1",
     "faker": "^5.5.3",
     "formik": "^2.2.9",
@@ -37,7 +43,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
     "extends": [
@@ -58,6 +65,12 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/introspection": "^2.1.1",
+    "@graphql-codegen/typescript": "2.4.8",
+    "@graphql-codegen/typescript-operations": "2.3.5",
+    "@graphql-codegen/typescript-react-apollo": "3.2.11",
+    "@types/apollo-upload-client": "^17.0.0",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-router-dom": "^5.3.2",
     "@types/uuid": "^8.3.4"

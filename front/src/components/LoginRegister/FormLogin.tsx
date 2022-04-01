@@ -6,10 +6,10 @@ import { styled } from '@mui/material/styles';
 import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { useFormik } from 'formik';
 import { loginSchema } from '../../yup/Login';
-import { useMutationLogin } from '../../graphql/Mutation/User';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useLoginUserMutation } from '../../graphql/Mutation/User/User.mutation';
 
 interface LoginFormValues {
   email: string;
@@ -24,22 +24,20 @@ const GridContainer = styled(Grid)(({ theme }) => ({
   },
 }));
 
-const LoginForm: React.FC<{ handleUrlPage: (str: string) => void }> = ({
-  handleUrlPage,
-}) => {
+const LoginForm = () => {
   const history = useHistory();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies(['token']);
-  const [login, { loading }] = useMutationLogin({
+  const [login, { loading }] = useLoginUserMutation({
     onCompleted: (data) => {
       const token = data?.login;
 
       setCookie('token', token);
-      handleUrlPage('/');
-      history.push('/');
+
+      window.location.replace('/ke4');
     },
     onError: (err) => toast.error(`${err.message}`),
   });

@@ -3,9 +3,10 @@ export const capitalize = (s: string) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-export const pageWithNotHeader = ['/login', '/register', '/newpassword'];
+export const pageWithNotHeader = ['/login', '/register', '/newpassword', '/'];
 export const pageWithImageBackground = [
   '/createProject',
-  '/board',
-  '/mesprojets',
+  '/ke4',
+  '/reseaux',
+  `/project`,
 ];

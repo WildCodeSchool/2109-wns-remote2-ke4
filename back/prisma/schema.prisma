@@ -10,21 +10,23 @@ generator client {
 }
 
 model User {
-  id          String        @id @default(cuid())
-  email       String        @unique
-  mdp         String
-  lastName    String
-  firstName   String
-  fullName    String
-  pseudo      String
-  avatar      String?
-  description String?
-  createdAt   DateTime      @default(now())
-  createdBy   String?
-  role        String[]
-  comment     Comment[]
-  UserProject UserProject[]
-  UserTicket  UserTicket[]
+  id            String        @id @default(cuid())
+  email         String        @unique
+  mdp           String
+  lastName      String
+  firstName     String
+  fullName      String
+  pseudo        String
+  avatar        String?
+  description   String?
+  createdAt     DateTime      @default(now())
+  createdBy     String?
+  role          String[]
+  comment       Comment[]
+  Reseaux       Reseaux[]     @relation("user")
+  WorkColleague Reseaux[]     @relation("colleague")
+  UserProject   UserProject[]
+  UserTicket    UserTicket[]
 }
 
 model Project {
@@ -97,6 +99,16 @@ model Comment {
   ticketId String
   User     User     @relation(fields: [userId], references: [id])
   ticket   Ticket   @relation(fields: [ticketId], references: [id])
+}
+
+model Reseaux {
+  id              String @id @default(cuid())
+  userId          String
+  workColleagueId String
+  User            User   @relation(name: "user", fields: [userId], references: [id])
+  WorkColleague   User   @relation(name: "colleague", fields: [workColleagueId], references: [id])
+
+  @@unique([userId, workColleagueId])
 }
 
 enum PriorityTicket {

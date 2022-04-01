@@ -7,9 +7,10 @@ import Grid from '@mui/material/Grid';
 import InputPassword from '../components/LoginRegister/InputPassword';
 import { useFormik } from 'formik';
 import { passwordSchema } from '../yup/Password';
-import { useMutationResetPasswordViewer } from '../graphql/Mutation/User';
 import { TypographyPasswordForgot } from '../elements/updatepassword.styled';
 import { FormUpdatePassword } from '../elements/updatepassword.styled';
+import toast from 'react-hot-toast';
+import { useResetPasswordViewerMutation } from '../graphql/Mutation/User/User.mutation';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,13 +53,11 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
-  handleUrlPage,
-}) => {
+const NewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const classes = useStyles();
   const history = useHistory();
-  const [updatePassword, { loading, error }] = useMutationResetPasswordViewer();
+  const [updatePassword, { loading, error }] = useResetPasswordViewerMutation();
 
   const onSubmit = async (values: any) => {
     await updatePassword({
@@ -66,6 +65,12 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         oldPassword: values.oldPassword,
         newMdp: values.newPassword,
       },
+      onCompleted: () => {
+        toast.success(
+          'La mise à jour de votre mot de passe à bien été prise en compte'
+        );
+      },
+      onError: (err) => toast.error(err.message),
     });
   };
 
@@ -152,7 +157,6 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         <div className={classes.containerBtn}>
           <ButtonCancel
             onClick={() => {
-              handleUrlPage('/updateprofil');
               history.push('/updateprofil');
             }}
           >
@@ -165,7 +169,6 @@ const NewPassword: React.FC<{ handleUrlPage: (str: string) => void }> = ({
         <TypographyPasswordForgot
           variant="h6"
           onClick={() => {
-            handleUrlPage('/newpassword');
             history.push('/newpassword');
           }}
         >

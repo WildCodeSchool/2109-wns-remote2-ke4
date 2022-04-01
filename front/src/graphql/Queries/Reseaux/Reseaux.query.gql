@@ -1,0 +1,11 @@
+query GetAllColleagues {
+  getManyWorkColleague {
+    id
+    firstName
+    lastName
+    fullName
+    pseudo
+    email
+    avatar
+  }
+}
