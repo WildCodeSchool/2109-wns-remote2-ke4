@@ -14,6 +14,7 @@ import imgCreateProject from '../assets/images/imgCreateProject.jpeg';
 import Grid from '@mui/material/Grid';
 import { makeStyles, createStyles } from '@mui/styles';
 import {
+  Alert,
   Button,
   Chip,
   FormControl,
@@ -25,11 +26,9 @@ import {
 import DatePicker from '@mui/lab/DatePicker';
 import { LocalizationProvider } from '@mui/lab';
 import LuxonUtils from '@mui/lab/AdapterLuxon';
-import avatar1 from '../assets/images/avatar1.jpg';
-import avatar2 from '../assets/images/avatar2.jpg';
-import avatar3 from '../assets/images/avatar3.jpg';
 import ModalAssignCreate from '../components/CreateProject/ModalAssignCreate';
 import { devArrayNotAssign } from '../libs/const';
+import { ErrorSharp } from '@mui/icons-material';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -83,6 +82,7 @@ const CreateTicket = () => {
   const [ressources, setRessources] = useState<String[]>([]);
   const [newRessource, setNewRessource] = useState<String>('');
   const [priority, setPriority] = useState('');
+  const [errorValidation, setErrorValidation] = useState<String[]>([]);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -115,6 +115,7 @@ const CreateTicket = () => {
   useEffect(() => {}, [columns]);
 
   function submission() {
+    let errors = [];
     if (
       name !== '' &&
       priority !== '' &&
@@ -122,24 +123,28 @@ const CreateTicket = () => {
       description !== '' &&
       startDate &&
       dueDate &&
-      startDate >= dueDate
+      startDate <= dueDate
     ) {
       console.log('fetch de la morkitu');
-      /* fetch('http://localhost:4000/', {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
-          name: name,
-          priority: priority,
-          project: project,
-          description: description,
-          developpeurs: columns.assigned.items,
-          estimatedTime: estimatedTime,
-          startDate: startDate,
-          dueDate: dueDate,
-          ressources: ressources,
-        }),
-      }); */
+      return;
+    }
+    if (name === '') {
+      errors.push('name');
+    }
+    if (priority === '') {
+      errors.push('priority');
+    }
+    if (project === '') {
+      errors.push('project');
+    }
+    if (description === '') {
+      errors.push('description');
+    }
+    if (!startDate || !dueDate || startDate > dueDate) {
+      errors.push('dates');
+    }
+    if (errors.length > 0) {
+      setErrorValidation(errors);
     }
   }
 
@@ -158,6 +163,7 @@ const CreateTicket = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+
               <FormControl sx={{ m: 1, minWidth: 120, margin: 0 }} required>
                 <InputLabel id="priority-select-label">Priority</InputLabel>
                 <Select
@@ -174,6 +180,15 @@ const CreateTicket = () => {
                   <MenuItem value={'high'}>High</MenuItem>
                 </Select>
               </FormControl>
+            </Box>
+            <Box>
+              {errorValidation.includes('name') ? (
+                <Alert severity="warning">
+                  Les valeurs renseignées sont invalides
+                </Alert>
+              ) : (
+                <></>
+              )}
             </Box>
           </GridMargin>
           <GridMargin>
@@ -200,6 +215,13 @@ const CreateTicket = () => {
                 })}
               </Select>
             </FormControl>
+            {errorValidation.includes('project') ? (
+              <Alert severity="warning" sx={{ marginTop: 2 }}>
+                La valeur renseignée est invalide
+              </Alert>
+            ) : (
+              <></>
+            )}
           </GridMargin>
           <GridMargin item>
             <Input
@@ -211,6 +233,13 @@ const CreateTicket = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+            {errorValidation.includes('description') ? (
+              <Alert severity="warning">
+                La valeur renseignée est invalide
+              </Alert>
+            ) : (
+              <></>
+            )}
           </GridMargin>
           <GridMargin item>
             <Button onClick={handleOpen}>+ Inviter des utilisateurs</Button>
@@ -233,10 +262,8 @@ const CreateTicket = () => {
           <GridMargin item>
             <Box className={classes.doubleInput}>
               <Input
-                required
                 sx={{ marginRight: 2 }}
                 label="Estimated time"
-                helperText="This field is required"
                 value={estimatedTime}
                 onChange={(e) => setEstimatedTime(e.target.value)}
               />
@@ -299,6 +326,13 @@ const CreateTicket = () => {
                 />
               </LocalizationProvider>
             </Box>
+            {errorValidation.includes('dates') ? (
+              <Alert severity="warning" sx={{ marginTop: 2 }}>
+                les valeurs renseignées sont invalides
+              </Alert>
+            ) : (
+              <></>
+            )}
           </GridMargin>
           <GridMargin>
             <Input
