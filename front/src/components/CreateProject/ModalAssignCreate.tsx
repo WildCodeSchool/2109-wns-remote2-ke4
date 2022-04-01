@@ -12,7 +12,7 @@ import {
   PaperModal,
   InputStyled,
   TitleSearch,
-} from '../../elements/ModalAssignDev.styles';
+} from '../../elements/modalAssignDev.styles';
 import { capitalize } from '../../libs/utils';
 
 const ModalAssignCreateProject: React.FC<{
@@ -46,7 +46,7 @@ const ModalAssignCreateProject: React.FC<{
             fullWidth
             label="Rechercher"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e: any) => setSearch(e.target.value)}
           />
           <DivColumns>
             <DragDropContext

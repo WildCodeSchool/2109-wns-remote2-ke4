@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CreateProject from './pages/CreateProject';
+import CreateTicket from './pages/CreateTicket';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import {
@@ -122,6 +123,9 @@ export default function App() {
               </Route>
               <Route path="/createProject">
                 <CreateProject />
+              </Route>
+              <Route path="/createTicket">
+                <CreateTicket />
               </Route>
               <Route path="/updateprofil">
                 <UpdateProfil viewer={viewer} />
