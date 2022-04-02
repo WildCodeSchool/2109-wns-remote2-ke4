@@ -29,6 +29,7 @@ import { Toaster } from 'react-hot-toast';
 import Footer from './components/Footer';
 
 import { useGetViewerQuery } from './graphql/Queries/User/User.query';
+import CreateTicket from './pages/CreateTicket';
 
 interface DivProps {
   widthNav: string;
@@ -122,6 +123,9 @@ export default function App() {
               </Route>
               <Route path="/createProject">
                 <CreateProject />
+              </Route>
+              <Route path="/createTicket">
+                <CreateTicket />
               </Route>
               <Route path="/updateprofil">
                 <UpdateProfil viewer={viewer} />
