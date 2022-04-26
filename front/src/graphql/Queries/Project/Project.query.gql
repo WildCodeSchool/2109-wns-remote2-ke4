@@ -1,0 +1,33 @@
+query GetAllMyProjects {
+  getAllProjectsByViewer {
+    id
+    name
+    author
+    client
+    status
+    description
+    investedTime
+    estimatedTime
+    numberDev
+    isFavorite
+    createdAt
+    devs {
+      id
+      email
+      fullName
+      pseudo
+      avatar
+    }
+    tickets {
+      id
+      name
+    }
+  }
+}
+
+query GetAllMyProjectsNavbar {
+  getAllProjectsByViewer {
+    id
+    name
+  }
+}

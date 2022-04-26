@@ -23,3 +23,14 @@ query SearchUsers($search: String) {
     pseudo
   }
 }
+
+query GetManyDevs {
+  getManyDevAssign {
+    id
+    firstName
+    lastName
+    email
+    avatar
+    pseudo
+  }
+}

@@ -23,7 +23,7 @@ const ModalAssignCreateProject: React.FC<{
       name: string;
       items: {
         id: string;
-        image: string;
+        avatar: string;
         lastName: string;
         firstName: string;
       }[];
@@ -32,6 +32,7 @@ const ModalAssignCreateProject: React.FC<{
   setColumns: any;
 }> = ({ open, handleClose, columns, setColumns }) => {
   const [search, setSearch] = useState('');
+
   return (
     <ModalStyles
       open={open}
@@ -96,7 +97,7 @@ const ModalAssignCreateProject: React.FC<{
                                             }}
                                           >
                                             <AvatarStyles
-                                              src={item?.image}
+                                              src={item?.avatar ? `http://localhost:4000/avatar/${item?.avatar}` : '../../assets/images/default_profile.png'}
                                               alt="logo"
                                             />
                                             {item.firstName} {item.lastName}

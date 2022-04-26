@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { updateUserSchema } from '../../yup/UpdateUser';
 import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { TypeUser } from '../../types';
 import { useUpdateUserMutation } from '../../graphql/Mutation/User/User.mutation';
 
@@ -55,7 +55,7 @@ const UpdateProfil: React.FC<{ viewer: TypeUser | undefined | null }> = ({
   viewer,
 }) => {
   const [updateUser, { loading }] = useUpdateUserMutation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const onSubmit = async (values: any) => {
     const { firstName, lastName, email, description, pseudo } = values;
     await updateUser({
@@ -176,7 +176,7 @@ const UpdateProfil: React.FC<{ viewer: TypeUser | undefined | null }> = ({
         <ButtonSend type="submit" disabled={loading || oldDataSame}>
           Sauvegarder
         </ButtonSend>
-        <ButtonPass onClick={() => history.push('/updatepassword')}>
+        <ButtonPass onClick={() => navigate('/updatepassword')}>
           Modifier mot de passe
         </ButtonPass>
       </Div>

@@ -223,6 +223,7 @@ export type RootQueries = {
   getAllTickets?: Maybe<Array<Maybe<TypeTicket>>>;
   getAllTicketsByProjectId?: Maybe<Array<Maybe<TypeTicket>>>;
   getAllUsers?: Maybe<Array<Maybe<TypeUser>>>;
+  getManyDevAssign?: Maybe<Array<Maybe<TypeUser>>>;
   getManyWorkColleague?: Maybe<Array<Maybe<TypeUser>>>;
   getProjectById: TypeProject;
   getSearchUser?: Maybe<Array<Maybe<TypeUser>>>;
@@ -281,22 +282,24 @@ export type RootQueriesGetUserByIdArgs = {
 
 export type TypeComment = {
   __typename?: 'TypeComment';
-  author: TypeUser;
-  content: Scalars['String'];
-  id: Scalars['ID'];
-  postDate: Scalars['String'];
+  author?: Maybe<TypeUser>;
+  content?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  postDate?: Maybe<Scalars['String']>;
 };
 
 export type TypeProject = {
   __typename?: 'TypeProject';
   author?: Maybe<Scalars['String']>;
   client?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
   description?: Maybe<Scalars['String']>;
   devs?: Maybe<Array<Maybe<TypeUser>>>;
   estimatedTime?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
   investedTime?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+  isFavorite?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
   numberDev?: Maybe<Scalars['Int']>;
   status?: Maybe<Scalars['String']>;
   tickets?: Maybe<Array<Maybe<TypeTicket>>>;
@@ -304,14 +307,14 @@ export type TypeProject = {
 
 export type TypeTicket = {
   __typename?: 'TypeTicket';
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   devs?: Maybe<Array<Maybe<TypeUser>>>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  priority: Scalars['String'];
-  progress: Scalars['Int'];
-  ressources: Array<Maybe<Scalars['String']>>;
-  status: Scalars['String'];
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  priority?: Maybe<Scalars['String']>;
+  progress?: Maybe<Scalars['Int']>;
+  ressources?: Maybe<Array<Maybe<Scalars['String']>>>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type TypeUser = {

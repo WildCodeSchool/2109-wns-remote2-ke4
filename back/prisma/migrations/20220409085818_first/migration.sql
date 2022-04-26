@@ -90,6 +90,15 @@ CREATE TABLE "Comment" (
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Reseaux" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "workColleagueId" TEXT NOT NULL,
+
+    CONSTRAINT "Reseaux_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -98,6 +107,9 @@ CREATE UNIQUE INDEX "UserProject_userId_projectId_key" ON "UserProject"("userId"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserTicket_userId_ticketId_key" ON "UserTicket"("userId", "ticketId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Reseaux_userId_workColleagueId_key" ON "Reseaux"("userId", "workColleagueId");
 
 -- AddForeignKey
 ALTER TABLE "UserProject" ADD CONSTRAINT "UserProject_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -119,3 +131,9 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_ticketId_fkey" FOREIGN KEY ("ticketId") REFERENCES "Ticket"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Reseaux" ADD CONSTRAINT "Reseaux_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Reseaux" ADD CONSTRAINT "Reseaux_workColleagueId_fkey" FOREIGN KEY ("workColleagueId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

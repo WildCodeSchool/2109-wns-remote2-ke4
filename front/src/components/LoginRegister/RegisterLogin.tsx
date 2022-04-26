@@ -8,7 +8,7 @@ import {
   TypographyPasswordForgot,
   TypographyStyled,
 } from '../../elements/registerlogin.styled';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,7 +45,7 @@ const RegisterLogin: React.FC<{
   type: 'login' | 'register';
 }> = ({ children, type }) => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   //@ts-ignore
   // const [openReset, setOpenReset] = useState<boolean>(true);
   return (
@@ -60,9 +60,9 @@ const RegisterLogin: React.FC<{
               variant="h6"
               onClick={() => {
                 if (type === 'register') {
-                  history.push('/login');
+                  navigate('/login');
                 } else {
-                  history.push('/register');
+                  navigate('/register');
                 }
               }}
             >
@@ -74,7 +74,7 @@ const RegisterLogin: React.FC<{
               <TypographyPasswordForgot
                 variant="h6"
                 onClick={() => {
-                  history.push('/newpassword');
+                  navigate('/newpassword');
                 }}
               >
                 Mot de passe oublier ?

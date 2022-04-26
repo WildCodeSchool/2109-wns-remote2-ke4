@@ -93,7 +93,6 @@ const UpdateProfil: React.FC<{ viewer: TypeUser | undefined | null }> = ({
               }
 
               const file = e.target.files[0];
-              console.log(file);
 
               updateAvatar({
                 variables: {

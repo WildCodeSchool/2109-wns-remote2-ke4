@@ -8,7 +8,6 @@ import {
 } from '../elements/styledHeader.styles';
 import Badge from '@mui/material/Badge';
 import { makeStyles, createStyles } from '@mui/styles';
-import { useHistory } from 'react-router-dom';
 import defaultAvatar from '../assets/images/default_profile.png';
 import { TypeUser } from '../types';
 import List from '@mui/material/List';
@@ -56,7 +55,6 @@ const Header: React.FC<{
   viewer: TypeUser | undefined | null;
 }> = ({ onChange, color, viewer }) => {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
     <HeaderContainer>

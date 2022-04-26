@@ -6,7 +6,6 @@ import { useFormik } from 'formik';
 import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { registerSchema } from '../../yup/Register';
 import { useCookies } from 'react-cookie';
-import { useHistory } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useCreateUserMutation } from '../../graphql/Mutation/User/User.mutation';
 
@@ -20,7 +19,6 @@ interface PropsValues {
 }
 
 const RegisterForm = () => {
-  const history = useHistory();
   const [showPasswordOne, setShowPasswordOne] = useState(false);
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

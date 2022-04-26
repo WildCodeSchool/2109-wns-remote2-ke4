@@ -7,7 +7,7 @@ import { ButtonStyled, Form } from '../../elements/registerlogin.styled';
 import { useFormik } from 'formik';
 import { loginSchema } from '../../yup/Login';
 import { useCookies } from 'react-cookie';
-import { useHistory } from 'react-router-dom';
+
 import toast from 'react-hot-toast';
 import { useLoginUserMutation } from '../../graphql/Mutation/User/User.mutation';
 
@@ -25,8 +25,6 @@ const GridContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const LoginForm = () => {
-  const history = useHistory();
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

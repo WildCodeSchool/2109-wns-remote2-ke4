@@ -66,6 +66,7 @@ export const Btn = styled(Button)(() => ({
   background: '#07DFCD',
   color: '#FFF',
   marginTop: '10px',
+  cursor: 'pointer',
   ':hover': {
     background: '#07DFCD',
     color: '#FFF',

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { makeStyles, createStyles } from '@mui/styles';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import InputPassword from '../components/LoginRegister/InputPassword';
 import { useFormik } from 'formik';
@@ -74,15 +74,15 @@ const ResetPassword: React.FC<{ viewer: TypeUser | undefined | null }> = (
 ) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [resetPassword, { loading }] = useResetPasswordMutation();
-  const params: { token: string } = useParams();
+  const { token } = useParams();
 
   const onSubmit = async (values: any) => {
     await resetPassword({
       variables: {
         newMdp: values.newPassword,
-        tokenURL: params.token,
+        tokenURL: token,
       },
       onCompleted: () => {
         toast.success(
@@ -90,7 +90,9 @@ const ResetPassword: React.FC<{ viewer: TypeUser | undefined | null }> = (
         );
 
         setTimeout(() => {
-          viewer ? history.push('/ke4') : history.push('/login');
+          viewer
+            ? window.location.replace('/ke4')
+            : window.location.replace('/login');
         }, 4000);
       },
       onError: (err) => toast.error(err.message),

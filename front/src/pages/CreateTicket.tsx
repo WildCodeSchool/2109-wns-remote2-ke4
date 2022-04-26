@@ -120,7 +120,6 @@ const CreateTicket = () => {
       dueDate &&
       startDate <= dueDate
     ) {
-      console.log('fetch de la morkitu');
       return;
     }
     if (name === '') {

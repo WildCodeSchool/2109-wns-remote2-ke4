@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import {
   Btn,
   Card,
@@ -8,26 +9,26 @@ import {
   TextDateCreate,
   TextNumberDev,
 } from '../../elements/myProjectCard.styled';
+import { TypeProject } from '../../types';
 
 const CardMyProject: React.FC<{
-  project: {
-    name: string;
-    devNumber: number;
-    createdAt: string;
-    isFavorite: boolean;
-  };
+  project: any;
 }> = ({ project }) => {
+  const navigate = useNavigate();
+  const createDate = new Date(project?.createdAt).toLocaleDateString('fr-FR');
   return (
     <Card>
       {project?.isFavorite && <FavIcon />}
       <NameProject variant="inherit">{project?.name}</NameProject>
       <DivNumberDev>
         <DevIcons />
-        <TextNumberDev>{project?.devNumber}</TextNumberDev>
+        <TextNumberDev>{project?.numberDev}</TextNumberDev>
       </DivNumberDev>
 
-      <TextDateCreate>Créer le {project?.createdAt}</TextDateCreate>
-      <Btn>Allez au projet</Btn>
+      <TextDateCreate>Créer le {createDate}</TextDateCreate>
+      <Btn onClick={() => navigate(`/project/${project?.id}`)}>
+        Allez au projet
+      </Btn>
     </Card>
   );
 };
