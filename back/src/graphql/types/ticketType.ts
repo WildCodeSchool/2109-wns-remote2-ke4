@@ -14,25 +14,25 @@ const TypeTicket: any = new GraphQLObjectType({
   name: 'TypeTicket',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID),
+      type: GraphQLID,
     },
     name: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     status: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     description: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     ressources: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      type: new GraphQLList(GraphQLString),
     },
     priority: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     progress: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: GraphQLInt,
     },
     devs: {
       type: new GraphQLList(User),

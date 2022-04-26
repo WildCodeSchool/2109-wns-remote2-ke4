@@ -26,13 +26,11 @@ export const uploadAvatar: GraphQLFieldConfig<any, any, any> = {
     context: Context
   ): Promise<User | null | undefined> => {
     if (!context?.user) return;
-    console.log(file);
 
     const { filename, createReadStream } = await file;
     const stream = createReadStream();
 
     const nameFile = `${randomBytes(6).toString('hex')}-${filename}`;
-    console.log(nameFile);
 
     const pathName = path.join(__dirname, `../../../avatar/${nameFile}`);
     const out = fs.createWriteStream(pathName);

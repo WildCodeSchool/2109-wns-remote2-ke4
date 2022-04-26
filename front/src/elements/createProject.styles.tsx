@@ -55,7 +55,7 @@ export const BoxAvatarDev = styled(Box)(() => ({
   margin: '20px 0px',
 }));
 
-export const AvatarDiv = styled(Avatar)(() => ({
+export const AvatarDiv = styled('div')(() => ({
   height: '50px',
   width: '50px',
   borderRadius: '50%',
@@ -65,7 +65,6 @@ export const AvatarDiv = styled(Avatar)(() => ({
   zIndex: 2,
   backgroundSize: 'cover!important',
   backgroundPosition: 'center!important',
-  overflow: 'visible',
 }));
 
 export const BoxContainer = styled(Box)(() => ({

@@ -1,0 +1,33 @@
+fragment FragmentProject on TypeProject {
+  id
+  name
+  author
+  client
+  status
+  description
+  investedTime
+  estimatedTime
+  numberDev
+  isFavorite
+  createdAt
+}
+
+mutation CreateProject(
+  $name: String
+  $client: String
+  $description: String
+  $date: Date
+  $estimatedTime: String
+  $user: [ID]
+) {
+  createProject(
+    name: $name
+    client: $client
+    description: $description
+    date: $date
+    estimatedTime: $estimatedTime
+    user: $user
+  ) {
+    ...FragmentProject
+  }
+}

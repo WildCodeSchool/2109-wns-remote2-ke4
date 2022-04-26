@@ -8,39 +8,39 @@ import { v4 as uuidv4 } from 'uuid';
 export const devArrayNotAssign = [
   {
     id: uuidv4(),
-    image: avatar4,
+    avatar: avatar4,
     firstName: 'Tochlain',
     lastName: 'Jsp',
   },
   {
     id: uuidv4(),
-    image: avatar5,
+    avatar: avatar5,
 
     firstName: 'Nissim',
     lastName: 'Jsp',
   },
   {
     id: uuidv4(),
-    image: avatar6,
+    avatar: avatar6,
 
     firstName: 'Maxime',
     lastName: 'Vallee',
   },
   {
     id: uuidv4(),
-    image: avatar1,
+    avatar: avatar1,
     firstName: 'Thomas',
     lastName: 'Thbaut',
   },
   {
     id: uuidv4(),
-    image: avatar2,
+    avatar: avatar2,
     firstName: 'Yunus',
     lastName: 'Jsp',
   },
   {
     id: uuidv4(),
-    image: avatar3,
+    avatar: avatar3,
     firstName: 'Pierre-Hugo',
     lastName: 'Maillet',
   },

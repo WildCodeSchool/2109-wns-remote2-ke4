@@ -5,20 +5,23 @@ import {
   GraphQLString,
   GraphQLList,
   GraphQLInt,
+  GraphQLBoolean,
 } from 'graphql';
 import User from './userType';
 import prisma from '../../lib/prisma';
 import { Project } from '@prisma/client';
 import Ticket from './ticketType';
+import Context from '@tsTypes/context';
+import GraphQLDate from '@graphql/GraphQlDate';
 
 const TypeProject: any = new GraphQLObjectType({
   name: 'TypeProject',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID),
+      type: GraphQLID,
     },
     name: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     author: {
       type: GraphQLString,
@@ -55,6 +58,9 @@ const TypeProject: any = new GraphQLObjectType({
     estimatedTime: {
       type: GraphQLString,
     },
+    createdAt: {
+      type: GraphQLDate,
+    },
     devs: {
       type: new GraphQLList(User),
       resolve: async (node: Project) => {
@@ -89,6 +95,21 @@ const TypeProject: any = new GraphQLObjectType({
           },
         });
         return count;
+      },
+    },
+    isFavorite: {
+      type: GraphQLBoolean,
+      resolve: async (node: Project, _, context: Context) => {
+        if (!context?.user) return;
+        const result = await prisma.userProject.findUnique({
+          where: {
+            userId_projectId: {
+              projectId: node.id,
+              userId: context?.user?.id,
+            },
+          },
+        });
+        return result?.isFavorite;
       },
     },
   }),

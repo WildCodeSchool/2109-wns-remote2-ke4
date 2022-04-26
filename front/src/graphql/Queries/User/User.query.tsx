@@ -15,6 +15,11 @@ export type SearchUsersQueryVariables = Types.Exact<{
 
 export type SearchUsersQuery = { __typename?: 'RootQueries', getSearchUser?: Array<{ __typename?: 'TypeUser', id: string, firstName: string, lastName: string, email: string, avatar?: string | null, pseudo: string } | null> | null };
 
+export type GetManyDevsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type GetManyDevsQuery = { __typename?: 'RootQueries', getManyDevAssign?: Array<{ __typename?: 'TypeUser', id: string, firstName: string, lastName: string, email: string, avatar?: string | null, pseudo: string } | null> | null };
+
 
 export const GetViewerDocument = gql`
     query GetViewer {
@@ -99,3 +104,42 @@ export function useSearchUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
 export type SearchUsersLazyQueryHookResult = ReturnType<typeof useSearchUsersLazyQuery>;
 export type SearchUsersQueryResult = Apollo.QueryResult<SearchUsersQuery, SearchUsersQueryVariables>;
+export const GetManyDevsDocument = gql`
+    query GetManyDevs {
+  getManyDevAssign {
+    id
+    firstName
+    lastName
+    email
+    avatar
+    pseudo
+  }
+}
+    `;
+
+/**
+ * __useGetManyDevsQuery__
+ *
+ * To run a query within a React component, call `useGetManyDevsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetManyDevsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetManyDevsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetManyDevsQuery(baseOptions?: Apollo.QueryHookOptions<GetManyDevsQuery, GetManyDevsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetManyDevsQuery, GetManyDevsQueryVariables>(GetManyDevsDocument, options);
+      }
+export function useGetManyDevsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetManyDevsQuery, GetManyDevsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetManyDevsQuery, GetManyDevsQueryVariables>(GetManyDevsDocument, options);
+        }
+export type GetManyDevsQueryHookResult = ReturnType<typeof useGetManyDevsQuery>;
+export type GetManyDevsLazyQueryHookResult = ReturnType<typeof useGetManyDevsLazyQuery>;
+export type GetManyDevsQueryResult = Apollo.QueryResult<GetManyDevsQuery, GetManyDevsQueryVariables>;

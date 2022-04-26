@@ -62,14 +62,21 @@ const queriesProject: GraphQLFieldConfigMap<any, any> = {
       _,
       args,
       context: Context
-    ): Promise<UserProject[] | undefined> => {
+    ): Promise<Project[] | undefined> => {
       if (!context.user) return;
       const projects = await prisma.userProject.findMany({
         where: {
           userId: context.user.id,
         },
+        include: {
+          Project: true,
+        },
       });
-      return projects.sort((x) => (x?.isFavorite ? -1 : 1)) || [];
+      return (
+        projects
+          .sort((a, _) => (a.isFavorite === true ? -1 : 1))
+          .map((e) => e.Project) || []
+      );
     },
   },
 };

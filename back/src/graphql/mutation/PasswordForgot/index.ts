@@ -131,8 +131,7 @@ export const resetPasswordViewer: GraphQLFieldConfig<any, any, any> = {
       },
     });
     if (!user) return;
-
-    const validOldPassword = bcrypt.compare(user?.mdp, oldPassword);
+    const validOldPassword = await bcrypt.compare(user?.mdp, oldPassword);
 
     if (!validOldPassword) {
       throw new Error('Le mot de passe initial est invalide');

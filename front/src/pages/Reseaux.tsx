@@ -28,6 +28,7 @@ import {
 } from '../graphql/Mutation/Reseaux/Reseaux.mutation';
 import { useGetAllColleaguesQuery } from '../graphql/Queries/Reseaux/Reseaux.query';
 import { useSearchUsersQuery } from '../graphql/Queries/User/User.query';
+import { gql } from '@apollo/client';
 
 const Reseaux: React.FC<{ viewer: TypeUser | undefined | null }> = ({
   viewer,
@@ -44,11 +45,8 @@ const Reseaux: React.FC<{ viewer: TypeUser | undefined | null }> = ({
     },
   });
   const users = data?.getSearchUser || [];
-  const {
-    data: dataColleagues,
-    loading: loadingColleagues,
-    refetch,
-  } = useGetAllColleaguesQuery();
+  const { data: dataColleagues, loading: loadingColleagues } =
+    useGetAllColleaguesQuery();
   const colleagues = dataColleagues?.getManyWorkColleague;
 
   if (loadingColleagues) {
@@ -93,25 +91,33 @@ const Reseaux: React.FC<{ viewer: TypeUser | undefined | null }> = ({
                   variables: {
                     workColleagueId: option.id,
                   },
-                  // update: (cache, { data }) => {
-                  //   cache.modify({
-                  //     //@ts-ignore
-                  //     id: cache.identify(dataColleagues?.getManyWorkColleague),
+                  update: (cache, { data: { createWorkColleague } }: any) => {
+                    cache.modify({
+                      //@ts-ignore
 
-                  //     fields: {
-                  //       getManyWorkColleague(existingColleagues = []) {
-                  //         const newColleague = cache.writeFragment({
-                  //           data: data?.createWorkColleague,
-                  //           fragment: FragmentColleagueFragmentDoc,
-                  //         });
-                  //         const result = [...existingColleagues, newColleague];
-                  //         return result;
-                  //       },
-                  //     },
-                  //   });
-                  // },
+                      fields: {
+                        getManyWorkColleague(
+                          existingColleagues = [],
+                          { readField }
+                        ) {
+                          const newColleague = cache.writeFragment({
+                            data: createWorkColleague,
+                            fragment: FragmentColleagueFragmentDoc,
+                          });
+                          if (
+                            existingColleagues.some(
+                              (ref: any) =>
+                                readField('id', ref) === createWorkColleague?.id
+                            )
+                          ) {
+                            return existingColleagues;
+                          }
+                          return [...existingColleagues, newColleague];
+                        },
+                      },
+                    });
+                  },
                   onCompleted: (data: any) => {
-                    refetch();
                     toast.success(
                       `${data?.createWorkColleague?.fullName} a bien été ajouter à votre réseau`
                     );

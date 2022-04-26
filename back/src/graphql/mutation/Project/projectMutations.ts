@@ -42,18 +42,24 @@ export const createProject: GraphQLFieldConfig<any, any, any> = {
   },
   type: TypeProject,
   resolve: async (_, args, { user }: Context): Promise<Project | undefined> => {
-    // if (!user) return;
+    if (!user) return;
     const project = await prisma.project.create({
       data: {
         name: args.name,
-        author: 'cl17429p60000v1bwbizoulkw',
+        author: user?.id,
         client: args.client,
-        status: args.status,
         description: args.description,
         date: args.date,
-        investedTime: args.investedTime,
         estimatedTime: args.estimatedTime,
-        createdBy: 'cl17429p60000v1bwbizoulkw',
+        createdBy: user?.id,
+      },
+    });
+    if (!project) return;
+
+    await prisma.userProject.create({
+      data: {
+        userId: user?.id,
+        projectId: project.id,
       },
     });
 

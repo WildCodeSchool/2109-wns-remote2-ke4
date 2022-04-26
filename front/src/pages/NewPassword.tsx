@@ -7,7 +7,7 @@ import {
   TextFieldNewPassword,
 } from '../elements/newPassword.styles';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { TypeUser } from '../types';
 import { usePasswordForgotMutation } from '../graphql/Mutation/User/User.mutation';
 
@@ -53,14 +53,14 @@ const NewPassword: React.FC<{ viewer: TypeUser | undefined | null }> = ({
 }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
   const [resetMdp, { loading }] = usePasswordForgotMutation({
     onCompleted: () => {
       toast.success(
         `Un email vous a été envoyer à ${email} pour la réinitialisation de votre mot de passe`
       );
       setTimeout(() => {
-        viewer ? history.push('/ke4') : history.push('/login');
+        viewer ? navigate('/ke4') : navigate('/login');
       }, 4000);
     },
     onError: (err) => {

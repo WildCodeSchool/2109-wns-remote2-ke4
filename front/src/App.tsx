@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CreateProject from './pages/CreateProject';
-import CreateTicket from './pages/CreateTicket';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Board from './pages/Board';
 import { theme } from './Theme';
 import { ThemeProvider } from '@mui/system';
@@ -30,6 +24,8 @@ import { Toaster } from 'react-hot-toast';
 import Footer from './components/Footer';
 
 import { useGetViewerQuery } from './graphql/Queries/User/User.query';
+import CreateTicket from './pages/CreateTicket';
+import { useGetAllMyProjectsNavbarQuery } from './graphql/Queries/Project/Project.query';
 
 interface DivProps {
   widthNav: string;
@@ -49,8 +45,13 @@ export const BodyWithNavbar = styled('div')<DivProps>(
 
 export default function App() {
   const { data, loading, error } = useGetViewerQuery();
+  const { data: dataProject } = useGetAllMyProjectsNavbarQuery();
+  const urlPageProject = (dataProject?.getAllProjectsByViewer || []).map(
+    (el) => `/project/${el?.id}`
+  );
   const [navbar, setNavbar] = useState(false);
-  const statePageWithImageBackground = pageWithImageBackground.includes(
+  const arrUrl = pageWithImageBackground.concat(urlPageProject);
+  const statePageWithImageBackground = arrUrl.includes(
     window.location.pathname
   );
 
@@ -77,7 +78,9 @@ export default function App() {
     window.location.pathname !== '/login' &&
     window.location.pathname !== '/register' &&
     window.location.pathname !== '/' &&
-    window.location.pathname !== '/newpassword'
+    window.location.pathname !== '/newpassword' &&
+    window.location.pathname !== '/updatepassword' &&
+    window.location.pathname.includes('/resetpassword')
   ) {
     window.location.replace('/login');
   }
@@ -103,49 +106,31 @@ export default function App() {
                 viewer={viewer}
               />
             )}
-            <Switch>
-              <Route path="/login">
-                <Login />
-              </Route>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/newpassword"
+                element={<NewPassword viewer={viewer} />}
+              />
+              <Route
+                path="/resetpassword/:token"
+                element={<ResetPassword viewer={viewer} />}
+              />
+              <Route path="/ke4" element={<HomeAccount />} />
+              <Route path="/project/:id" element={<Board />} />
+              <Route path="/project" element={<AllCards />} />
+              <Route path="/updatepassword" element={<UpdatePassword />} />
+              <Route
+                path="/updateprofil"
+                element={<UpdateProfil viewer={viewer} />}
+              />
+              <Route path="/reseaux" element={<Reseaux viewer={viewer} />} />
+              <Route path="/createproject" element={<CreateProject />} />
+              <Route path="/createticket" element={<CreateTicket />} />
 
-              <Route path="/register">
-                <Register />
-              </Route>
-
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/ke4">
-                <HomeAccount viewer={viewer} />
-              </Route>
-              <Route path="/project/:id">
-                <Board />
-              </Route>
-              <Route path="/createProject">
-                <CreateProject />
-              </Route>
-              <Route path="/createTicket">
-                <CreateTicket />
-              </Route>
-              <Route path="/updateprofil">
-                <UpdateProfil viewer={viewer} />
-              </Route>
-              <Route path="/updatepassword">
-                <UpdatePassword />
-              </Route>
-              <Route path="/newpassword">
-                <NewPassword viewer={viewer} />
-              </Route>
-              <Route path="/resetpassword/:token">
-                <ResetPassword viewer={viewer} />
-              </Route>
-              <Route path="/cards">
-                <AllCards />
-              </Route>
-              <Route path="/reseaux">
-                <Reseaux viewer={viewer} />
-              </Route>
-            </Switch>
+              <Route path="/" element={<Home />} />
+            </Routes>
           </BodyWithNavbar>
         </BodyApp>
 

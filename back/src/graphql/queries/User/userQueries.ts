@@ -55,7 +55,7 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
     },
     type: new GraphQLList(TypeUser),
     resolve: async (_, args, context: Context): Promise<User[] | undefined> => {
-      // if (!context.user) return;
+      if (!context.user) return;
       if (args.search.length < 4) return [];
       const result = await prisma.user.findMany({
         where: {
@@ -66,6 +66,38 @@ const queriesUser: GraphQLFieldConfigMap<any, any> = {
         orderBy: { lastName: 'asc' },
       });
       return result || [];
+    },
+  },
+  getManyDevAssign: {
+    type: new GraphQLList(TypeUser),
+    resolve: async (_, __, context: Context): Promise<User[]> => {
+      if (!context.user) return [];
+      const idFriendsArray: string[] = [];
+      const devs = await prisma.user.findMany();
+      const devsFriends = await prisma.reseaux.findMany({
+        where: {
+          userId: context?.user?.id,
+        },
+        include: {
+          WorkColleague: true,
+        },
+      });
+
+      if (devsFriends.length > 0) {
+        const friends = devsFriends
+          .map((dev) => dev.WorkColleague)
+          .map((el) => ({ id: el.id }));
+
+        for (const id of friends.map((el) => el.id)) {
+          idFriendsArray.push(id);
+        }
+        const result = devs
+          .sort((a, _) => (idFriendsArray.includes(a.id) ? -1 : 1))
+          .filter((el) => el.id !== context?.user?.id);
+        return result;
+      } else {
+        return devs || [];
+      }
     },
   },
 };

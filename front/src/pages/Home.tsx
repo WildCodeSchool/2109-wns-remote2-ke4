@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import logo from '../assets/images/logoKe4.png';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -54,7 +54,7 @@ const TypographyHome = styled(Typography)(() => ({
   margin: '60px 0px',
 }));
 const Base = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <Container>
       <Img src={logo} alt="logo" />
@@ -70,10 +70,8 @@ const Base = () => {
           justifyContent: 'space-around',
         }}
       >
-        <ButtonLog onClick={() => history.push('/login')}>
-          Se connecter
-        </ButtonLog>
-        <ButtonSign onClick={() => history.push('/register')}>
+        <ButtonLog onClick={() => navigate('/login')}>Se connecter</ButtonLog>
+        <ButtonSign onClick={() => navigate('/register')}>
           S'inscrire
         </ButtonSign>
       </div>

@@ -35,13 +35,13 @@ const TypeProject = new graphql_1.GraphQLObjectType({
                 });
                 if (!author)
                     return;
-                console.log(author);
+           
                 const res = yield prisma_1.default.user.findUnique({
                     where: {
                         id: author.author,
                     },
                 });
-                console.log(res);
+    
                 if (!res)
                     return;
                 return res === null || res === void 0 ? void 0 : res.fullName;

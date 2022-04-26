@@ -13,21 +13,23 @@ import {
 import logo from '../../assets/images/logoKe4.png';
 import React from 'react';
 import { navbarOption } from '../../mock/navbar.mock';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useCookies } from 'react-cookie';
+import { useGetAllMyProjectsNavbarQuery } from '../../graphql/Queries/Project/Project.query';
 
 export const getOptionsNavbar = (
   label: string,
   link: string,
   icon: React.ReactElement,
   disabled: boolean,
-  history: any,
+  navigate: any,
   key: any,
   onClose: () => void,
   projects?: { name: string; linkProject: string }[] | null,
-  onClick?: () => void
+  onClick?: () => void,
+  dataProject?: any
 ) => {
   if (label !== 'Mes Projets') {
     return (
@@ -37,12 +39,12 @@ export const getOptionsNavbar = (
           if (label === 'Deconection' && onClick) {
             onClick();
 
-            history.push(link);
+            navigate(link);
           } else {
             if (label !== 'Mes projets') {
               onClose();
 
-              history.push(link);
+              navigate(link);
             }
           }
         }}
@@ -67,12 +69,12 @@ export const getOptionsNavbar = (
         </AccordionSummary>
         <AccordionDetailsStyled cursoroption={disabled ? 'default' : 'pointer'}>
           <ul>
-            {(projects || []).map((project, index) => (
+            {(dataProject || []).map((project: any) => (
               <ListStyled
-                key={index}
+                key={project?.id}
                 onClick={() => {
                   onClose();
-                  history.push(project.linkProject);
+                  window.location.replace(`/project/${project?.id}`);
                 }}
               >
                 {project.name}
@@ -89,7 +91,8 @@ const Navbar: React.FC<{
   onChange: (b: boolean) => void;
   navbar: boolean;
 }> = ({ onChange, navbar }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const { data } = useGetAllMyProjectsNavbarQuery();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, __, removeCookie] = useCookies(['token']);
@@ -98,7 +101,7 @@ const Navbar: React.FC<{
     removeCookie('token');
     onChange(false);
     setTimeout(() => {
-      history.push('/');
+      navigate('/');
     }, 1000);
   };
 
@@ -113,7 +116,7 @@ const Navbar: React.FC<{
           src={logo}
           alt="logo"
           onClick={() => {
-            history.push('/ke4');
+            navigate('/ke4');
             onChange(false);
           }}
         />
@@ -130,12 +133,12 @@ const Navbar: React.FC<{
             link,
             icon,
             disabled,
-            history,
+            navigate,
             index,
-
             closeNav,
             project,
-            onDisconnect
+            onDisconnect,
+            data?.getAllProjectsByViewer
           )
         )}
       </ContainerOption>

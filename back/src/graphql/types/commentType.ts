@@ -7,21 +7,22 @@ import {
 import User from './userType';
 import prisma from '../../lib/prisma';
 import { Comment } from '@prisma/client';
+import TypeUser from './userType';
 
 const TypeComment = new GraphQLObjectType({
   name: 'TypeComment',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID),
+      type: GraphQLID,
     },
     postDate: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     content: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     author: {
-      type: new GraphQLNonNull(User),
+      type: TypeUser,
       resolve: async (node: Comment) => {
         const comment = await prisma.comment.findUnique({
           where: {

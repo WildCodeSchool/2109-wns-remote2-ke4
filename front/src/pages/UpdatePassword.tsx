@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { makeStyles, createStyles } from '@mui/styles';
 import { ButtonCancel, ButtonSend } from '../elements/newPassword.styles';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import InputPassword from '../components/LoginRegister/InputPassword';
 import { useFormik } from 'formik';
@@ -56,7 +56,7 @@ const useStyles = makeStyles(() =>
 const NewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [updatePassword, { loading, error }] = useResetPasswordViewerMutation();
 
   const onSubmit = async (values: any) => {
@@ -157,7 +157,7 @@ const NewPassword = () => {
         <div className={classes.containerBtn}>
           <ButtonCancel
             onClick={() => {
-              history.push('/updateprofil');
+              navigate('/updateprofil');
             }}
           >
             Annuler
@@ -169,7 +169,7 @@ const NewPassword = () => {
         <TypographyPasswordForgot
           variant="h6"
           onClick={() => {
-            history.push('/newpassword');
+            navigate('/newpassword');
           }}
         >
           Mot de passe oublier ?
