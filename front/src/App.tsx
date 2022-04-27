@@ -58,7 +58,7 @@ export default function App() {
   const viewer = data?.getViewer;
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <h1>Loading....</h1>;
   }
 
   if (error) {
