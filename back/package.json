@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "prod": "node dist/server.js",
     "dev": "npm run prisma:generate && nodemon src/server.ts",
     "build": "tsc -p .",
     "prisma:generate": "prisma generate"
