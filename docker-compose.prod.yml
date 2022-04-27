@@ -11,6 +11,8 @@ services:
 
     image: tdashh/2109-wns-remote2-ke4_server
 
+    command: sh -c "npm run build && npm run start"
+
     ports:
       - 4000:4000
     volumes:
@@ -29,8 +31,11 @@ services:
     image: tdashh/2109-wns-remote2-ke4_client
     ports:
       - 3000:3000
+    command: sh -c "npm run build"
+
     volumes:
-     - ./front/src:/app/src  
+
+      - web-client-build:/app/build  
 
   postgres:
 

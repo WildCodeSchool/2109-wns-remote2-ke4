@@ -13,9 +13,9 @@ services:
     build: ./front
     ports:
       - 3000:3000
+    command: sh -c "npm run build"
     volumes:
-     - ./front/src:/app/src
-    
+      - web-client-build:/app/build
 
   postgres:
     image: postgres
@@ -28,4 +28,20 @@ services:
       POSTGRES_PASSWORD: ke4db
       POSTGRES_USER: ke4user
       POSTGRES_DB: ke4
+
+  nginx:
+    image: nginx:1.21.3
+    depends_on:
+      - server
+      - client
+    restart: always
+    ports:
+      - ${GATEWAY_PORT:-8000}:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - web-client-build:/web-client-build
+      - ./logs:/var/log/nginx  
+
+volumes:
+  web-client-build:         
      
