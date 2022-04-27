@@ -15,8 +15,6 @@ services:
 
     ports:
       - 4000:4000
-    volumes:
-     - ./back/src:/back/src
 
     depends_on:
 

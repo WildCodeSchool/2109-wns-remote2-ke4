@@ -3,11 +3,10 @@ version: "3.1"
 services:
   server:
     build: ./back
-    restart: always
     ports:
       - 4000:4000
-    volumes:
-     - ./back/src:/back/src  
+    command: sh -c "npm run build && npm run prod"  
+    
 
   client:
     build: ./front
@@ -22,8 +21,7 @@ services:
     container_name: postgres
     volumes:
       - ./data:/var/lib/postgresql/data
-    restart: always
-
+    
     environment:
       POSTGRES_PASSWORD: ke4db
       POSTGRES_USER: ke4user
