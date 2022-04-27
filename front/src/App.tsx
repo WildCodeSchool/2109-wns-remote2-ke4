@@ -62,7 +62,7 @@ export default function App() {
   }
 
   if (error) {
-    return <h1>Error message: {error.message}</h1>;
+    return <h1>Error message:{error.message}</h1>;
   }
 
   if (

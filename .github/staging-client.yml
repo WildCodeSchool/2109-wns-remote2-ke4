@@ -57,9 +57,9 @@ jobs:
         name: Build and push
 
         with:
-          context: ./client
+          context: ./front
 
-          file: ./client/Dockerfile
+          file: ./front/Dockerfile
 
           push: true
 
